@@ -1,12 +1,18 @@
 import 'package:get/get.dart';
-import '../controller/home_controller.dart';
 
-class HomeBinding extends Bindings{
+import '../../../app/modules/home/controllers/home_controller.dart';
+import '../../../app/modules/home/repositories/home_repository.dart';
 
+class HomeBinding extends Bindings {
   @override
-  void dependencies () {
+  void dependencies() {
+    Get.lazyPut<HomeRepository>(
+          () => HomeRepository(),
+      fenix: true,
+    );
 
-    Get.lazyPut(() => HomeController());
+    Get.lazyPut<HomeController>(
+          () => HomeController(),
+    );
   }
-
 }

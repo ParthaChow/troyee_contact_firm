@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:troyee_contact_farm/models/user_model.dart';
+
+import '../../models/user_model.dart';
 
 class ApiFetch {
   Future<UserInfo> login({
