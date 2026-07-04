@@ -1,0 +1,28 @@
+import 'package:get/get.dart';
+import '../../modules/auth/binding/sign_in_binding.dart';
+import '../../modules/auth/view/sign_in_view.dart';
+import '../../modules/home/binding/home_binidng.dart';
+import '../../modules//home/view/home_view.dart';
+import '../../modules/splash/binding/splash_binding.dart';
+import 'app_routes.dart';
+import '../../modules/splash/view/splash_view.dart';
+
+class AppPages {
+  static final routes = [
+    GetPage(
+      name: Routes.splash,
+      page: () => const SplashView(),
+      binding: SplashBinding(),
+    ),
+    GetPage(
+      name: Routes.auth,
+      page: () => const AuthView(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: Routes.home,
+      page: () => const HomeView(),
+      binding: HomeBinding(),
+    ),
+  ];
+}
