@@ -1,5 +1,5 @@
 abstract class Routes {
   static const splash = "/splash";
-  static const auth = "/auth";
+  static const auth = "/sign_in";
   static const home = "/home";
 }

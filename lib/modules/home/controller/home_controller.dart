@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
+import 'package:troyee_contact_farm/app/services/services.dart';
 
 class HomeController extends GetxController {
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
+
+  void logout() {
+    Get.find<AuthService>().logout();
+
+    Get.offNamed('/sign_in');
   }
 }
