@@ -1,5 +1,8 @@
 import 'package:get/get.dart';
 
+import '../../../core/utils/bengali_numbers.dart';
+import '../../../routes/app_routes.dart';
+import '../../../services/services.dart';
 import '../models/farm_task.dart';
 import '../repositories/home_repository.dart';
 
@@ -11,6 +14,7 @@ enum FarmFilter {
 
 class HomeController extends GetxController {
   final HomeRepository _repository = HomeRepository();
+  final AuthService _authService = Get.find<AuthService>();
 
   // Officer Information
   final officerName = 'রফিক';
@@ -33,6 +37,32 @@ class HomeController extends GetxController {
 
   // Loading
   final isLoading = false.obs;
+
+  String get todayString {
+    final now = DateTime.now();
+    final day = toBengaliNumber(now.day);
+    final year = toBengaliNumber(now.year);
+    final month = _getBengaliMonth(now.month);
+    return "$day $month, $year";
+  }
+
+  String _getBengaliMonth(int month) {
+    const months = [
+      'জানুয়ারি',
+      'ফেব্রুয়ারি',
+      'মার্চ',
+      'এপ্রিল',
+      'মে',
+      'জুন',
+      'জুলাই',
+      'আগস্ট',
+      'সেপ্টেম্বর',
+      'অক্টোবর',
+      'নভেম্বর',
+      'ডিসেম্বর'
+    ];
+    return months[month - 1];
+  }
 
   // Data
   final farmTasks = <FarmTask>[].obs;
@@ -186,6 +216,11 @@ class HomeController extends GetxController {
     await _repository.syncTasks();
 
     await loadFarmTasks();
+  }
+
+  void logout() {
+    _authService.logout();
+    Get.offAllNamed(Routes.auth);
   }
 
   int get pendingCount =>

@@ -1,4 +1,3 @@
-// UPDATED home_view.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -20,108 +19,368 @@ class HomeView extends GetView<HomeController> {
       ),
       child: Scaffold(
         backgroundColor: AppColors.background,
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: controller.syncAll,
-          backgroundColor: AppColors.primaryGreen,
-          icon: const Icon(Icons.sync),
-          label: const Text("Sync"),
+        body: Obx(() {
+          switch (controller.navIndex.value) {
+            case 0:
+              return _HomeSection(controller: controller);
+            case 1:
+              return _TaskListSection(controller: controller);
+            case 2:
+              return _SyncSection(controller: controller);
+            case 3:
+              return _ProfileSection(controller: controller);
+            default:
+              return _HomeSection(controller: controller);
+          }
+        }),
+        bottomNavigationBar: Obx(
+          () => BottomNavigationBar(
+            currentIndex: controller.navIndex.value,
+            onTap: controller.changeNavIndex,
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: AppColors.primary,
+            unselectedItemColor: Colors.grey,
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
+            selectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+            unselectedLabelStyle: const TextStyle(fontSize: 12),
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home_outlined),
+                activeIcon: Icon(Icons.home),
+                label: 'হোম',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.assignment_outlined),
+                activeIcon: Icon(Icons.assignment),
+                label: 'তালিকা',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.sync_outlined),
+                activeIcon: Icon(Icons.sync),
+                label: 'সিঙ্ক',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline),
+                activeIcon: Icon(Icons.person),
+                label: 'প্রোফাইল',
+              ),
+            ],
+          ),
         ),
-        body: Column(
-          children: [
-            _HeaderSection(controller: controller),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: AppColors.background,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                ),
-                transform: Matrix4.translationValues(0, -20, 0),
-                child: Obx(
-                      () => RefreshIndicator(
-                    onRefresh: () async => controller.refreshData(),
-                    child: ListView(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      children: [
-                        ProgressSummaryCard(
-                          completed: controller.completedVisits.value,
-                          total: controller.totalVisits.value,
-                          remaining: controller.remainingVisits,
-                          pendingSync: controller.pendingSyncRecords.value,
-                          progress: controller.progressValue,
-                        ),
-                        const SizedBox(height: 20),
-                        TextField(
-                          onChanged: controller.search,
-                          decoration: InputDecoration(
-                            hintText: 'ফার্ম, মালিক অথবা গ্রামের নাম লিখুন',
-                            prefixIcon: const Icon(Icons.search),
-                            suffixIcon: Obx(() {
-                              if (controller.searchText.value.isEmpty) {
-                                return const SizedBox.shrink();
-                              }
+      ),
+    );
+  }
+}
 
-                              return IconButton(
-                                icon: const Icon(Icons.close),
-                                onPressed: controller.clearSearch,
-                              );
-                            }),
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(14),
-                              borderSide: BorderSide.none,
-                            ),
+class _HomeSection extends StatelessWidget {
+  final HomeController controller;
+  const _HomeSection({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _HeaderSection(controller: controller),
+        Expanded(
+          child: Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              color: AppColors.background,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            ),
+            transform: Matrix4.translationValues(0, -30, 0),
+            child: Obx(
+              () => RefreshIndicator(
+                onRefresh: () async => controller.refreshData(),
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                  children: [
+                    ProgressSummaryCard(
+                      completed: controller.completedVisits.value,
+                      total: controller.totalVisits.value,
+                      remaining: controller.remainingVisits,
+                      pendingSync: controller.pendingSyncRecords.value,
+                      progress: controller.progressValue,
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        Container(
+                          width: 4,
+                          height: 18,
+                          decoration: BoxDecoration(
+                            color: const Color(0xffE7A512),
+                            borderRadius: BorderRadius.circular(2),
                           ),
                         ),
-                        const SizedBox(height: 16),
-                        SizedBox(
-                          height: 40,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              Obx(()=>FilterChip(
-                                label: const Text("সব"),
-                                selected: controller.selectedFilter.value==FarmFilter.all,
-                                onSelected: (_)=>controller.changeFilter(FarmFilter.all),
-                              )),
-                              const SizedBox(width:10),
-                              Obx(()=>FilterChip(
-                                label: const Text("বাকি"),
-                                selected: controller.selectedFilter.value==FarmFilter.pending,
-                                onSelected: (_)=>controller.changeFilter(FarmFilter.pending),
-                              )),
-                              const SizedBox(width:10),
-                              Obx(()=>FilterChip(
-                                label: const Text("সম্পন্ন"),
-                                selected: controller.selectedFilter.value==FarmFilter.completed,
-                                onSelected: (_)=>controller.changeFilter(FarmFilter.completed),
-                              )),
-                            ],
+                        const SizedBox(width: 8),
+                        const Text(
+                          "আজকের পরিদর্শন তালিকা",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textDark,
                           ),
                         ),
-                        const SizedBox(height:20),
-                        const Text("আজকের পরিদর্শন তালিকা",
-                            style: TextStyle(fontWeight: FontWeight.bold,fontSize:16)),
-                        const SizedBox(height:12),
-                        if(controller.filteredTasks.isEmpty)
-                          const _EmptyTaskWidget()
-                        else
-                          ...controller.filteredTasks.map(
-                                (e) => FarmTaskTile(
-                              task: e,
-                              onTap: () => controller.startVisit(e.id),
-                            ),
-                          ),
                       ],
                     ),
-                  ),
+                    const SizedBox(height: 16),
+                    if (controller.isLoading.value)
+                      const Center(
+                          child: Padding(
+                        padding: EdgeInsets.all(40.0),
+                        child: CircularProgressIndicator(),
+                      ))
+                    else if (controller.filteredTasks.isEmpty)
+                      const _EmptyTaskWidget()
+                    else
+                      ...controller.filteredTasks.map(
+                        (task) => FarmTaskTile(
+                          task: task,
+                          onTap: () => controller.startVisit(task.id),
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ),
-          ],
+          ),
         ),
+      ],
+    );
+  }
+}
+
+class _TaskListSection extends StatelessWidget {
+  final HomeController controller;
+  const _TaskListSection({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _HeaderSection(controller: controller),
+        Expanded(
+          child: Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              color: AppColors.background,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            ),
+            transform: Matrix4.translationValues(0, -30, 0),
+            child: Obx(
+              () => controller.isLoading.value
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                      children: [
+                        const SizedBox(height: 10),
+                        const Text(
+                          "সম্পূর্ণ তালিকা",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textDark,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        ...controller.farmTasks.map(
+                          (task) => FarmTaskTile(
+                            task: task,
+                            onTap: () => controller.startVisit(task.id),
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _SyncSection extends StatelessWidget {
+  final HomeController controller;
+  const _SyncSection({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _HeaderSection(controller: controller),
+        Expanded(
+          child: Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              color: AppColors.background,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            ),
+            transform: Matrix4.translationValues(0, -30, 0),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.sync, size: 80, color: AppColors.primary),
+                  const SizedBox(height: 20),
+                  Obx(() => Text(
+                        "পেন্ডিং রেকর্ড: ${controller.pendingSyncRecords.value}",
+                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      )),
+                  const SizedBox(height: 30),
+                  ElevatedButton.icon(
+                    onPressed: () => controller.syncAll(),
+                    icon: const Icon(Icons.sync),
+                    label: const Text("সব সিঙ্ক করুন"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ProfileSection extends StatelessWidget {
+  final HomeController controller;
+  const _ProfileSection({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          color: const Color(0xff0F2D20),
+          padding: EdgeInsets.fromLTRB(
+            20,
+            MediaQuery.of(context).padding.top + 20,
+            20,
+            40,
+          ),
+          child: Column(
+            children: [
+              const CircleAvatar(
+                radius: 50,
+                backgroundColor: Colors.white24,
+                child: Icon(Icons.person, size: 60, color: Colors.white),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                controller.officerName,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                controller.zone,
+                style: const TextStyle(
+                  color: Colors.white70,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.all(20),
+            children: [
+              _ProfileMenuItem(
+                icon: Icons.person_outline,
+                title: 'ব্যক্তিগত তথ্য',
+                onTap: () {},
+              ),
+              _ProfileMenuItem(
+                icon: Icons.settings_outlined,
+                title: 'সেটিংস',
+                onTap: () {},
+              ),
+              _ProfileMenuItem(
+                icon: Icons.help_outline,
+                title: 'সহায়তা',
+                onTap: () {},
+              ),
+              const SizedBox(height: 20),
+              const Divider(),
+              const SizedBox(height: 10),
+              ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.red.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.logout, color: Colors.red),
+                ),
+                title: const Text(
+                  'লগআউট',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                onTap: () => _showLogoutDialog(context),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    Get.dialog(
+      AlertDialog(
+        title: const Text('লগআউট'),
+        content: const Text('আপনি কি নিশ্চিত যে আপনি লগআউট করতে চান?'),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text('না', style: TextStyle(color: Colors.grey)),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+              controller.logout();
+            },
+            child: const Text('হ্যাঁ', style: TextStyle(color: Colors.red)),
+          ),
+        ],
       ),
+    );
+  }
+}
+
+class _ProfileMenuItem extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+
+  const _ProfileMenuItem({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(icon, color: AppColors.primary),
+      title: Text(title, style: const TextStyle(fontSize: 16)),
+      trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+      onTap: onTap,
     );
   }
 }
@@ -131,52 +390,120 @@ class _HeaderSection extends StatelessWidget {
   const _HeaderSection({required this.controller});
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: AppColors.primaryGreen,
-      padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top+12,20,36),
-      child: Row(
-        children:[
-          Expanded(child:Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children:[
-              Text('আসসালামু আলাইকুম, ${controller.officerName}',
-                  style: const TextStyle(color: Colors.white,fontSize:20,fontWeight: FontWeight.bold)),
-              const SizedBox(height:4),
-              Text('ফিল্ড অফিসার - ${controller.zone}',
-                  style: const TextStyle(color: Colors.white70)),
+      color: const Color(0xff0F2D20), // Dark Green
+      padding: EdgeInsets.fromLTRB(
+        20,
+        MediaQuery.of(context).padding.top + 10,
+        20,
+        60,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "৯:৪১",
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+              Row(
+                children: [
+                  Icon(Icons.signal_cellular_alt, color: Colors.white, size: 14),
+                  SizedBox(width: 4),
+                  Icon(Icons.wifi, color: Colors.white, size: 14),
+                  SizedBox(width: 4),
+                  Text("৮৭%", style: TextStyle(color: Colors.white, fontSize: 12)),
+                  SizedBox(width: 2),
+                  Icon(Icons.battery_full, color: Colors.white, size: 14),
+                ],
+              ),
             ],
-          )),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal:12,vertical:6),
-            decoration: BoxDecoration(
-              color: AppColors.activeBadge,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(controller.statusLabel),
-          )
+          ),
+          const SizedBox(height: 20),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "আসসালামু আলাইকুম, ${controller.officerName}",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "ফিল্ড অফিসার - ${controller.zone}",
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: const Color(0xffE7A512),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 6,
+                      height: 6,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      controller.statusLabel,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
   }
 }
 
-class _EmptyTaskWidget extends StatelessWidget{
+class _EmptyTaskWidget extends StatelessWidget {
   const _EmptyTaskWidget();
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return const Padding(
-      padding: EdgeInsets.symmetric(vertical:60),
+      padding: EdgeInsets.symmetric(vertical: 60),
       child: Column(
-        children:[
-          Icon(Icons.agriculture,size:70,color:Colors.grey),
-          SizedBox(height:16),
-          Text("কোনো ফার্ম পাওয়া যায়নি",
-              style: TextStyle(fontWeight: FontWeight.bold,fontSize:18)),
-          SizedBox(height:8),
-          Text("সার্চ অথবা ফিল্টার পরিবর্তন করুন"),
+        children: [
+          Icon(Icons.agriculture_outlined, size: 70, color: Colors.grey),
+          SizedBox(height: 16),
+          Text(
+            "কোনো ফার্ম পাওয়া যায়নি",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+          SizedBox(height: 8),
+          Text("আজকের জন্য কোনো কাজ নির্ধারিত নেই"),
         ],
       ),
     );
