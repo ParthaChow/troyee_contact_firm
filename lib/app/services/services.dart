@@ -18,6 +18,7 @@ class AuthService extends GetxService {
     required String fullName,
     required String zone,
     required String expiresAt,
+    required String baseUrl,
   }) async {
     await storage.write("accessToken", accessToken);
     await storage.write("refreshToken", refreshToken);
@@ -25,9 +26,13 @@ class AuthService extends GetxService {
     await storage.write("fullName", fullName);
     await storage.write("zone", zone);
     await storage.write("accessTokenExpiresAt", expiresAt);
+    await storage.write("baseUrl", baseUrl);
 
     isLoggedIn.value = true;
   }
+
+  String? get baseUrl =>
+      storage.read<String>("baseUrl");
 
   String? get accessToken =>
       storage.read<String>("accessToken");

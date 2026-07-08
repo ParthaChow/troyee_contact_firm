@@ -24,7 +24,7 @@ class HomeView extends GetView<HomeController> {
             case 0:
               return _HomeSection(controller: controller);
             case 1:
-              return _TaskListSection(controller: controller);
+              return _FarmListSection(controller: controller);
             case 2:
               return _SyncSection(controller: controller);
             case 3:
@@ -152,9 +152,9 @@ class _HomeSection extends StatelessWidget {
   }
 }
 
-class _TaskListSection extends StatelessWidget {
+class _FarmListSection extends StatelessWidget {
   final HomeController controller;
-  const _TaskListSection({required this.controller});
+  const _FarmListSection({required this.controller});
 
   @override
   Widget build(BuildContext context) {

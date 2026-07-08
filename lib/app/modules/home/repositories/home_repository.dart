@@ -1,65 +1,39 @@
 import 'dart:async';
-
+import 'package:get/get.dart';
+import '../../../services/api_fetch.dart';
+import '../../../services/services.dart';
 import '../models/farm_task.dart';
 
 class HomeRepository {
-  final List<FarmTask> _tasks = [
-    FarmTask(
-      id: 1,
-      farmName: 'করিম পোল্ট্রি ফার্ম',
-      ownerName: 'করিম উদ্দিন',
-      phone: '01711111111',
-      village: 'সাহাপুর',
-      latitude: 23.9001,
-      longitude: 89.1220,
-      cycleDay: 28,
-      distance: 23,
-      status: VisitStatus.pending,
-      isSynced: false,
-      visitDate: DateTime.now(),
-    ),
-    FarmTask(
-      id: 2,
-      farmName: 'রহিম ব্রয়লার ফার্ম',
-      ownerName: 'রহিম শেখ',
-      phone: '01811111111',
-      village: 'চরপাড়া',
-      latitude: 23.9140,
-      longitude: 89.1550,
-      cycleDay: 18,
-      distance: 15,
-      status: VisitStatus.pending,
-      isSynced: false,
-      visitDate: DateTime.now(),
-    ),
-    FarmTask(
-      id: 3,
-      farmName: 'সালাম লেয়ার ফার্ম',
-      ownerName: 'সালাম মোল্লা',
-      phone: '01911111111',
-      village: 'বেলতলী',
-      latitude: 23.9300,
-      longitude: 89.1900,
-      cycleDay: 22,
-      distance: 9,
-      status: VisitStatus.completed,
-      isSynced: true,
-      visitDate: DateTime.now(),
-    ),
-  ];
+  final ApiFetch _api = ApiFetch();
+  final AuthService _auth = Get.find<AuthService>();
 
-  /// Fake API call
+  final List<FarmTask> _tasks = [];
+
+  /// Fetch from actual API
   Future<List<FarmTask>> getFarmTasks() async {
-    await Future.delayed(const Duration(milliseconds: 800));
+    final baseUrl = _auth.baseUrl;
+    final token = _auth.accessToken;
 
-    return List<FarmTask>.from(_tasks);
+    if (baseUrl == null || token == null) {
+      return List<FarmTask>.from(_tasks);
+    }
+
+    try {
+      print("Fetching farms from: ${baseUrl}farm-list");
+      final remoteTasks = await _api.getFarmList(baseUrl: baseUrl, token: token);
+      _tasks.clear();
+      _tasks.addAll(remoteTasks);
+      return remoteTasks;
+    } catch (e) {
+      print("Error fetching from API: $e");
+      return List<FarmTask>.from(_tasks);
+    }
   }
 
   /// Pull-to-refresh
   Future<List<FarmTask>> refreshTasks() async {
-    await Future.delayed(const Duration(seconds: 1));
-
-    return List<FarmTask>.from(_tasks);
+    return await getFarmTasks();
   }
 
   /// Complete a visit
