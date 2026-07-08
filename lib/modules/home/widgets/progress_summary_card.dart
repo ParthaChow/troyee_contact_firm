@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/utils/bengali_numbers.dart';
+import '../../../app/core/theme/app_colors.dart';
 
 class ProgressSummaryCard extends StatelessWidget {
   const ProgressSummaryCard({
@@ -62,7 +61,7 @@ class ProgressSummaryCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "${toBengaliNumber(completed)}/${toBengaliNumber(total)}",
+                      "${completed}/${total}",
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -95,7 +94,7 @@ class ProgressSummaryCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "${toBengaliNumber(total)}টি টার্গেট - ${toBengaliNumber(remaining)}টি বাকি",
+                  "${total}টি টার্গেট - ${remaining}টি বাকি",
                   style: const TextStyle(
                     fontSize: 14,
                     color: AppColors.textGrey,
@@ -103,7 +102,7 @@ class ProgressSummaryCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "${toBengaliNumber(pendingSync.toString().padLeft(2, '0'))}টি রেকর্ড সিঙ্কের অপেক্ষায়",
+                  "${pendingSync.toString().padLeft(2, '0')}টি রেকর্ড সিঙ্কের অপেক্ষায়",
                   style: const TextStyle(
                     fontSize: 13,
                     color: Color(0xffD79A09),

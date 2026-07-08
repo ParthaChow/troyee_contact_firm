@@ -1,11 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:troyee_contact_firm/models/login_response.dart';
 
-import '../../models/user_model.dart';
-import '../modules/home/models/farm_task.dart';
+import '../../modules/home/models/farm_task.dart';
 
 class ApiFetch {
   Future<LoginResponse> login({

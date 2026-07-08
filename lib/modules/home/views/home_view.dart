@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import '../../../core/theme/app_colors.dart';
+import '../../../app/core/theme/app_colors.dart';
 import '../controllers/home_controller.dart';
 import '../widgets/farm_task_tile.dart';
 import '../widgets/progress_summary_card.dart';
@@ -403,26 +403,6 @@ class _HeaderSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "৯:৪১",
-                style: TextStyle(color: Colors.white, fontSize: 12),
-              ),
-              Row(
-                children: [
-                  Icon(Icons.signal_cellular_alt, color: Colors.white, size: 14),
-                  SizedBox(width: 4),
-                  Icon(Icons.wifi, color: Colors.white, size: 14),
-                  SizedBox(width: 4),
-                  Text("৮৭%", style: TextStyle(color: Colors.white, fontSize: 12)),
-                  SizedBox(width: 2),
-                  Icon(Icons.battery_full, color: Colors.white, size: 14),
-                ],
-              ),
-            ],
-          ),
           const SizedBox(height: 20),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,

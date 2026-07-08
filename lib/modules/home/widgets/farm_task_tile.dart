@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/utils/bengali_numbers.dart';
+import '../../../app/core/theme/app_colors.dart';
 import '../models/farm_task.dart';
 
 class FarmTaskTile extends StatelessWidget {
@@ -70,7 +69,7 @@ class FarmTaskTile extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        "${task.location} - স্টক: ${toBengaliNumber(task.currentStock)}",
+                        "${task.location} - স্টক: ${task.currentStock}",
                         style: const TextStyle(
                           color: AppColors.textGrey,
                           fontSize: 13,

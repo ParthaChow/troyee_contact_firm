@@ -16,8 +16,8 @@ class SplashController extends GetxController {
     super.onInit();
     print("Splash initialized");
 
-    Future.delayed(const Duration(seconds: 5), () {
-      print("5 sec");
+    Future.delayed(const Duration(seconds: 1), () {
+      print("1 sec");
       checkLogin();
     });
   }
