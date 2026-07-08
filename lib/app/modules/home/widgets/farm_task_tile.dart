@@ -16,186 +16,72 @@ class FarmTaskTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final statusColor = _statusColor(task.status);
-    final statusText = _statusText(task.status);
-
     return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(16),
           onTap: onTap,
           child: Ink(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
-              color: AppColors.cardWhite,
-              borderRadius: BorderRadius.circular(18),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: .05),
-                  blurRadius: 14,
-                  offset: const Offset(0, 6),
+                  color: Colors.black.withValues(alpha: .03),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
-            child: Column(
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 56,
-                      height: 56,
-                      decoration: BoxDecoration(
-                        color: AppColors.iconBackground,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: const Icon(
-                        Icons.agriculture_rounded,
-                        color: AppColors.primaryGreen,
-                        size: 30,
-                      ),
-                    ),
+                // Icon
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: const Color(0xffFEEBEB),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.pets_rounded, // Using a pet icon for the chicken
+                    color: Color(0xffE53935),
+                    size: 24,
+                  ),
+                ),
 
-                    const SizedBox(width: 14),
+                const SizedBox(width: 14),
 
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            task.farmName,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.textDark,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            task.ownerName,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: AppColors.textGrey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: statusColor.withValues(alpha: .12),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Text(
-                        statusText,
-                        style: TextStyle(
-                          color: statusColor,
+                // Details
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        task.farmName,
+                        style: const TextStyle(
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          fontSize: 12,
+                          color: AppColors.textDark,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 16),
-
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.location_on_outlined,
-                      size: 18,
-                      color: AppColors.textGrey,
-                    ),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: Text(
-                        task.village,
+                      const SizedBox(height: 2),
+                      Text(
+                        "লট নম্বর: ৪৮ - ${toBengaliNumber(task.cycleDay)} দিন বয়স",
                         style: const TextStyle(
                           color: AppColors.textGrey,
+                          fontSize: 13,
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
 
-                const SizedBox(height: 10),
-
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.phone_outlined,
-                      size: 18,
-                      color: AppColors.textGrey,
-                    ),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: Text(
-                        task.phone,
-                        style: const TextStyle(
-                          color: AppColors.textGrey,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 16),
-
-                Row(
-                  children: [
-                    Expanded(
-                      child: _InfoCard(
-                        icon: Icons.calendar_today,
-                        label: "Cycle",
-                        value: "${toBengaliNumber(task.cycleDay)} দিন",
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: _InfoCard(
-                        icon: Icons.route,
-                        label: "Distance",
-                        value:
-                        "${toBengaliNumber(task.distance.toStringAsFixed(1))} km",
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 16),
-
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: onTap,
-                        icon: const Icon(Icons.visibility),
-                        label: const Text("View"),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: FilledButton.icon(
-                        onPressed: onTap,
-                        icon: const Icon(Icons.arrow_forward),
-                        label: Text(
-                          task.isCompleted
-                              ? "Details"
-                              : "Visit",
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                // Action Button
+                _buildActionButton(),
               ],
             ),
           ),
@@ -204,75 +90,38 @@ class FarmTaskTile extends StatelessWidget {
     );
   }
 
-  Color _statusColor(VisitStatus status) {
-    switch (status) {
-      case VisitStatus.completed:
-        return Colors.green;
-      case VisitStatus.pending:
-        return Colors.orange;
-      case VisitStatus.ongoing:
-        return Colors.blue;
-      case VisitStatus.cancelled:
-        return Colors.red;
+  Widget _buildActionButton() {
+    if (task.isCompleted) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: const Color(0xffE8F5E9),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: const Text(
+          "সম্পন্ন",
+          style: TextStyle(
+            color: Color(0xff2E7D32),
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      );
     }
-  }
 
-  String _statusText(VisitStatus status) {
-    switch (status) {
-      case VisitStatus.completed:
-        return "Completed";
-      case VisitStatus.pending:
-        return "Pending";
-      case VisitStatus.ongoing:
-        return "Ongoing";
-      case VisitStatus.cancelled:
-        return "Cancelled";
-    }
-  }
-}
-
-class _InfoCard extends StatelessWidget {
-  const _InfoCard({
-    required this.icon,
-    required this.label,
-    required this.value,
-  });
-
-  final IconData icon;
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.grey.withValues(alpha: .06),
-        borderRadius: BorderRadius.circular(14),
+        color: const Color(0xffFFF4D7),
+        borderRadius: BorderRadius.circular(8),
       ),
-      child: Column(
-        children: [
-          Icon(
-            icon,
-            color: AppColors.primaryGreen,
-            size: 20,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: const TextStyle(
-              color: AppColors.textGrey,
-              fontSize: 12,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
+      child: const Text(
+        "পরিদর্শন করুন",
+        style: TextStyle(
+          color: Color(0xffC88705),
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
