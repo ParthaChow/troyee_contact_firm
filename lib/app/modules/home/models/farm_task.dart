@@ -7,36 +7,33 @@ enum VisitStatus {
 
 class FarmTask {
   final int id;
-
-  final String farmName;
-  final String ownerName;
-  final String phone;
-  final String village;
-
-  final double latitude;
-  final double longitude;
-
-  final int cycleDay;
-  final double distance;
-
+  final String name;
+  final String location;
+  final int capacity;
+  final int currentStock;
+  final int employeeCount;
+  final String certStatus;
+  final DateTime certExpiry;
+  final bool isActive;
+  final double utilizationPercent;
+  
+  // Local state fields
   final VisitStatus status;
   final bool isSynced;
 
-  final DateTime visitDate;
-
   const FarmTask({
     required this.id,
-    required this.farmName,
-    required this.ownerName,
-    required this.phone,
-    required this.village,
-    required this.latitude,
-    required this.longitude,
-    required this.cycleDay,
-    required this.distance,
-    required this.status,
-    required this.isSynced,
-    required this.visitDate,
+    required this.name,
+    required this.location,
+    required this.capacity,
+    required this.currentStock,
+    required this.employeeCount,
+    required this.certStatus,
+    required this.certExpiry,
+    required this.isActive,
+    required this.utilizationPercent,
+    this.status = VisitStatus.pending,
+    this.isSynced = true,
   });
 
   //==========================
@@ -44,25 +41,8 @@ class FarmTask {
   //==========================
 
   bool get isCompleted => status == VisitStatus.completed;
-
   bool get isPending => status == VisitStatus.pending;
-
   bool get isOngoing => status == VisitStatus.ongoing;
-
-  bool get isCancelled => status == VisitStatus.cancelled;
-
-  String get statusText {
-    switch (status) {
-      case VisitStatus.pending:
-        return "Pending";
-      case VisitStatus.ongoing:
-        return "Ongoing";
-      case VisitStatus.completed:
-        return "Completed";
-      case VisitStatus.cancelled:
-        return "Cancelled";
-    }
-  }
 
   //==========================
   // CopyWith
@@ -70,31 +50,31 @@ class FarmTask {
 
   FarmTask copyWith({
     int? id,
-    String? farmName,
-    String? ownerName,
-    String? phone,
-    String? village,
-    double? latitude,
-    double? longitude,
-    int? cycleDay,
-    double? distance,
+    String? name,
+    String? location,
+    int? capacity,
+    int? currentStock,
+    int? employeeCount,
+    String? certStatus,
+    DateTime? certExpiry,
+    bool? isActive,
+    double? utilizationPercent,
     VisitStatus? status,
     bool? isSynced,
-    DateTime? visitDate,
   }) {
     return FarmTask(
       id: id ?? this.id,
-      farmName: farmName ?? this.farmName,
-      ownerName: ownerName ?? this.ownerName,
-      phone: phone ?? this.phone,
-      village: village ?? this.village,
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
-      cycleDay: cycleDay ?? this.cycleDay,
-      distance: distance ?? this.distance,
+      name: name ?? this.name,
+      location: location ?? this.location,
+      capacity: capacity ?? this.capacity,
+      currentStock: currentStock ?? this.currentStock,
+      employeeCount: employeeCount ?? this.employeeCount,
+      certStatus: certStatus ?? this.certStatus,
+      certExpiry: certExpiry ?? this.certExpiry,
+      isActive: isActive ?? this.isActive,
+      utilizationPercent: utilizationPercent ?? this.utilizationPercent,
       status: status ?? this.status,
       isSynced: isSynced ?? this.isSynced,
-      visitDate: visitDate ?? this.visitDate,
     );
   }
 
@@ -104,58 +84,42 @@ class FarmTask {
 
   factory FarmTask.fromJson(Map<String, dynamic> json) {
     return FarmTask(
-      id: json["id"],
-      farmName: json["farmName"],
-      ownerName: json["ownerName"],
-      phone: json["phone"],
-      village: json["village"],
-      latitude: (json["latitude"] as num).toDouble(),
-      longitude: (json["longitude"] as num).toDouble(),
-      cycleDay: json["cycleDay"],
-      distance: (json["distance"] as num).toDouble(),
-      status: VisitStatus.values.firstWhere(
-            (e) => e.name == json["status"],
-        orElse: () => VisitStatus.pending,
-      ),
-      isSynced: json["isSynced"] ?? false,
-      visitDate: DateTime.parse(json["visitDate"]),
+      id: json["id"] ?? 0,
+      name: json["name"] ?? "",
+      location: json["location"] ?? "",
+      capacity: json["capacity"] ?? 0,
+      currentStock: json["currentStock"] ?? 0,
+      employeeCount: json["employeeCount"] ?? 0,
+      certStatus: json["certStatus"] ?? "Valid",
+      certExpiry: json.containsKey("certExpiry") 
+          ? DateTime.parse(json["certExpiry"]) 
+          : DateTime.now(),
+      isActive: json["isActive"] ?? true,
+      utilizationPercent: (json["utilizationPercent"] as num?)?.toDouble() ?? 0.0,
+      status: json["certStatus"] == "Expiring Soon" 
+          ? VisitStatus.pending 
+          : VisitStatus.completed, // Mapping for demonstration
+      isSynced: true,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       "id": id,
-      "farmName": farmName,
-      "ownerName": ownerName,
-      "phone": phone,
-      "village": village,
-      "latitude": latitude,
-      "longitude": longitude,
-      "cycleDay": cycleDay,
-      "distance": distance,
+      "name": name,
+      "location": location,
+      "capacity": capacity,
+      "currentStock": currentStock,
+      "employeeCount": employeeCount,
+      "certStatus": certStatus,
+      "certExpiry": certExpiry.toIso8601String(),
+      "isActive": isActive,
+      "utilizationPercent": utilizationPercent,
       "status": status.name,
       "isSynced": isSynced,
-      "visitDate": visitDate.toIso8601String(),
     };
   }
 
-  //==========================
-  // Equality
-  //==========================
-
   @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        other is FarmTask &&
-            runtimeType == other.runtimeType &&
-            id == other.id;
-  }
-
-  @override
-  int get hashCode => id.hashCode;
-
-  @override
-  String toString() {
-    return 'FarmTask(id: $id, farm: $farmName, status: ${status.name})';
-  }
+  String toString() => 'FarmTask(id: $id, name: $name)';
 }

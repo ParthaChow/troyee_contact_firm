@@ -66,6 +66,7 @@ class SignInController extends GetxController {
         zone: result.zone,
         fieldOfficerId: result.fieldOfficerId,
         expiresAt: result.accessTokenExpiresAt.toIso8601String(),
+        baseUrl: baseUrlController.text.trim(),
       );
 
       Get.snackbar("Success",

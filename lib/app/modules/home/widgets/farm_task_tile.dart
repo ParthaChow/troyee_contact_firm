@@ -42,12 +42,12 @@ class FarmTaskTile extends StatelessWidget {
                 Container(
                   width: 48,
                   height: 48,
-                  decoration: BoxDecoration(
-                    color: const Color(0xffFEEBEB),
+                  decoration: const BoxDecoration(
+                    color: Color(0xffFEEBEB),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
-                    Icons.pets_rounded, // Using a pet icon for the chicken
+                    Icons.pets_rounded,
                     color: Color(0xffE53935),
                     size: 24,
                   ),
@@ -61,7 +61,7 @@ class FarmTaskTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        task.farmName,
+                        task.name,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -70,7 +70,7 @@ class FarmTaskTile extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        "লট নম্বর: ৪৮ - ${toBengaliNumber(task.cycleDay)} দিন বয়স",
+                        "${task.location} - স্টক: ${toBengaliNumber(task.currentStock)}",
                         style: const TextStyle(
                           color: AppColors.textGrey,
                           fontSize: 13,
