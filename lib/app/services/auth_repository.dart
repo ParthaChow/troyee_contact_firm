@@ -1,3 +1,5 @@
+import 'package:troyee_contact_firm/models/login_response.dart';
+
 import '../../models/user_model.dart';
 import 'api_fetch.dart';
 
@@ -6,7 +8,7 @@ class AuthRepository {
 
   AuthRepository(this.api);
 
-  Future<UserInfo> login({
+  Future<LoginResponse> login({
     required String username,
     required String password,
     required String baseUrl,
