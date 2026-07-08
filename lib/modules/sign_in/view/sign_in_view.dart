@@ -57,19 +57,19 @@ class SignInView extends GetView<SignInController> {
                     const SizedBox(height: 40),
 
                     /// Base URL
-                    TextFormField(
-                      controller: controller.baseUrlController,
-                      validator: controller.validateBaseUrl,
-                      keyboardType: TextInputType.url,
-                      decoration: InputDecoration(
-                        labelText: "Base URL",
-                        hintText: "http://xxx.xxx.xxx/api/",
-                        prefixIcon: const Icon(Icons.link),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
+                    // TextFormField(
+                    //   controller: controller.baseUrlController,
+                    //   validator: controller.validateBaseUrl,
+                    //   keyboardType: TextInputType.url,
+                    //   decoration: InputDecoration(
+                    //     labelText: "Base URL",
+                    //     hintText: "http://xxx.xxx.xxx/api/",
+                    //     prefixIcon: const Icon(Icons.link),
+                    //     border: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(12),
+                    //     ),
+                    //   ),
+                    // ),
 
                     const SizedBox(height: 18),
 
