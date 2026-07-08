@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 
-import '../../../app/modules/home/models/farm_task.dart';
-import '../../../app/modules/home/repositories/home_repository.dart';
-
-
+import '../../../app/routes/app_routes.dart';
+import '../../../app/services/services.dart';
+import '../models/farm_task.dart';
+import '../repositories/home_repository.dart';
 
 enum FarmFilter {
   all,
@@ -13,10 +13,11 @@ enum FarmFilter {
 
 class HomeController extends GetxController {
   final HomeRepository _repository = HomeRepository();
+  final AuthService _authService = Get.find<AuthService>();
 
   // Officer Information
-  final officerName = 'রফিক';
-  final zone = 'কুষ্টিয়া জোন';
+  String get officerName => _authService.fullName ?? 'রফিক';
+  String get zone => _authService.zone ?? 'কুষ্টিয়া জোন';
   final statusLabel = 'সক্রিয়';
 
   // Dashboard
@@ -35,6 +36,7 @@ class HomeController extends GetxController {
 
   // Loading
   final isLoading = false.obs;
+
 
   // Data
   final farmTasks = <FarmTask>[].obs;
@@ -103,6 +105,9 @@ class HomeController extends GetxController {
 
   void changeNavIndex(int index) {
     navIndex.value = index;
+    if (index == 1) {
+      loadFarmTasks();
+    }
   }
 
   void search(String value) {
@@ -127,9 +132,8 @@ class HomeController extends GetxController {
       final keyword = searchText.value.toLowerCase();
 
       list = list.where((task) {
-        return task.farmName.toLowerCase().contains(keyword) ||
-            task.ownerName.toLowerCase().contains(keyword) ||
-            task.village.toLowerCase().contains(keyword);
+        return task.name.toLowerCase().contains(keyword) ||
+            task.location.toLowerCase().contains(keyword);
       }).toList();
     }
 
@@ -188,6 +192,11 @@ class HomeController extends GetxController {
     await _repository.syncTasks();
 
     await loadFarmTasks();
+  }
+
+  void logout() {
+    _authService.logout();
+    Get.offAllNamed(Routes.auth);
   }
 
   int get pendingCount =>

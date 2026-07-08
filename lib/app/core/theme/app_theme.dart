@@ -38,16 +38,6 @@ class AppTheme {
         surfaceTintColor: Colors.transparent,
       ),
 
-      cardTheme: CardTheme(
-        elevation: 0,
-        color: AppColors.card,
-        shadowColor: AppColors.shadow,
-        surfaceTintColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-      ),
-
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white,
@@ -104,8 +94,8 @@ class AppTheme {
         selectedItemColor: AppColors.primary,
         unselectedItemColor: AppColors.navUnselected,
         elevation: 8,
-        selectedFontSize: 12,
-        unselectedFontSize: 12,
+        // selectedFontSize: 12,
+        // unselectedFontSize: 12,
         type: BottomNavigationBarType.fixed,
       ),
 
