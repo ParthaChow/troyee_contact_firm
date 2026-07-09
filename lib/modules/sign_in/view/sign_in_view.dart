@@ -35,75 +35,31 @@ class SignInView extends GetView<SignInController> {
                     final hasProfiles = controller.savedProfiles.isNotEmpty;
                     final showManual = controller.showManualLogin.value || !hasProfiles;
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 10),
-
-                        if (hasProfiles) ...[
-                          const Text(
-                            "পছন্দের প্রোফাইল",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: AppColors.textDark,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          SizedBox(
-                            height: 85,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: controller.savedProfiles.length,
-                              itemBuilder: (context, index) {
-                                final profile = controller.savedProfiles[index];
-                                return _QuickProfileCard(
-                                  profile: profile,
-                                  onTap: () => controller.selectProfile(profile),
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(height: 24),
-                        ],
-
-                        if (!showManual && hasProfiles)
-                          Center(
-                            child: TextButton.icon(
-                              onPressed: () => controller.showManualLogin.value = true,
-                              icon: const Icon(Icons.add_circle_outline, color: AppColors.primary),
-                              label: const Text(
-                                "অন্য অ্যাকাউন্ট দিয়ে লগইন করুন",
+                    if (showManual) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                "Login",
                                 style: TextStyle(
-                                  color: AppColors.primary,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 15,
+                                  fontSize: 16,
+                                  color: AppColors.textDark,
                                 ),
                               ),
-                            ),
-                          ),
-
-                        if (showManual) ...[
-                          if (hasProfiles) ...[
-                            const Row(
-                              children: [
-                                Expanded(child: Divider(color: AppColors.divider)),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 16),
-                                  child: Text("অথবা", style: TextStyle(color: AppColors.textGrey, fontSize: 13)),
+                              if (hasProfiles)
+                                TextButton(
+                                  onPressed: () => controller.showManualLogin.value = false,
+                                  child: const Text(
+                                    "Go Back",
+                                    style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                                Expanded(child: Divider(color: AppColors.divider)),
-                              ],
-                            ),
-                            const SizedBox(height: 24),
-                          ],
-                          const Text(
-                            "লগইন করুন",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: AppColors.textDark,
-                            ),
+                            ],
                           ),
                           const SizedBox(height: 16),
 
@@ -112,7 +68,7 @@ class SignInView extends GetView<SignInController> {
                             controller: controller.usernameController,
                             validator: controller.validateUsername,
                             decoration: InputDecoration(
-                              hintText: "ইউজারনেম",
+                              hintText: "Username",
                               prefixIcon: const Icon(Icons.person_outline, size: 22, color: AppColors.primary),
                               filled: true,
                               fillColor: Colors.white,
@@ -140,7 +96,7 @@ class SignInView extends GetView<SignInController> {
                             validator: controller.validatePassword,
                             obscureText: controller.obcsurePassword.value,
                             decoration: InputDecoration(
-                              hintText: "পাসওয়ার্ড",
+                              hintText: "Password",
                               prefixIcon: const Icon(Icons.lock_outline, size: 22, color: AppColors.primary),
                               suffixIcon: IconButton(
                                 icon: Icon(
@@ -196,7 +152,7 @@ class SignInView extends GetView<SignInController> {
                                       ),
                                     )
                                   : const Text(
-                                      "লগইন",
+                                      "Login",
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
@@ -204,21 +160,80 @@ class SignInView extends GetView<SignInController> {
                                     ),
                             ),
                           ),
-                        ],
-
-                        const SizedBox(height: 40),
-
-                        Center(
-                          child: Text(
-                            "Version 1.0.0",
-                            style: TextStyle(
-                              color: Colors.grey.shade500,
-                              fontSize: 12,
+                          const SizedBox(height: 40),
+                          Center(
+                            child: Text(
+                              "Version 1.0.0",
+                              style: TextStyle(
+                                color: Colors.grey.shade500,
+                                fontSize: 12,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 20),
-                      ],
+                        ],
+                      );
+                    }
+
+                    // Account Selection Layout
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height - 230,
+                      child: Column(
+                        children: [
+                          // 1. Saved Profiles Section (Top 80%)
+                          Expanded(
+                            flex: 8,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 10),
+                                Expanded(
+                                  child: ListView.builder(
+                                    padding: const EdgeInsets.only(bottom: 20),
+                                    itemCount: controller.savedProfiles.length,
+                                    itemBuilder: (context, index) {
+                                      final profile = controller.savedProfiles[index];
+                                      return _QuickProfileCard(
+                                        profile: profile,
+                                        onTap: () => controller.selectProfile(profile),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          // 2. Fixed Bottom Section (Bottom 20%)
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextButton.icon(
+                                  onPressed: () => controller.showManualLogin.value = true,
+                                  icon: const Icon(Icons.add_circle_outline, color: AppColors.primary),
+                                  label: const Text(
+                                    "Sign in with another account",
+                                    style: TextStyle(
+                                      color: AppColors.primary,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  "Version 1.0.0",
+                                  style: TextStyle(
+                                    color: Colors.grey.shade500,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   }),
                 ),
@@ -251,7 +266,7 @@ class _HeaderSection extends StatelessWidget {
             size: 48,
           ),
           SizedBox(height: 12),
-          Text(
+          const Text(
             "Troyee Contact Farm",
             style: TextStyle(
               color: Colors.white,
@@ -260,9 +275,9 @@ class _HeaderSection extends StatelessWidget {
               letterSpacing: 0.5,
             ),
           ),
-          SizedBox(height: 4),
-          Text(
-            "ফিল্ড অফিসার লগইন",
+          const SizedBox(height: 4),
+          const Text(
+            "Field Officer Login",
             style: TextStyle(
               color: Colors.white70,
               fontSize: 13,
@@ -285,28 +300,28 @@ class _QuickProfileCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 190,
-        margin: const EdgeInsets.only(right: 12),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        width: double.infinity,
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: .04),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
         child: Row(
           children: [
             CircleAvatar(
-              radius: 18,
+              radius: 22,
               backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-              child: const Icon(Icons.person, color: AppColors.primary, size: 20),
+              child: const Icon(Icons.person, color: AppColors.primary, size: 24),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 14),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -316,17 +331,18 @@ class _QuickProfileCard extends StatelessWidget {
                     profile['fullName'],
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 13,
+                      fontSize: 15,
                       color: AppColors.textDark,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
+                  const SizedBox(height: 2),
                   Text(
                     profile['zone'],
                     style: const TextStyle(
                       color: AppColors.textGrey,
-                      fontSize: 11,
+                      fontSize: 12,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -334,6 +350,7 @@ class _QuickProfileCard extends StatelessWidget {
                 ],
               ),
             ),
+            const Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.textGrey),
           ],
         ),
       ),
