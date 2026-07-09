@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+import '../../../app/core/theme/app_colors.dart';
 import '../controller/sign_in_controller.dart';
 
 class SignInView extends GetView<SignInController> {
@@ -8,69 +10,46 @@ class SignInView extends GetView<SignInController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 450),
-              child: Form(
-                key: controller.formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+      ),
+      child: Scaffold(
+        backgroundColor: AppColors.background,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              _HeaderSection(),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                decoration: const BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                ),
+                transform: Matrix4.translationValues(0, -30, 0),
+                child: Form(
+                  key: controller.formKey,
+                  child: Obx(() {
+                    final hasProfiles = controller.savedProfiles.isNotEmpty;
+                    final showManual = controller.showManualLogin.value || !hasProfiles;
 
-                    const SizedBox(height: 20),
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10),
 
-                    /// Logo
-                    CircleAvatar(
-                      radius: 45,
-                      backgroundColor: Colors.lightGreen,
-                      child: Icon(
-                        Icons.agriculture_rounded,
-                        color: Colors.blueAccent,
-                        size: 50,
-                      ),
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    Text(
-                      "Troyee Contact Farm",
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    Text(
-                      "Sign in to continue",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(color: Colors.grey),
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    /// Saved Profiles
-                    Obx(() {
-                      if (controller.savedProfiles.isEmpty) return const SizedBox();
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        if (hasProfiles) ...[
                           const Text(
-                            "পছন্দের প্রোফাইল", // Quick Login / Preferred Profile
+                            "পছন্দের প্রোফাইল",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              color: Colors.black87,
+                              fontSize: 16,
+                              color: AppColors.textDark,
                             ),
                           ),
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 16),
                           SizedBox(
                             height: 85,
                             child: ListView.builder(
@@ -78,187 +57,284 @@ class SignInView extends GetView<SignInController> {
                               itemCount: controller.savedProfiles.length,
                               itemBuilder: (context, index) {
                                 final profile = controller.savedProfiles[index];
-                                return GestureDetector(
+                                return _QuickProfileCard(
+                                  profile: profile,
                                   onTap: () => controller.selectProfile(profile),
-                                  child: Container(
-                                    width: 180,
-                                    margin: const EdgeInsets.only(right: 12),
-                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xffF0F7F4), // Light greenish background
-                                      borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(color: const Color(0xffD1E7DD)),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        const CircleAvatar(
-                                          radius: 20,
-                                          backgroundColor: Color(0xff0F2D20),
-                                          child: Icon(Icons.person, color: Colors.white, size: 24),
-                                        ),
-                                        const SizedBox(width: 12),
-                                        Expanded(
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                profile['fullName'],
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                  color: Color(0xff0F2D20),
-                                                ),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              Text(
-                                                profile['zone'],
-                                                style: const TextStyle(
-                                                  color: Colors.black54,
-                                                  fontSize: 11,
-                                                ),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
                                 );
                               },
                             ),
                           ),
                           const SizedBox(height: 24),
-                          const Row(
-                            children: [
-                              Expanded(child: Divider()),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                child: Text("অথবা", style: TextStyle(color: Colors.grey, fontSize: 12)),
+                        ],
+
+                        if (!showManual && hasProfiles)
+                          Center(
+                            child: TextButton.icon(
+                              onPressed: () => controller.showManualLogin.value = true,
+                              icon: const Icon(Icons.add_circle_outline, color: AppColors.primary),
+                              label: const Text(
+                                "অন্য অ্যাকাউন্ট দিয়ে লগইন করুন",
+                                style: TextStyle(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
                               ),
-                              Expanded(child: Divider()),
-                            ],
+                            ),
+                          ),
+
+                        if (showManual) ...[
+                          if (hasProfiles) ...[
+                            const Row(
+                              children: [
+                                Expanded(child: Divider(color: AppColors.divider)),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 16),
+                                  child: Text("অথবা", style: TextStyle(color: AppColors.textGrey, fontSize: 13)),
+                                ),
+                                Expanded(child: Divider(color: AppColors.divider)),
+                              ],
+                            ),
+                            const SizedBox(height: 24),
+                          ],
+                          const Text(
+                            "লগইন করুন",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: AppColors.textDark,
+                            ),
                           ),
                           const SizedBox(height: 16),
+
+                          /// Username
+                          TextFormField(
+                            controller: controller.usernameController,
+                            validator: controller.validateUsername,
+                            decoration: InputDecoration(
+                              hintText: "ইউজারনেম",
+                              prefixIcon: const Icon(Icons.person_outline, size: 22, color: AppColors.primary),
+                              filled: true,
+                              fillColor: Colors.white,
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: const BorderSide(color: AppColors.primary, width: 1),
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          /// Password
+                          TextFormField(
+                            controller: controller.passwordController,
+                            validator: controller.validatePassword,
+                            obscureText: controller.obcsurePassword.value,
+                            decoration: InputDecoration(
+                              hintText: "পাসওয়ার্ড",
+                              prefixIcon: const Icon(Icons.lock_outline, size: 22, color: AppColors.primary),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  controller.obcsurePassword.value
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
+                                  color: AppColors.textGrey,
+                                  size: 20,
+                                ),
+                                onPressed: controller.togglePassword,
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: const BorderSide(color: AppColors.primary, width: 1),
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 32),
+
+                          /// Sign In Button
+                          SizedBox(
+                            width: double.infinity,
+                            height: 56,
+                            child: ElevatedButton(
+                              onPressed: controller.isLoading.value ? null : controller.login,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                              ),
+                              child: controller.isLoading.value
+                                  ? const SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2.5,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : const Text(
+                                      "লগইন",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                            ),
+                          ),
                         ],
-                      );
-                    }),
 
-                    const SizedBox(height: 10),
+                        const SizedBox(height: 40),
 
-                    /// Base URL
-                    // TextFormField(
-                    //   controller: controller.baseUrlController,
-                    //   validator: controller.validateBaseUrl,
-                    //   keyboardType: TextInputType.url,
-                    //   decoration: InputDecoration(
-                    //     labelText: "Base URL",
-                    //     hintText: "http://xxx.xxx.xxx/api/",
-                    //     prefixIcon: const Icon(Icons.link),
-                    //     border: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(12),
-                    //     ),
-                    //   ),
-                    // ),
-
-                    const SizedBox(height: 18),
-
-                    /// Username
-                    TextFormField(
-                      controller: controller.usernameController,
-                      validator: controller.validateUsername,
-                      decoration: InputDecoration(
-                        labelText: "Username",
-                        prefixIcon: const Icon(Icons.person),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 18),
-
-                    /// Password
-                    Obx(
-                          () => TextFormField(
-                        controller: controller.passwordController,
-                        validator: controller.validatePassword,
-                        obscureText: controller.obcsurePassword.value,
-                        decoration: InputDecoration(
-                          labelText: "Password",
-                          prefixIcon: const Icon(Icons.lock),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              controller.obcsurePassword.value
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                            ),
-                            onPressed: controller.togglePassword,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 30),
-
-                    SizedBox(
-                      width: double.infinity,
-                      height: 52,
-                      child: Obx(
-                            () => ElevatedButton(
-                          onPressed: controller.isLoading.value
-                              ? null
-                              : controller.login,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blueAccent,
-                            foregroundColor: Colors.white,
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          child: controller.isLoading.value
-                              ? const SizedBox(
-                            width: 22,
-                            height: 22,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.5,
-                              color: Colors.white,
-                            ),
-                          )
-                              : const Text(
-                            "SIGN IN",
+                        Center(
+                          child: Text(
+                            "Version 1.0.0",
                             style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                              color: Colors.grey.shade500,
+                              fontSize: 12,
                             ),
                           ),
                         ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    Text(
-                      "Version 1.0.0",
-                      style: TextStyle(
-                        color: Colors.grey.shade500,
-                        fontSize: 12,
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-                  ],
+                        const SizedBox(height: 20),
+                      ],
+                    );
+                  }),
                 ),
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HeaderSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      color: AppColors.primary,
+      padding: EdgeInsets.fromLTRB(
+        24,
+        MediaQuery.of(context).padding.top + 20,
+        24,
+        60,
+      ),
+      child: const Column(
+        children: [
+          Icon(
+            Icons.agriculture_rounded,
+            color: Colors.white,
+            size: 48,
+          ),
+          SizedBox(height: 12),
+          Text(
+            "Troyee Contact Farm",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.5,
             ),
           ),
+          SizedBox(height: 4),
+          Text(
+            "ফিল্ড অফিসার লগইন",
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: 13,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _QuickProfileCard extends StatelessWidget {
+  final Map<String, dynamic> profile;
+  final VoidCallback onTap;
+
+  const _QuickProfileCard({required this.profile, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 190,
+        margin: const EdgeInsets.only(right: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: .04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 18,
+              backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+              child: const Icon(Icons.person, color: AppColors.primary, size: 20),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    profile['fullName'],
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                      color: AppColors.textDark,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    profile['zone'],
+                    style: const TextStyle(
+                      color: AppColors.textGrey,
+                      fontSize: 11,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
