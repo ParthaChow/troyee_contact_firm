@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import '../../../app/core/theme/app_colors.dart';
 import '../controllers/home_controller.dart';
 import '../widgets/farm_task_tile.dart';
-import '../widgets/progress_summary_card.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -96,14 +95,7 @@ class _HomeSection extends StatelessWidget {
                 child: ListView(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                   children: [
-                    ProgressSummaryCard(
-                      completed: controller.completedVisits.value,
-                      total: controller.totalVisits.value,
-                      remaining: controller.remainingVisits,
-                      pendingSync: controller.pendingSyncRecords.value,
-                      progress: controller.progressValue,
-                    ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
                         Container(
@@ -412,7 +404,7 @@ class _HeaderSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "আসসালামু আলাইকুম, ${controller.officerName}",
+                      controller.officerName,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -430,33 +422,37 @@ class _HeaderSection extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: const Color(0xffE7A512),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 6,
-                      height: 6,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
+              Obx(
+                () => Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: controller.isOnline.value
+                        ? const Color(0xffE7A512)
+                        : Colors.grey.shade600,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 6,
+                        height: 6,
+                        decoration: BoxDecoration(
+                          color: controller.isOnline.value ? Colors.white : Colors.white54,
+                          shape: BoxShape.circle,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      controller.statusLabel,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
+                      const SizedBox(width: 6),
+                      Text(
+                        controller.statusLabel,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],

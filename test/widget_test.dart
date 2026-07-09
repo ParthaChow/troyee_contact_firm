@@ -6,7 +6,7 @@ import 'package:troyee_contact_firm/modules/home/bindings/home_binding.dart';
 import 'package:troyee_contact_firm/modules/home/views/home_view.dart';
 
 void main() {
-  testWidgets('Home screen shows Bengali greeting', (WidgetTester tester) async {
+  testWidgets('Home screen shows officer name', (WidgetTester tester) async {
     HomeBinding().dependencies();
 
     await tester.pumpWidget(
@@ -16,7 +16,7 @@ void main() {
       ),
     );
 
-    expect(find.textContaining('আসসালামু আলাইকুম'), findsOneWidget);
+    expect(find.textContaining('রফিক'), findsOneWidget);
     expect(find.text('আজকের পরিদর্শন তালিকা'), findsOneWidget);
   });
 }

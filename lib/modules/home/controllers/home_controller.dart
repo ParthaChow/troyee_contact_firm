@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:get/get.dart';
 
 import '../../../app/routes/app_routes.dart';
@@ -18,7 +21,11 @@ class HomeController extends GetxController {
   // Officer Information
   String get officerName => _authService.fullName ?? 'রফিক';
   String get zone => _authService.zone ?? 'কুষ্টিয়া জোন';
-  final statusLabel = 'সক্রিয়';
+
+  final isOnline = true.obs;
+  String get statusLabel => isOnline.value ? 'অনলাইন' : 'অফলাইন';
+
+  late Timer _connectivityTimer;
 
   // Dashboard
   final completedVisits = 0.obs;
@@ -47,7 +54,24 @@ class HomeController extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
+    _checkConnectivity();
+    _connectivityTimer = Timer.periodic(const Duration(seconds: 10), (_) => _checkConnectivity());
     await loadFarmTasks();
+  }
+
+  @override
+  void onClose() {
+    _connectivityTimer.cancel();
+    super.onClose();
+  }
+
+  Future<void> _checkConnectivity() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      isOnline.value = result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } on SocketException catch (_) {
+      isOnline.value = false;
+    }
   }
 
   Future<void> loadFarmTasks() async {
