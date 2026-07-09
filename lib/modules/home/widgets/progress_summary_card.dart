@@ -94,7 +94,7 @@ class ProgressSummaryCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "${total}টি টার্গেট - ${remaining}টি বাকি",
+                  "$totalটি টার্গেট - $remainingটি বাকি",
                   style: const TextStyle(
                     fontSize: 14,
                     color: AppColors.textGrey,

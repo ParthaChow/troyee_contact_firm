@@ -1,6 +1,5 @@
 import 'package:troyee_contact_firm/models/login_response.dart';
 
-import '../../models/user_model.dart';
 import 'api_fetch.dart';
 
 class AuthRepository {
