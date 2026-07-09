@@ -25,7 +25,7 @@ class FarmBatchController extends GetxController {
     try {
       isLoading(true);
 
-      final url = Uri.parse('${SignInController().baseUrlController}/$farmId/batches');
+      final url = Uri.parse('${SignInController().baseUrlController.text}/$farmId/batches');
 
       final response = await http.get(
         url,
@@ -40,6 +40,7 @@ class FarmBatchController extends GetxController {
       }
     } catch (e) {
       Get.snackbar('Error', 'An error occurred: $e');
+      print('Error An error occurred: $e');
     } finally {
       isLoading(false);
     }

@@ -28,7 +28,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.farm_batch,
-      page: () => FarmBatchView(),
+      page: () => const FarmBatchView(),
       binding: FarmBatchBinding(),
     ),
   ];
