@@ -20,6 +20,7 @@ class SignInController extends GetxController {
 
   final isLoading = false.obs;
   final obcsurePassword = true.obs;
+  final showManualLogin = false.obs;
 
   final savedProfiles = <Map<String, dynamic>>[].obs;
 
