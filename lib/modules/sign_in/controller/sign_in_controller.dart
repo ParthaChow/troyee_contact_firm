@@ -101,10 +101,5 @@ class SignInController extends GetxController {
     return null;
   }
 
-  String? validateBaseUrl(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return "Base URL is required";
-    }
-    return null;
-  }
+
 }
