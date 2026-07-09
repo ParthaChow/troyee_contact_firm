@@ -17,7 +17,7 @@ class FarmTask {
   final bool isActive;
   final double utilizationPercent;
   
-  // Local state fields
+
   final VisitStatus status;
   final bool isSynced;
 
@@ -36,17 +36,13 @@ class FarmTask {
     this.isSynced = true,
   });
 
-  //==========================
-  // Helpers
-  //==========================
+
 
   bool get isCompleted => status == VisitStatus.completed;
   bool get isPending => status == VisitStatus.pending;
   bool get isOngoing => status == VisitStatus.ongoing;
 
-  //==========================
-  // CopyWith
-  //==========================
+
 
   FarmTask copyWith({
     int? id,
@@ -78,9 +74,9 @@ class FarmTask {
     );
   }
 
-  //==========================
+
   // JSON
-  //==========================
+
 
   factory FarmTask.fromJson(Map<String, dynamic> json) {
     return FarmTask(
