@@ -54,7 +54,100 @@ class SignInView extends GetView<SignInController> {
                           ?.copyWith(color: Colors.grey),
                     ),
 
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 24),
+
+                    /// Saved Profiles
+                    Obx(() {
+                      if (controller.savedProfiles.isEmpty) return const SizedBox();
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "পছন্দের প্রোফাইল", // Quick Login / Preferred Profile
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          SizedBox(
+                            height: 85,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: controller.savedProfiles.length,
+                              itemBuilder: (context, index) {
+                                final profile = controller.savedProfiles[index];
+                                return GestureDetector(
+                                  onTap: () => controller.selectProfile(profile),
+                                  child: Container(
+                                    width: 180,
+                                    margin: const EdgeInsets.only(right: 12),
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xffF0F7F4), // Light greenish background
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(color: const Color(0xffD1E7DD)),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const CircleAvatar(
+                                          radius: 20,
+                                          backgroundColor: Color(0xff0F2D20),
+                                          child: Icon(Icons.person, color: Colors.white, size: 24),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                profile['fullName'],
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                  color: Color(0xff0F2D20),
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              Text(
+                                                profile['zone'],
+                                                style: const TextStyle(
+                                                  color: Colors.black54,
+                                                  fontSize: 11,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          const Row(
+                            children: [
+                              Expanded(child: Divider()),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Text("অথবা", style: TextStyle(color: Colors.grey, fontSize: 12)),
+                              ),
+                              Expanded(child: Divider()),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                        ],
+                      );
+                    }),
+
+                    const SizedBox(height: 10),
 
                     /// Base URL
                     // TextFormField(
