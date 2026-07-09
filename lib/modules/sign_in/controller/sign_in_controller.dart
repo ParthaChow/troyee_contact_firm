@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
+import '../../../app/routes/app_routes.dart';
 import '../../../app/services/api_fetch.dart';
 import '../../../app/services/services.dart';
-import '../../../models/user_model.dart';
+import '../../../models/login_response.dart';
 
 class SignInController extends GetxController {
   final ApiFetch _api = ApiFetch();
@@ -14,20 +15,20 @@ class SignInController extends GetxController {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   final baseUrlController = TextEditingController(
-    text: "http://103.134.89.218:5053/api/",
+    text: "http://103.134.89.218:60657/api/",
   );
 
   final isLoading = false.obs;
   final obcsurePassword = true.obs;
 
-  final Rxn<UserInfo> user = Rxn<UserInfo>();
+  final Rxn<LoginResponse> user = Rxn<LoginResponse>();
 
   @override
   void onInit() {
     super.onInit();
 
-    usernameController.text = 'Troyee';
-    passwordController.text = '123456';
+    usernameController.text = 'rafiq.fo';
+    passwordController.text = '12345678';
   }
 
 
@@ -50,19 +51,30 @@ class SignInController extends GetxController {
     try {
       isLoading.value  = true;
 
-      final result = await _api.login(username: usernameController.text.trim(), password: passwordController.text.trim(), baseUrl: baseUrlController.text.trim(),);
+      final LoginResponse result = await _api.login(username: usernameController.text.trim(), password: passwordController.text.trim(), baseUrl: baseUrlController.text.trim(),);
+      print(baseUrlController);
 
       user.value = result;
 
-      Get.find<AuthService>().login();
+      final auth = Get.find<AuthService>();
+
+      await auth.saveLogin(
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+        fullName: result.fullName,
+        zone: result.zone,
+        fieldOfficerId: result.fieldOfficerId,
+        expiresAt: result.accessTokenExpiresAt.toIso8601String(),
+        baseUrl: baseUrlController.text.trim(),
+      );
 
       Get.snackbar("Success",
-          "Welcome ${result.uName}",
+          "Welcome ${result.fullName}",
       snackPosition: SnackPosition.BOTTOM,);
 
 
-      Get.offNamed(
-        '/home',
+      Get.offAllNamed(
+        Routes.home,
         arguments: result,
       );
     } catch (e) {
@@ -89,10 +101,5 @@ class SignInController extends GetxController {
     return null;
   }
 
-  String? validateBaseUrl(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return "Base URL is required";
-    }
-    return null;
-  }
+
 }

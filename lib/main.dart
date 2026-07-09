@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'app/routes/app_pages.dart';
 import 'app/routes/app_routes.dart';
 import 'app/services/services.dart';
@@ -7,7 +8,13 @@ import 'app/services/services.dart';
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Get.putAsync(() => AuthService().init());
+  await GetStorage.init();
+
+
+  await Get.putAsync<AuthService>(() async {
+    return await AuthService().init();
+  });
+
 
   runApp(TroyeeApp()
   );

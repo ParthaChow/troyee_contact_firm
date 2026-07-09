@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../app//routes/app_routes.dart';
 
 import '../controller/splash_controller.dart';
 
@@ -12,9 +10,13 @@ class SplashView extends GetView<SplashController> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Image(image: AssetImage('assets/logo.jpg')),
+        child: Transform.scale(
+          scale: 0.5,
+          child: const Image(image: AssetImage('assets/logo.jpg')
+          ),
+        ),
       )
     );
   }
