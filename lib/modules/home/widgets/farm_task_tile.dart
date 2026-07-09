@@ -81,40 +81,14 @@ class FarmTaskTile extends StatelessWidget {
                   ),
                 ),
 
-                // Action Button
-                _buildActionButton(),
+                const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: AppColors.textGrey,
+                ),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActionButton() {
-    return ElevatedButton(
-      onPressed: () {
-        Get.toNamed(
-          Routes.farm_batch,
-          arguments: task.id,
-        );
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xffFFF4D7),
-        foregroundColor: const Color(0xffC88705),
-        elevation: 0,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        minimumSize: Size.zero,
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-      child: const Text(
-        "Batch View",
-        style: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
         ),
       ),
     );

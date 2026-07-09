@@ -76,9 +76,8 @@ class ProgressSummaryCard extends StatelessWidget {
 
           const SizedBox(width: 24),
 
-          //------------------------------------------------
           // Info (Right)
-          //------------------------------------------------
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

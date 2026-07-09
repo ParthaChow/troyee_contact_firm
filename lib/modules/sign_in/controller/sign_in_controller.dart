@@ -21,14 +21,31 @@ class SignInController extends GetxController {
   final isLoading = false.obs;
   final obcsurePassword = true.obs;
 
+  final savedProfiles = <Map<String, dynamic>>[].obs;
+
   final Rxn<LoginResponse> user = Rxn<LoginResponse>();
 
   @override
   void onInit() {
     super.onInit();
+    _loadProfiles();
+    // usernameController.text = 'rafiq.fo';
+    // passwordController.text = '12345678';
+  }
 
-    usernameController.text = 'rafiq.fo';
-    passwordController.text = '12345678';
+  void _loadProfiles() {
+    final auth = Get.find<AuthService>();
+    savedProfiles.assignAll(auth.savedProfiles);
+  }
+
+  void selectProfile(Map<String, dynamic> profile) {
+    usernameController.text = profile['username'] ?? '';
+    passwordController.text = profile['password'] ?? '';
+
+    // Auto-login if password exists
+    if (passwordController.text.isNotEmpty) {
+      login();
+    }
   }
 
 
@@ -59,6 +76,8 @@ class SignInController extends GetxController {
       final auth = Get.find<AuthService>();
 
       await auth.saveLogin(
+        username: usernameController.text.trim(),
+        password: passwordController.text.trim(),
         accessToken: result.accessToken,
         refreshToken: result.refreshToken,
         fullName: result.fullName,

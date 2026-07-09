@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../../app/core/theme/app_colors.dart';
+import '../../../app/routes/app_routes.dart';
 import '../controllers/home_controller.dart';
 import '../widgets/farm_task_tile.dart';
 
@@ -96,27 +97,6 @@ class _HomeSection extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                   children: [
                     const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Container(
-                          width: 4,
-                          height: 18,
-                          decoration: BoxDecoration(
-                            color: const Color(0xffE7A512),
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        const Text(
-                          "আজকের পরিদর্শন তালিকা",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textDark,
-                          ),
-                        ),
-                      ],
-                    ),
                     const SizedBox(height: 16),
                     if (controller.isLoading.value)
                       const Center(
@@ -130,7 +110,10 @@ class _HomeSection extends StatelessWidget {
                       ...controller.filteredTasks.map(
                         (task) => FarmTaskTile(
                           task: task,
-                          onTap: () => controller.startVisit(task.id),
+                          onTap: () {
+                            controller.startVisit(task.id);
+                            Get.toNamed(Routes.farm_batch, arguments: task);
+                          },
                         ),
                       ),
                   ],
@@ -180,7 +163,10 @@ class _FarmListSection extends StatelessWidget {
                         ...controller.farmTasks.map(
                           (task) => FarmTaskTile(
                             task: task,
-                            onTap: () => controller.startVisit(task.id),
+                            onTap: () {
+                              controller.startVisit(task.id);
+                              Get.toNamed(Routes.farm_batch, arguments: task);
+                            },
                           ),
                         ),
                       ],
