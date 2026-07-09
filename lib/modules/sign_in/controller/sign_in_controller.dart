@@ -5,7 +5,6 @@ import '../../../app/routes/app_routes.dart';
 import '../../../app/services/api_fetch.dart';
 import '../../../app/services/services.dart';
 import '../../../models/login_response.dart';
-import '../../../models/user_model.dart';
 
 class SignInController extends GetxController {
   final ApiFetch _api = ApiFetch();
