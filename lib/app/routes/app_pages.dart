@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import '../../modules/farm_batch/binding/farm_batch_binding.dart';
+import '../../modules/farm_batch/view/farm_batch_view.dart';
 import '../../modules/sign_in/binding/sign_in_binding.dart';
 import '../../modules/sign_in/view/sign_in_view.dart';
 import '../../modules/home/bindings/home_binding.dart';
@@ -23,6 +25,11 @@ class AppPages {
       name: Routes.home,
       page: () => const HomeView(),
       binding: HomeBinding(),
+    ),
+    GetPage(
+      name: Routes.farm_batch,
+      page: () => FarmBatchView(),
+      binding: FarmBatchBinding(),
     ),
   ];
 }

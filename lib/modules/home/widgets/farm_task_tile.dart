@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:troyee_contact_firm/app/routes/app_routes.dart';
 
 import '../../../app/core/theme/app_colors.dart';
 import '../models/farm_task.dart';
@@ -90,34 +92,27 @@ class FarmTaskTile extends StatelessWidget {
   }
 
   Widget _buildActionButton() {
-    if (task.isCompleted) {
-      return Container(
+    return ElevatedButton(
+      onPressed: () {
+        Get.toNamed(
+          Routes.farm_batch,
+          arguments: task.id,
+        );
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xffFFF4D7),
+        foregroundColor: const Color(0xffC88705),
+        elevation: 0,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: const Color(0xffE8F5E9),
+        minimumSize: Size.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        child: const Text(
-          "সম্পন্ন",
-          style: TextStyle(
-            color: Color(0xff2E7D32),
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: const Color(0xffFFF4D7),
-        borderRadius: BorderRadius.circular(8),
       ),
       child: const Text(
-        "পরিদর্শন করুন",
+        "Batch View",
         style: TextStyle(
-          color: Color(0xffC88705),
           fontSize: 12,
           fontWeight: FontWeight.bold,
         ),
