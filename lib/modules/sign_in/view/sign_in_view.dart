@@ -254,7 +254,7 @@ class _HeaderSection extends StatelessWidget {
       color: AppColors.primary,
       padding: EdgeInsets.fromLTRB(
         24,
-        MediaQuery.of(context).padding.top + 20,
+        MediaQuery.of(context).padding.top + 22,
         24,
         60,
       ),
@@ -301,27 +301,27 @@ class _QuickProfileCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        margin: const EdgeInsets.only(bottom: 20), // Increased margin
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20), // Significantly increased padding for size
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20), // More rounded corners
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: .04),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+              color: Colors.black.withValues(alpha: .06), // Slightly deeper shadow
+              blurRadius: 15,
+              offset: const Offset(0, 6),
             ),
           ],
         ),
         child: Row(
           children: [
             CircleAvatar(
-              radius: 22,
+              radius: 30, // Bigger avatar
               backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-              child: const Icon(Icons.person, color: AppColors.primary, size: 24),
+              child: const Icon(Icons.person, color: AppColors.primary, size: 36), // Bigger icon
             ),
-            const SizedBox(width: 14),
+            const SizedBox(width: 20),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -331,18 +331,18 @@ class _QuickProfileCard extends StatelessWidget {
                     profile['fullName'],
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 15,
+                      fontSize: 18, // Bigger font
                       color: AppColors.textDark,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: 6),
                   Text(
                     profile['zone'],
                     style: const TextStyle(
                       color: AppColors.textGrey,
-                      fontSize: 12,
+                      fontSize: 14, // Bigger font
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -350,7 +350,7 @@ class _QuickProfileCard extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.textGrey),
+            const Icon(Icons.arrow_forward_ios, size: 18, color: AppColors.textGrey),
           ],
         ),
       ),
