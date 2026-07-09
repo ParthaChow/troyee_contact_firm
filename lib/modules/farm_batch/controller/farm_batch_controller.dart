@@ -16,7 +16,7 @@ class FarmBatchController extends GetxController {
   void onInit() {
     super.onInit();
 
-    // ✅ CORRECT: Assignments and function calls go inside a method
+
     farmId = Get.arguments as int;
     fetchBatches();
   }
@@ -25,10 +25,11 @@ class FarmBatchController extends GetxController {
     try {
       isLoading(true);
 
-      final url = Uri.parse('${SignInController().baseUrlController.text}/$farmId/batches');
+      String url = "http://103.134.89.218:60657/";
+      final finalUrl = Uri.parse('$url$farmId/batches');
 
       final response = await http.get(
-        url,
+        finalUrl,
         headers: {'accept': '*/*'},
       );
 
