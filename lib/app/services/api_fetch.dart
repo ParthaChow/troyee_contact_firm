@@ -53,4 +53,37 @@ class ApiFetch {
 
     throw Exception("Failed to fetch farm list (Status: ${response.statusCode}): ${response.body}");
   }
+
+  Future<Map<String, dynamic>> checkIn({
+    required String baseUrl,
+    required String token,
+    required int farmId,
+    required int batchId,
+    required double latitude,
+    required double longitude,
+    required double accuracy,
+    required String deviceId,
+  }) async {
+    final response = await http.post(
+      Uri.parse("${baseUrl}FarmVisit/check-in"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode({
+        "farmId": farmId,
+        "batchId": batchId,
+        "latitude": latitude,
+        "longitude": longitude,
+        "accuracyMeters": accuracy,
+        "deviceId": deviceId,
+      }),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return jsonDecode(response.body);
+    }
+
+    throw Exception("Check-in failed (Status: ${response.statusCode}): ${response.body}");
+  }
 }

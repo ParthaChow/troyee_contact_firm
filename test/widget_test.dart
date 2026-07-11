@@ -11,7 +11,7 @@ void main() {
 
     await tester.pumpWidget(
       GetMaterialApp(
-        theme: AppTheme.light,
+        theme: AppTheme.lightTheme,
         home: const HomeView(),
       ),
     );
