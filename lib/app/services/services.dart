@@ -46,7 +46,7 @@ class AuthService extends GetxService {
     required String fullName,
     required String zone,
   }) async {
-    List<dynamic> profiles = storage.read<List<dynamic>>("savedProfiles") ?? [];
+    final List<dynamic> profiles = storage.read("savedProfiles") ?? [];
 
     // Check if profile already exists
     final index = profiles.indexWhere((p) => p['username'] == username);
@@ -69,36 +69,39 @@ class AuthService extends GetxService {
   }
 
   List<Map<String, dynamic>> get savedProfiles {
-    List<dynamic> profiles = storage.read<List<dynamic>>("savedProfiles") ?? [];
-    List<Map<String, dynamic>> profileList = profiles.map((p) => Map<String, dynamic>.from(p)).toList();
-    
-    // Sort by last login (newest first)
-    profileList.sort((a, b) {
-      final aDate = DateTime.tryParse(a['lastLogin'] ?? '') ?? DateTime(2000);
-      final bDate = DateTime.tryParse(b['lastLogin'] ?? '') ?? DateTime(2000);
-      return bDate.compareTo(aDate);
-    });
-    
-    return profileList;
+    try {
+      final List<dynamic>? profiles = storage.read("savedProfiles");
+      if (profiles == null) return [];
+      
+      final List<Map<String, dynamic>> profileList = profiles
+          .whereType<Map>()
+          .map((p) => Map<String, dynamic>.from(p))
+          .toList();
+      
+      // Sort by last login (newest first)
+      profileList.sort((a, b) {
+        final aDate = DateTime.tryParse(a['lastLogin']?.toString() ?? '') ?? DateTime(2000);
+        final bDate = DateTime.tryParse(b['lastLogin']?.toString() ?? '') ?? DateTime(2000);
+        return bDate.compareTo(aDate);
+      });
+      
+      return profileList;
+    } catch (e) {
+      return [];
+    }
   }
 
-  String? get baseUrl =>
-      storage.read<String>("baseUrl");
+  String? get baseUrl => storage.read("baseUrl");
 
-  String? get accessToken =>
-      storage.read<String>("accessToken");
+  String? get accessToken => storage.read("accessToken");
 
-  String? get refreshToken =>
-      storage.read<String>("refreshToken");
+  String? get refreshToken => storage.read("refreshToken");
 
-  int? get fieldOfficerId =>
-      storage.read<int>("fieldOfficerId");
+  int? get fieldOfficerId => storage.read("fieldOfficerId");
 
-  String? get fullName =>
-      storage.read<String>("fullName");
+  String? get fullName => storage.read("fullName");
 
-  String? get zone =>
-      storage.read<String>("zone");
+  String? get zone => storage.read("zone");
 
   void logout() {
     storage.remove("accessToken");

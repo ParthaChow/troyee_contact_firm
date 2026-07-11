@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:troyee_contact_firm/models/login_response.dart';
 
+import '../../models/farm_batch_model.dart';
 import '../../modules/home/models/farm_task.dart';
 
 class ApiFetch {
@@ -53,4 +54,43 @@ class ApiFetch {
 
     throw Exception("Failed to fetch farm list (Status: ${response.statusCode}): ${response.body}");
   }
+
+  Future<FarmBatch> getBatchDetail({
+    required int farmId,
+    required int batchId,
+  }) async {
+    final response = await http.get(
+      Uri.parse("http://103.134.89.218:60657/batches/$farmId/$batchId"),
+      headers: {"accept": "*/*"},
+    );
+
+    if (response.statusCode == 200) {
+      return FarmBatch.fromJson(jsonDecode(response.body));
+    }
+
+    throw Exception("Failed to fetch batch detail: ${response.body}");
+  }
+
+  Future<void> submitDailyEntry({
+    required String baseUrl,
+    required String token,
+    required Map<String, dynamic> data,
+  }) async {
+    final response = await http.post(
+      Uri.parse("${baseUrl}DailyEntry"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+        "accept": "*/*",
+      },
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return;
+    }
+
+    throw Exception("Failed to submit daily entry: ${response.body}");
+  }
 }
+
