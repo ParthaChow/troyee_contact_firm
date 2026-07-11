@@ -29,9 +29,11 @@ class SignInController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    final auth = Get.find<AuthService>();
+    if (auth.baseUrl != null && auth.baseUrl!.isNotEmpty) {
+      baseUrlController.text = auth.baseUrl!;
+    }
     _loadProfiles();
-    // usernameController.text = 'rafiq.fo';
-    // passwordController.text = '12345678';
   }
 
   void _loadProfiles() {

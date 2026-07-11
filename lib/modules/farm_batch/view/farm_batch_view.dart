@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import '../../../app/routes/app_routes.dart';
 import '../../../app/core/theme/app_colors.dart';
 import '../../../models/farm_batch_model.dart';
 import '../controller/farm_batch_controller.dart';
@@ -108,31 +109,48 @@ class _BatchTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: .03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0),
-            child: Divider(height: 1, color: AppColors.divider),
-          ),
-          _InfoRow(label: 'ব্যাচ কোড', value: batch.batchCode),
-          const SizedBox(height: 8),
-          _InfoRow(label: 'জাত', value: batch.breed),
-        ],
+    return GestureDetector(
+      onTap: () => Get.toNamed(Routes.info, arguments: batch),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: .03),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Batch Details",
+                  style: TextStyle(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                const Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.textGrey),
+              ],
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: Divider(height: 1, color: AppColors.divider),
+            ),
+            _InfoRow(label: 'ব্যাচ কোড', value: batch.batchCode),
+            const SizedBox(height: 8),
+            _InfoRow(label: 'জাত', value: batch.breed),
+          ],
+        ),
       ),
     );
   }
