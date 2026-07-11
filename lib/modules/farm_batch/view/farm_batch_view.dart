@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../../../app/routes/app_routes.dart';
 import '../../../app/core/theme/app_colors.dart';
+import '../../../app/routes/app_routes.dart';
 import '../../../models/farm_batch_model.dart';
+import '../../home/models/farm_task.dart';
 import '../controller/farm_batch_controller.dart';
 
 class FarmBatchView extends GetView<FarmBatchController> {
@@ -103,53 +105,51 @@ class _HeaderSection extends GetView<FarmBatchController> {
   }
 }
 
-class _BatchTile extends StatelessWidget {
+class _BatchTile extends GetView<FarmBatchController> {
   final FarmBatch batch;
   const _BatchTile({required this.batch});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Get.toNamed(Routes.info, arguments: batch),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: .03),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
           borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: .03),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          onTap: () {
+            final task = Get.arguments as FarmTask;
+            Get.toNamed(Routes.farm_visit, arguments: {
+              'task': task,
+              'batch': batch,
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Batch Details",
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                  child: Divider(height: 1, color: AppColors.divider),
                 ),
-                const Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.textGrey),
+                _InfoRow(label: 'ব্যাচ কোড', value: batch.batchCode),
+                const SizedBox(height: 8),
+                _InfoRow(label: 'জাত', value: batch.breed),
               ],
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
-              child: Divider(height: 1, color: AppColors.divider),
-            ),
-            _InfoRow(label: 'ব্যাচ কোড', value: batch.batchCode),
-            const SizedBox(height: 8),
-            _InfoRow(label: 'জাত', value: batch.breed),
-          ],
+          ),
         ),
       ),
     );

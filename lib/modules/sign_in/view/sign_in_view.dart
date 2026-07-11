@@ -39,29 +39,7 @@ class SignInView extends GetView<SignInController> {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                "Login",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: AppColors.textDark,
-                                ),
-                              ),
-                              if (hasProfiles)
-                                TextButton(
-                                  onPressed: () => controller.showManualLogin.value = false,
-                                  child: const Text(
-                                    "Go Back",
-                                    style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 20),
 
                           /// Username
                           TextFormField(
@@ -160,6 +138,23 @@ class SignInView extends GetView<SignInController> {
                                     ),
                             ),
                           ),
+
+                          if (hasProfiles) ...[
+                            const SizedBox(height: 16),
+                            Center(
+                              child: TextButton(
+                                onPressed: () => controller.showManualLogin.value = false,
+                                child: const Text(
+                                  "Choose Account",
+                                  style: TextStyle(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                           const SizedBox(height: 40),
                           Center(
                             child: Text(
@@ -179,13 +174,13 @@ class SignInView extends GetView<SignInController> {
                       height: MediaQuery.of(context).size.height - 230,
                       child: Column(
                         children: [
+                          const SizedBox(height: 20),
                           // 1. Saved Profiles Section (Top 80%)
                           Expanded(
                             flex: 8,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const SizedBox(height: 10),
                                 Expanded(
                                   child: ListView.builder(
                                     padding: const EdgeInsets.only(bottom: 20),

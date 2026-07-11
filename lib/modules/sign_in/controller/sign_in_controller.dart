@@ -34,11 +34,24 @@ class SignInController extends GetxController {
       baseUrlController.text = auth.baseUrl!;
     }
     _loadProfiles();
+    _loadSavedBaseUrl();
+  }
+
+  void _loadSavedBaseUrl() {
+    final auth = Get.find<AuthService>();
+    if (auth.baseUrl != null && auth.baseUrl!.isNotEmpty) {
+      baseUrlController.text = auth.baseUrl!;
+    }
   }
 
   void _loadProfiles() {
     final auth = Get.find<AuthService>();
     savedProfiles.assignAll(auth.savedProfiles);
+    
+    // Listen to changes in auth.savedProfiles to keep local list updated
+    ever(auth.savedProfilesList, (List<Map<String, dynamic>> profiles) {
+      savedProfiles.assignAll(profiles);
+    });
   }
 
   void selectProfile(Map<String, dynamic> profile) {
