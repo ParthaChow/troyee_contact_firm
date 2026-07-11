@@ -5,4 +5,5 @@ abstract class Routes {
   static const farm_batch = "/farm_batch";
   static const farm_visit = "/farm_visit";
   static const camera_visit = "/camera_visit";
+  static const signature_visit = "/signature_visit";
 }

@@ -3,8 +3,10 @@ import '../../modules/farm_batch/binding/farm_batch_binding.dart';
 import '../../modules/farm_batch/view/farm_batch_view.dart';
 import '../../modules/farm_visit/binding/camera_visit_binding.dart';
 import '../../modules/farm_visit/binding/farm_visit_binding.dart';
+import '../../modules/farm_visit/binding/signature_binding.dart';
 import '../../modules/farm_visit/view/camera_visit_view.dart';
 import '../../modules/farm_visit/view/farm_visit_view.dart';
+import '../../modules/farm_visit/view/signature_view.dart';
 import '../../modules/sign_in/binding/sign_in_binding.dart';
 import '../../modules/sign_in/view/sign_in_view.dart';
 import '../../modules/home/bindings/home_binding.dart';
@@ -44,6 +46,11 @@ class AppPages {
       name: Routes.camera_visit,
       page: () => const CameraVisitView(),
       binding: CameraVisitBinding(),
+    ),
+    GetPage(
+      name: Routes.signature_visit,
+      page: () => const SignatureView(),
+      binding: SignatureBinding(),
     ),
   ];
 }
