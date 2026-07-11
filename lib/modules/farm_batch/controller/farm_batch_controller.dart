@@ -6,29 +6,34 @@ import 'package:troyee_contact_firm/modules/sign_in/controller/sign_in_controlle
 
 import '../../../models/farm_batch_model.dart';
 import '../../../app/services/api_fetch.dart';
+import '../../home/models/farm_task.dart';
 
 class FarmBatchController extends GetxController {
   var batches = <FarmBatch>[].obs;
   var isLoading = true.obs;
   late final int farmId;
+  late final String farmName;
 
   @override
   void onInit() {
     super.onInit();
 
-    // ✅ CORRECT: Assignments and function calls go inside a method
-    farmId = Get.arguments as int;
+    final task = Get.arguments as FarmTask;
+    farmId = task.id;
+    farmName = task.name;
     fetchBatches();
+    print(farmId);
   }
 
   Future<void> fetchBatches() async {
     try {
       isLoading(true);
 
-      final url = Uri.parse('${SignInController().baseUrlController.text}/$farmId/batches');
-
+      String url = "http://103.134.89.218:60657/";
+      final finalUrl = Uri.parse('$url$farmId/batches');
+      print(url);
       final response = await http.get(
-        url,
+        finalUrl,
         headers: {'accept': '*/*'},
       );
 
