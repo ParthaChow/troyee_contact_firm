@@ -266,35 +266,39 @@ class _DetailRow extends StatelessWidget {
   }
 }
 
-class _SubmitButton extends StatelessWidget {
+class _SubmitButton extends GetView<FarmVisitController> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 60,
-      child: ElevatedButton(
-        onPressed: () => Get.toNamed(Routes.camera_visit),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xff41695F),
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          elevation: 0,
-        ),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.check, size: 24),
-            SizedBox(width: 8),
-            Text(
-              "চেক-ইন সম্পন্ন হয়েছে",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+    return Obx(
+      () => SizedBox(
+        width: double.infinity,
+        height: 60,
+        child: ElevatedButton(
+          onPressed: controller.isCheckingIn.value ? null : () => controller.checkIn(),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xff41695F),
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-          ],
+            elevation: 0,
+          ),
+          child: controller.isCheckingIn.value
+              ? const CircularProgressIndicator(color: Colors.white)
+              : const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.check, size: 24),
+                    SizedBox(width: 8),
+                    Text(
+                      "চেক-ইন সম্পন্ন করুন",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
         ),
       ),
     );

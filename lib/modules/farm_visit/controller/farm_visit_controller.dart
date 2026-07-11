@@ -1,14 +1,19 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../../app/routes/app_routes.dart';
+import '../../../app/services/api_fetch.dart';
 import '../../../app/services/services.dart';
 import '../../home/models/farm_task.dart';
 import '../../../models/farm_batch_model.dart';
 
 class FarmVisitController extends GetxController {
   final AuthService _authService = Get.find<AuthService>();
+  final ApiFetch _apiFetch = ApiFetch();
+  
   final Rxn<Position> currentPosition = Rxn<Position>();
   final RxBool isLoading = true.obs;
+  final RxBool isCheckingIn = false.obs;
   
   GoogleMapController? mapController;
   final RxSet<Marker> markers = <Marker>{}.obs;
@@ -75,6 +80,58 @@ class FarmVisitController extends GetxController {
     } catch (e) {
       Get.snackbar("Error", "Failed to get location: $e");
       isLoading.value = false;
+    }
+  }
+
+  Future<void> checkIn() async {
+    if (currentPosition.value == null) {
+      Get.snackbar("Error", "Location not available. Please wait.");
+      return;
+    }
+
+    isCheckingIn.value = true;
+
+    try {
+      final pos = currentPosition.value!;
+      
+      // Use coordinates string as deviceId instead of geocoding address
+      final String deviceLocationId = "Lat: ${pos.latitude.toStringAsFixed(6)}, Lon: ${pos.longitude.toStringAsFixed(6)}";
+
+      final baseUrl = _authService.baseUrl;
+      final token = _authService.accessToken;
+
+
+
+      if (baseUrl == null || token == null) {
+        throw Exception("Auth session expired");
+      }
+
+      final response = await _apiFetch.checkIn(
+        baseUrl: baseUrl,
+        token: token,
+        farmId: task.id,
+        batchId: batch.id,
+        latitude: pos.latitude,
+        longitude: pos.longitude,
+        accuracy: pos.accuracy,
+        deviceId: deviceLocationId,
+      );
+
+      Get.snackbar("Success", "Check-in successful");
+      
+      // Pass the response data forward
+      Get.toNamed(Routes.camera_visit, arguments: {
+        ...Get.arguments as Map<String, dynamic>,
+        'checkInResponse': response,
+      });
+    } catch (e) {
+      Get.snackbar("Check-in Failed", e.toString());
+      final baseUrl = _authService.baseUrl;
+      final token = _authService.accessToken;
+      print("url $baseUrl");
+      print("token $token");
+    } finally {
+      isCheckingIn.value = false;
     }
   }
 

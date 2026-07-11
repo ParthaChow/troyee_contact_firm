@@ -9,6 +9,8 @@ import '../controller/camera_visit_controller.dart';
 class CameraVisitView extends GetView<CameraVisitController> {
   const CameraVisitView({super.key});
 
+
+
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
