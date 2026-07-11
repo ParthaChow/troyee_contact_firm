@@ -22,27 +22,28 @@ class CameraVisitView extends GetView<CameraVisitController> {
           children: [
             _HeaderSection(),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 10),
-                    _CameraContainer(),
-                    const SizedBox(height: 20),
+                    Expanded(
+                      child: _CameraContainer(),
+                    ),
+                    const SizedBox(height: 12),
                     const Text(
                       "| তোলা ছবি",
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: Color(0xffD79A09),
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     _ImageGallery(),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 15),
                     _NextButton(),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 5),
                   ],
                 ),
               ),
@@ -65,9 +66,9 @@ class _HeaderSection extends StatelessWidget {
       ),
       padding: EdgeInsets.fromLTRB(
         20,
-        MediaQuery.of(context).padding.top + 10,
+        MediaQuery.of(context).padding.top + 8,
         20,
-        30,
+        15,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,14 +90,14 @@ class _HeaderSection extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
           Padding(
             padding: const EdgeInsets.only(left: 36),
             child: Text(
               "শেড, খাদ্য, পানি ও পরিবেশের ছবি",
               style: TextStyle(
                 color: Colors.white.withOpacity(0.8),
-                fontSize: 14,
+                fontSize: 13,
               ),
             ),
           ),
@@ -110,7 +111,6 @@ class _CameraContainer extends GetView<CameraVisitController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 400,
       width: double.infinity,
       decoration: BoxDecoration(
         color: const Color(0xff2A332F),
@@ -124,16 +124,17 @@ class _CameraContainer extends GetView<CameraVisitController> {
           }
           return Stack(
             alignment: Alignment.center,
+            fit: StackFit.expand,
             children: [
               CameraPreview(controller.cameraController!),
               _buildFocusCorners(),
               Positioned(
-                bottom: 20,
+                bottom: 15,
                 child: GestureDetector(
                   onTap: () => controller.takePicture(),
                   child: Container(
-                    width: 70,
-                    height: 70,
+                    width: 60,
+                    height: 60,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(color: const Color(0xffD79A09), width: 4),
@@ -152,18 +153,18 @@ class _CameraContainer extends GetView<CameraVisitController> {
   Widget _buildFocusCorners() {
     return Stack(
       children: [
-        Positioned(top: 30, left: 30, child: _corner(top: true, left: true)),
-        Positioned(top: 30, right: 30, child: _corner(top: true, left: false)),
-        Positioned(bottom: 30, left: 30, child: _corner(top: false, left: true)),
-        Positioned(bottom: 30, right: 30, child: _corner(top: false, left: false)),
+        Positioned(top: 25, left: 25, child: _corner(top: true, left: true)),
+        Positioned(top: 25, right: 25, child: _corner(top: true, left: false)),
+        Positioned(bottom: 25, left: 25, child: _corner(top: false, left: true)),
+        Positioned(bottom: 25, right: 25, child: _corner(top: false, left: false)),
       ],
     );
   }
 
   Widget _corner({required bool top, required bool left}) {
     return Container(
-      width: 30,
-      height: 30,
+      width: 20,
+      height: 20,
       decoration: BoxDecoration(
         border: Border(
           top: top ? const BorderSide(color: Color(0xffD79A09), width: 3) : BorderSide.none,
@@ -180,7 +181,7 @@ class _ImageGallery extends GetView<CameraVisitController> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 100,
+      height: 70,
       child: Obx(() => ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: controller.capturedImages.length + 1,
@@ -210,10 +211,10 @@ class _GalleryItem extends GetView<CameraVisitController> {
         GestureDetector(
           onTap: () => _viewImage(context, image),
           child: Container(
-            width: 100,
-            margin: const EdgeInsets.only(right: 12),
+            width: 70,
+            margin: const EdgeInsets.only(right: 10),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
               image: DecorationImage(
                 image: FileImage(File(image.path)),
                 fit: BoxFit.cover,
@@ -222,12 +223,12 @@ class _GalleryItem extends GetView<CameraVisitController> {
           ),
         ),
         Positioned(
-          top: 4,
-          right: 16,
+          top: 2,
+          right: 12,
           child: GestureDetector(
             onTap: () => controller.removeImage(index),
             child: Container(
-              padding: const EdgeInsets.all(4),
+              padding: const EdgeInsets.all(3),
               decoration: const BoxDecoration(
                 color: Colors.black54,
                 shape: BoxShape.circle,
@@ -235,7 +236,7 @@ class _GalleryItem extends GetView<CameraVisitController> {
               child: const Icon(
                 Icons.close,
                 color: Colors.white,
-                size: 14,
+                size: 10,
               ),
             ),
           ),
@@ -268,13 +269,13 @@ class _AddButton extends GetView<CameraVisitController> {
     return GestureDetector(
       onTap: () => controller.pickFromGallery(),
       child: Container(
-        width: 100,
+        width: 70,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.grey.shade300, style: BorderStyle.solid),
         ),
-        child: const Icon(Icons.add, color: Colors.grey, size: 32),
+        child: const Icon(Icons.add, color: Colors.grey, size: 24),
       ),
     );
   }
@@ -285,7 +286,7 @@ class _NextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 60,
+      height: 50,
       child: ElevatedButton(
         onPressed: () {
           Get.snackbar("Info", "Next step: Signature");
@@ -296,10 +297,11 @@ class _NextButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
+          elevation: 0,
         ),
         child: const Text(
           "পরবর্তী: স্বাক্ষর →",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
         ),
       ),
     );

@@ -45,12 +45,12 @@ class CameraVisitController extends GetxController {
 
   Future<void> pickFromGallery() async {
     try {
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-      if (image != null) {
-        capturedImages.add(image);
+      final List<XFile> images = await _picker.pickMultiImage();
+      if (images.isNotEmpty) {
+        capturedImages.addAll(images);
       }
     } catch (e) {
-      print("Error picking image: $e");
+      print("Error picking images: $e");
     }
   }
 
