@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
 import '../../modules/farm_batch/binding/farm_batch_binding.dart';
 import '../../modules/farm_batch/view/farm_batch_view.dart';
-import '../../modules/info/binding/info_binding.dart';
-import '../../modules/info/view/info_view.dart';
 import '../../modules/farm_visit/binding/camera_visit_binding.dart';
 import '../../modules/farm_visit/binding/farm_visit_binding.dart';
 import '../../modules/farm_visit/view/camera_visit_view.dart';
@@ -38,9 +36,6 @@ class AppPages {
       binding: FarmBatchBinding(),
     ),
     GetPage(
-      name: Routes.info,
-      page: () => const InfoView(),
-      binding: InfoBinding(),
       name: Routes.farm_visit,
       page: () => const FarmVisitView(),
       binding: FarmVisitBinding(),

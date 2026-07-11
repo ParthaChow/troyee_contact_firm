@@ -29,10 +29,6 @@ class SignInController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    final auth = Get.find<AuthService>();
-    if (auth.baseUrl != null && auth.baseUrl!.isNotEmpty) {
-      baseUrlController.text = auth.baseUrl!;
-    }
     _loadProfiles();
     _loadSavedBaseUrl();
   }
