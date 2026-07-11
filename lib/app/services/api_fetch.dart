@@ -76,12 +76,16 @@ class ApiFetch {
     required String token,
     required Map<String, dynamic> data,
   }) async {
+    print("${baseUrl}DailyEntry");
+    print("THE token is $token");
+    print(data);
     final response = await http.post(
       Uri.parse("${baseUrl}DailyEntry"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
         "accept": "*/*",
+
       },
       body: jsonEncode(data),
     );
@@ -90,7 +94,7 @@ class ApiFetch {
       return;
     }
 
-    throw Exception("Failed to submit daily entry: ${response.body}");
+    throw Exception("Failed to submit daily entry (Status: ${response.statusCode}): ${response.body}");
   }
 }
 

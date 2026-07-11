@@ -90,7 +90,7 @@ class InfoController extends GetxController {
       final auth = Get.find<AuthService>();
       
       final Map<String, dynamic> data = {
-        "visitId": 0, // Assuming 0 for a new entry
+        "visitId": 1, // Assuming 0 for a new entry
         "batchId": batch.value?.id ?? 0,
         "recordDate": DateTime.now().toIso8601String(),
         "birdCount": birdCount.value,
@@ -102,15 +102,16 @@ class InfoController extends GetxController {
         "humidityPercent": int.tryParse(humidityController.text) ?? 0,
         "averageWeightGm": double.tryParse(growthController.text) ?? 0.0,
         "lightHours": double.tryParse(lightController.text) ?? 0.0,
-        "medicineUsed": "", // Optional fields for now
-        "vaccineUsed": "",
-        "remarks": commentController.text,
+        "medicineUsed": "a",
+        "vaccineUsed": "a",
+        "remarks": commentController.text.isEmpty ? "a" : commentController.text,
       };
 
       await _api.submitDailyEntry(
         baseUrl: auth.baseUrl ?? "",
         token: auth.accessToken ?? "",
         data: data,
+
       );
 
       Get.back();
