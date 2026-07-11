@@ -8,7 +8,7 @@ import 'app/services/services.dart';
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
 
-  await GetStorage.init();
+  await GetStorage.init('auth_storage');
 
 
   await Get.putAsync<AuthService>(() async {
