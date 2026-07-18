@@ -33,6 +33,31 @@ class ApiFetch {
     throw Exception(response.body);
   }
 
+  Future<LoginResponse> refreshToken({
+    required String accessToken,
+    required String refreshToken,
+    required String baseUrl,
+  }) async {
+    final response = await http.post(
+      Uri.parse("${baseUrl}Auth/refresh-token"),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({
+        "accessToken": accessToken,
+        "refreshToken": refreshToken,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return LoginResponse.fromJson(
+        jsonDecode(response.body),
+      );
+    }
+
+    throw Exception("Refresh token failed (Status: ${response.statusCode}): ${response.body}");
+  }
+
   Future<List<FarmTask>> getFarmList({
     required String baseUrl,
     required String token,

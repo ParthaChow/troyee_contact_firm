@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -100,15 +101,22 @@ class FarmVisitController extends GetxController {
       final baseUrl = _authService.baseUrl;
       final token = _authService.accessToken;
 
-
-
-      if (baseUrl == null || token == null) {
-        throw Exception("Auth session expired");
+      if (baseUrl == null || token == null || !(await _authService.ensureValidToken())) {
+        Get.snackbar("Session Expired", "Please login again to continue", 
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        Get.offAllNamed(Routes.auth);
+        return;
       }
+
+      // Re-get the token in case it was refreshed
+      final validToken = _authService.accessToken!;
 
       final response = await _apiFetch.checkIn(
         baseUrl: baseUrl,
-        token: token,
+        token: validToken,
         farmId: task.id,
         batchId: batch.id,
         latitude: pos.latitude,

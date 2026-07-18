@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:signature/signature.dart';
 import 'package:flutter/material.dart';
 
+import '../../../app/routes/app_routes.dart';
 import '../../../models/farm_batch_model.dart';
 
 class FarmSignatureController extends GetxController {
@@ -46,6 +47,7 @@ class FarmSignatureController extends GetxController {
   Future<void> submit() async {
     if (signatureController.isEmpty) {
       Get.snackbar("Success", "Info is saved successfully", snackPosition: SnackPosition.BOTTOM);
+      Get.toNamed(Routes.home);
       return;
     }
     if (!isConfirmed.value) {

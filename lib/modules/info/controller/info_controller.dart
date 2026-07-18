@@ -53,17 +53,15 @@ class InfoController extends GetxController {
     try {
       isLoading.value = true;
       final baseUrl = _authService.baseUrl;
-      final token = _authService.accessToken;
 
-      if (baseUrl != null && token != null) {
+      if (baseUrl != null && (await _authService.ensureValidToken())) {
         final updatedBatch = await _apiFetch.getBatchDetails(
           baseUrl: baseUrl,
-          token: token,
+          token: _authService.accessToken!,
           farmId: task.id,
           batchId: batch.value!.id,
         );
         batch.value = updatedBatch;
-        // Update bird count if it was 0 or just fetched
         if (birdCount.value == 0) {
           birdCount.value = updatedBatch.currentCount;
           feedController.text = updatedBatch.totalFeedKg.toString();
@@ -90,15 +88,21 @@ class InfoController extends GetxController {
     try {
       isLoading.value = true;
       final baseUrl = _authService.baseUrl;
-      final token = _authService.accessToken;
-
-      if (baseUrl == null || token == null) {
-        throw Exception("Session expired");
+      
+      if (baseUrl == null || !(await _authService.ensureValidToken())) {
+        Get.snackbar("Session Expired", "Please login again to continue", 
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        Get.offAllNamed(Routes.auth);
+        return;
       }
 
+      final validToken = _authService.accessToken!;
       final visitId = checkInResponse['visitId'];
       if (visitId == null) {
-        print("CheckIn Response keys: ${checkInResponse.keys}");
+        // print("CheckIn Response keys: ${checkInResponse.keys}");
         throw Exception("Visit ID not found (Response: $checkInResponse)");
       }
 
@@ -122,12 +126,12 @@ class InfoController extends GetxController {
 
       final response = await _apiFetch.postDailyEntry(
         baseUrl: baseUrl,
-        token: token,
+        token: validToken,
         data: data,
       );
 
       Get.snackbar("Success", "Daily Entry Posted");
-      
+
       Get.toNamed(Routes.camera_visit, arguments: {
         'task': task,
         'batch': batch.value,

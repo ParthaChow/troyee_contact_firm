@@ -92,8 +92,8 @@ class _HeaderSection extends GetView<FarmBatchController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  controller.farmName,
+                const Text(
+                  "Batch",
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
@@ -101,9 +101,9 @@ class _HeaderSection extends GetView<FarmBatchController> {
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
-                const Text(
-                  "Batch",
-                  style: TextStyle(
+                Text(
+                  controller.farmName,
+                  style: const TextStyle(
                     color: Colors.white70,
                     fontSize: 14,
                   ),

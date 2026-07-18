@@ -13,11 +13,12 @@ class HomeRepository {
   /// Fetch from actual API
   Future<List<FarmTask>> getFarmTasks() async {
     final baseUrl = _auth.baseUrl;
-    final token = _auth.accessToken;
-
-    if (baseUrl == null || token == null) {
+    
+    if (baseUrl == null || !(await _auth.ensureValidToken())) {
       return List<FarmTask>.from(_tasks);
     }
+
+    final token = _auth.accessToken!;
 
     try {
       print("Fetching farms from: ${baseUrl}farm-list");

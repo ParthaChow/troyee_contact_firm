@@ -70,11 +70,15 @@ class _HeaderSection extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () => Get.back(),
-                child: const Icon(Icons.arrow_back, color: Colors.white, size: 24),
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                  size: 24,
+                ),
               ),
               const SizedBox(width: 12),
               const Text(
-                "খামারির স্বাক্ষর",
+                "Confirmation Page",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 22,
@@ -88,10 +92,7 @@ class _HeaderSection extends StatelessWidget {
             padding: EdgeInsets.only(left: 36),
             child: Text(
               "তথ্য নিশ্চিতকরণ",
-              style: TextStyle(
-                color: Colors.white70,
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Colors.white70, fontSize: 14),
             ),
           ),
         ],
@@ -114,31 +115,24 @@ class _SummaryCard extends GetView<FarmSignatureController> {
         children: [
           _SummaryRow(
             label: "মোট মৃত্যু",
-            value: _toBengali(controller.mortalityCount.toString()),
+            value: controller.mortalityCount.toString(),
           ),
           const Divider(height: 32),
           _SummaryRow(
             label: "গড় ওজন",
-            value: "${_toBengali(controller.averageWeightKg.toString())} গ্রাম",
+            value: "${controller.averageWeightKg.toString()} গ্রাম",
           ),
           const Divider(height: 32),
           _SummaryRow(
             label: "খাদ্য খরচ",
-            value: "${_toBengali(controller.totalFeedKg.toString())} কেজি",
+            value: "${controller.totalFeedKg.toString()} কেজি",
           ),
         ],
       ),
     );
   }
 
-  String _toBengali(String input) {
-    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    const bengali = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-    for (int i = 0; i < english.length; i++) {
-      input = input.replaceAll(english[i], bengali[i]);
-    }
-    return input;
-  }
+
 }
 
 class _SummaryRow extends StatelessWidget {
@@ -330,27 +324,26 @@ class _SummaryRow extends StatelessWidget {
 class _ConfirmationCheckbox extends GetView<FarmSignatureController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Row(
-          children: [
-            Checkbox(
-              value: controller.isConfirmed.value,
-              onChanged: (val) => controller.toggleConfirmation(val),
-              activeColor: const Color(0xffD32F2F),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
+    return Obx(
+      () => Row(
+        children: [
+          Checkbox(
+            value: controller.isConfirmed.value,
+            onChanged: (val) => controller.toggleConfirmation(val),
+            activeColor: const Color(0xffD32F2F),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
             ),
-            const Expanded(
-              child: Text(
-                "আমি নিশ্চিত করছি যে উপরের তথ্য সঠিক",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Color(0xff424242),
-                ),
-              ),
+          ),
+          const Expanded(
+            child: Text(
+              "আমি নিশ্চিত করছি যে উপরের তথ্য সঠিক",
+              style: TextStyle(fontSize: 14, color: Color(0xff424242)),
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -375,10 +368,7 @@ class _SubmitButton extends GetView<FarmSignatureController> {
           children: [
             Text(
               "Confirm",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(width: 8),
             Icon(Icons.arrow_forward, size: 20),

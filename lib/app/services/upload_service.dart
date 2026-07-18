@@ -73,12 +73,13 @@ class UploadService extends GetxService {
       final item = _queue.first;
       try {
         final baseUrl = _authService.baseUrl;
-        final token = _authService.accessToken;
 
-        if (baseUrl == null || token == null) {
+        if (baseUrl == null || !(await _authService.ensureValidToken())) {
           _isUploading = false;
           return;
         }
+
+        final token = _authService.accessToken!;
 
         final file = File(item['imagePath']);
         if (file.existsSync()) {

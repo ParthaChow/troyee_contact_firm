@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'api_fetch.dart';
 
 class AuthService extends GetxService {
   late GetStorage storage;
+  final ApiFetch _apiFetch = ApiFetch();
 
   final isLoggedIn = false.obs;
   final savedProfilesList = <Map<String, dynamic>>[].obs;
@@ -12,6 +14,39 @@ class AuthService extends GetxService {
     isLoggedIn.value = storage.hasData("accessToken");
     _loadProfiles();
     return this;
+  }
+
+  Future<bool> refreshAccessToken() async {
+    final baseUrl = this.baseUrl;
+    final access = accessToken;
+    final refresh = refreshToken;
+
+    if (baseUrl == null || access == null || refresh == null) return false;
+
+    try {
+      final response = await _apiFetch.refreshToken(
+        accessToken: access,
+        refreshToken: refresh,
+        baseUrl: baseUrl,
+      );
+
+      await saveLogin(
+        username: storage.read("lastUsername") ?? "", // We might need to store the username during login
+        password: storage.read("lastPassword") ?? "", // And password if needed for profile
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+        fieldOfficerId: response.fieldOfficerId,
+        fullName: response.fullName,
+        zone: response.zone,
+        expiresAt: response.accessTokenExpiresAt.toIso8601String(),
+        baseUrl: baseUrl,
+      );
+      return true;
+    } catch (e) {
+      print("Token refresh error: $e");
+      logout();
+      return false;
+    }
   }
 
   void _loadProfiles() {
@@ -59,6 +94,8 @@ class AuthService extends GetxService {
     await storage.write("zone", zone);
     await storage.write("accessTokenExpiresAt", expiresAt);
     await storage.write("baseUrl", baseUrl);
+    await storage.write("lastUsername", username);
+    await storage.write("lastPassword", password);
 
     await _saveProfile(
       username: username,
@@ -114,11 +151,30 @@ class AuthService extends GetxService {
 
   String? get refreshToken => storage.read<String>("refreshToken");
 
+  String? get accessTokenExpiresAt => storage.read<String>("accessTokenExpiresAt");
+
+  bool get isTokenExpired {
+    final expiry = storage.read<String>("accessTokenExpiresAt");
+    if (expiry == null) return true;
+    try {
+      final expiryDate = DateTime.parse(expiry);
+      // Add a small buffer (e.g., 5 minutes) to handle network latency
+      return expiryDate.isBefore(DateTime.now().add(const Duration(minutes: 5)));
+    } catch (e) {
+      return true;
+    }
+  }
+
   int? get fieldOfficerId => storage.read<int>("fieldOfficerId");
 
   String? get fullName => storage.read<String>("fullName");
 
   String? get zone => storage.read<String>("zone");
+
+  Future<bool> ensureValidToken() async {
+    if (!isTokenExpired) return true;
+    return await refreshAccessToken();
+  }
 
   void logout() {
     storage.remove("accessToken");

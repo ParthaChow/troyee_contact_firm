@@ -19,8 +19,8 @@ class InfoView extends GetView<InfoController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 16),
-                  _buildOfflineBanner(),
+                  // const SizedBox(height: 16),
+                  // _buildOfflineBanner(),
                   const SizedBox(height: 24),
                   _buildSectionHeader("পাখির তথ্য"),
                   const SizedBox(height: 12),
@@ -103,10 +103,7 @@ class InfoView extends GetView<InfoController> {
               final age = controller.batch.value?.ageInDays ?? 0;
               return Text(
                 "$farmName • দিন $age",
-                style: const TextStyle(
-                  color: Colors.white70,
-                  fontSize: 16,
-                ),
+                style: const TextStyle(color: Colors.white70, fontSize: 16),
               );
             }),
           ),
@@ -115,31 +112,31 @@ class InfoView extends GetView<InfoController> {
     );
   }
 
-  Widget _buildOfflineBanner() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFDE8E8),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Icon(Icons.wifi_off, size: 18, color: Color(0xFFC53030)),
-          SizedBox(width: 8),
-          Text(
-            "অফলাইনে ডিভাইসে সংরক্ষিত হচ্ছে",
-            style: TextStyle(
-              color: Color(0xFFC53030),
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
+  // Widget _buildOfflineBanner() {
+  //   return Container(
+  //     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+  //     decoration: BoxDecoration(
+  //       color: const Color(0xFFFDE8E8),
+  //       borderRadius: BorderRadius.circular(12),
+  //     ),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: const [
+  //         Icon(Icons.wifi_off, size: 18, color: Color(0xFFC53030)),
+  //         SizedBox(width: 8),
+  //         Text(
+  //           "অফলাইনে ডিভাইসে সংরক্ষিত হচ্ছে",
+  //           style: TextStyle(
+  //             color: Color(0xFFC53030),
+  //             fontSize: 14,
+  //             fontWeight: FontWeight.w500,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+  //
   Widget _buildSectionHeader(String title) {
     return Row(
       children: [
@@ -231,10 +228,7 @@ class InfoView extends GetView<InfoController> {
               ),
               Text(
                 subtitle,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey,
-                ),
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
               ),
             ],
           ),
@@ -243,14 +237,16 @@ class InfoView extends GetView<InfoController> {
           children: [
             _buildCounterButton(Icons.remove, onRemove),
             const SizedBox(width: 16),
-            Obx(() => Text(
-                  _toBengaliNumber(count.value.toString()),
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF0F2D20),
-                  ),
-                )),
+            Obx(
+              () => Text(
+                _toBengaliNumber(count.value.toString()),
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF0F2D20),
+                ),
+              ),
+            ),
             const SizedBox(width: 16),
             _buildCounterButton(Icons.add, onAdd),
           ],
@@ -389,11 +385,7 @@ class InfoView extends GetView<InfoController> {
             hasDropdown: true,
           ),
           const Divider(height: 32, color: Color(0xFFEEEEEE)),
-          _buildSelectRow(
-            "ভ্যাকসিন",
-            "Vaccine",
-            controller.vaccineController,
-          ),
+          _buildSelectRow("ভ্যাকসিন", "Vaccine", controller.vaccineController),
         ],
       ),
     );
@@ -423,10 +415,7 @@ class InfoView extends GetView<InfoController> {
         child: TextField(
           controller: controller.remarksController,
           maxLines: 3,
-          style: const TextStyle(
-            fontSize: 15,
-            color: Color(0xFF0F2D20),
-          ),
+          style: const TextStyle(fontSize: 15, color: Color(0xFF0F2D20)),
           decoration: const InputDecoration(
             hintText: "মন্তব্য লিখুন...",
             border: InputBorder.none,
@@ -459,10 +448,7 @@ class InfoView extends GetView<InfoController> {
               ),
               Text(
                 subtitle,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey,
-                ),
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
               ),
             ],
           ),
@@ -497,7 +483,11 @@ class InfoView extends GetView<InfoController> {
               if (hasDropdown)
                 const Padding(
                   padding: EdgeInsets.only(right: 8),
-                  child: Icon(Icons.keyboard_arrow_down, size: 20, color: Colors.grey),
+                  child: Icon(
+                    Icons.keyboard_arrow_down,
+                    size: 20,
+                    color: Colors.grey,
+                  ),
                 ),
             ],
           ),
@@ -527,10 +517,7 @@ class InfoView extends GetView<InfoController> {
               ),
               Text(
                 subtitle,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey,
-                ),
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
               ),
             ],
           ),
@@ -563,34 +550,38 @@ class InfoView extends GetView<InfoController> {
   }
 
   Widget _buildSubmitButton() {
-    return Obx(() => SizedBox(
-          width: double.infinity,
-          height: 55,
-          child: ElevatedButton(
-            onPressed: controller.isLoading.value ? null : () => controller.submitDailyEntry(),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF0F2D20),
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              elevation: 0,
+    return Obx(
+      () => SizedBox(
+        width: double.infinity,
+        height: 55,
+        child: ElevatedButton(
+          onPressed: controller.isLoading.value
+              ? null
+              : () => controller.submitDailyEntry(),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF0F2D20),
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
             ),
-            child: controller.isLoading.value
-                ? const SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 2,
-                    ),
-                  )
-                : const Text(
-                    "Next",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
+            elevation: 0,
           ),
-        ));
+          child: controller.isLoading.value
+              ? const SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2,
+                  ),
+                )
+              : const Text(
+                  "Next",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+        ),
+      ),
+    );
   }
 
   String _toBengaliNumber(String number) {
