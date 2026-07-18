@@ -120,7 +120,7 @@ class FarmVisitController extends GetxController {
       Get.snackbar("Success", "Check-in successful");
       
       // Pass the response data forward
-      Get.toNamed(Routes.camera_visit, arguments: {
+      Get.toNamed(Routes.info, arguments: {
         ...Get.arguments as Map<String, dynamic>,
         'checkInResponse': response,
       });

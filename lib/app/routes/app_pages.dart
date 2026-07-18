@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:troyee_contact_firm/modules/info/binding/info_binidng.dart';
+import 'package:troyee_contact_firm/modules/info/view/info_view.dart';
 import '../../modules/farm_batch/binding/farm_batch_binding.dart';
 import '../../modules/farm_batch/view/farm_batch_view.dart';
 import '../../modules/farm_visit/binding/camera_visit_binding.dart';
@@ -48,6 +50,9 @@ class AppPages {
       binding: CameraVisitBinding(),
     ),
     GetPage(
+      name: Routes.info,
+      page: () => const InfoView(),
+      binding: InfoBinidng(),
       name: Routes.signature_visit,
       page: () => const SignatureView(),
       binding: SignatureBinding(),
