@@ -129,7 +129,7 @@ class InfoController extends GetxController {
       Get.snackbar(
         "Error",
         "Failed: $e",
-        backgroundColor: Colors.red.withValues(alpha: 0.7),
+        backgroundColor: Colors.red.withOpacity(0.7),
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.all(15),
