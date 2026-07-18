@@ -20,19 +20,6 @@ class FarmSignatureController extends GetxController {
       penColor: Colors.black,
       exportBackgroundColor: Colors.white,
     );
-
-    // In a real app, these would come from arguments or another controller
-    final args = Get.arguments as Map<String, dynamic>?;
-    if (args != null) {
-      mortality.value = args['mortality'] ?? 3;
-      avgWeight.value = args['avgWeight'] ?? 1280;
-      feedExpense.value = args['feedExpense'] ?? 385.5;
-    } else {
-      // Default values as per screenshot
-      mortality.value = 3;
-      avgWeight.value = 1280;
-      feedExpense.value = 385.5;
-    }
   }
 
   void clearSignature() {
@@ -53,7 +40,7 @@ class FarmSignatureController extends GetxController {
       return;
     }
     
-    // Logic to save signature and sync
+    /// TODO: Logic to save signature and sync
     Get.snackbar("সফল", "তথ্য সফলভাবে সংরক্ষিত হয়েছে", snackPosition: SnackPosition.BOTTOM);
     
     // Navigate to home or success screen

@@ -20,7 +20,7 @@ class CameraVisitController extends GetxController {
     if (args != null) {
       visitId = args['visitId'];
     }
-    // Set visitId to 35 for now as requested
+    /// TODO: Change from 35 later
     visitId ??= 35;
     _initializeCamera();
   }
