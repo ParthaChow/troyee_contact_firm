@@ -130,4 +130,37 @@ class ApiFetch {
 
     throw Exception("Failed to post daily entry (Status: ${response.statusCode}): ${response.body}");
   }
+
+  Future<void> uploadVisitImage({
+    required String baseUrl,
+    required String token,
+    required int visitId,
+    required String imagePath,
+  }) async {
+    final uri = Uri.parse("${baseUrl}Photo/upload");
+    final request = http.MultipartRequest('POST', uri);
+    
+    request.headers.addAll({
+      'Authorization': 'Bearer $token',
+      'accept': '*/*',
+    });
+
+    request.fields['VisitId'] = visitId.toString();
+    request.fields['PhotoType'] = 'string';
+    
+    request.files.add(await http.MultipartFile.fromPath(
+      'Files', 
+      imagePath,
+    ));
+
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+
+    print("Upload Response Status: ${response.statusCode}");
+    print("Upload Response Body: ${response.body}");
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception("Failed to upload image (Status: ${response.statusCode}): ${response.body}");
+    }
+  }
 }
