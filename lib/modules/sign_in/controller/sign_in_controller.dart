@@ -118,6 +118,13 @@ class SignInController extends GetxController {
     }
   }
 
+  String? validateUrl(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return "Url is required";
+    }
+    return null;
+  }
+
   String? validateUsername(String? value) {
     if (value == null || value.trim().isEmpty) {
       return "Username is required";
