@@ -2,19 +2,32 @@ import 'package:get/get.dart';
 import 'package:signature/signature.dart';
 import 'package:flutter/material.dart';
 
+import '../../../models/farm_batch_model.dart';
+
 class FarmSignatureController extends GetxController {
   late final SignatureController signatureController;
 
   final RxBool isConfirmed = false.obs;
   
   // Summary Data
-  final mortality = 0.obs;
-  final avgWeight = 0.obs;
-  final feedExpense = 0.0.obs;
+  int mortalityCount = 0;
+  double averageWeightKg = 0;
+  double totalFeedKg = 0.0;
 
   @override
   void onInit() {
     super.onInit();
+    final args = Get.arguments as Map<String, dynamic>?;
+    print(args);
+    if (args != null) {
+      final batch = args['batch'] as FarmBatch?;
+      mortalityCount = batch!.mortalityCount;
+      totalFeedKg = batch.totalFeedKg;
+      averageWeightKg = batch.averageWeightKg;
+      print("mortality count ${mortalityCount}");
+      print("avgweightkg ${averageWeightKg}");
+      print("feedkg ${totalFeedKg}");
+    }
     signatureController = SignatureController(
       penStrokeWidth: 3,
       penColor: Colors.black,
@@ -32,7 +45,7 @@ class FarmSignatureController extends GetxController {
 
   Future<void> submit() async {
     if (signatureController.isEmpty) {
-      Get.snackbar("ত্রুটি", "দয়া করে স্বাক্ষর করুন", snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar("Success", "Info is saved successfully", snackPosition: SnackPosition.BOTTOM);
       return;
     }
     if (!isConfirmed.value) {

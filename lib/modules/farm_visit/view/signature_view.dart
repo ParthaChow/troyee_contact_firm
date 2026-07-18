@@ -110,24 +110,24 @@ class _SummaryCard extends GetView<FarmSignatureController> {
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: Colors.grey.shade200),
       ),
-      child: Obx(() => Column(
-            children: [
-              _SummaryRow(
-                label: "মোট মৃত্যু",
-                value: _toBengali(controller.mortality.value.toString()),
-              ),
-              const Divider(height: 32),
-              _SummaryRow(
-                label: "গড় ওজন",
-                value: "${_toBengali(controller.avgWeight.value.toString())} গ্রাম",
-              ),
-              const Divider(height: 32),
-              _SummaryRow(
-                label: "খাদ্য খরচ",
-                value: "${_toBengali(controller.feedExpense.value.toString())} কেজি",
-              ),
-            ],
-          )),
+      child: Column(
+        children: [
+          _SummaryRow(
+            label: "মোট মৃত্যু",
+            value: _toBengali(controller.mortalityCount.toString()),
+          ),
+          const Divider(height: 32),
+          _SummaryRow(
+            label: "গড় ওজন",
+            value: "${_toBengali(controller.averageWeightKg.toString())} গ্রাম",
+          ),
+          const Divider(height: 32),
+          _SummaryRow(
+            label: "খাদ্য খরচ",
+            value: "${_toBengali(controller.totalFeedKg.toString())} কেজি",
+          ),
+        ],
+      ),
     );
   }
 
@@ -374,7 +374,7 @@ class _SubmitButton extends GetView<FarmSignatureController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "নিশ্চিত করুন ও সিঙ্কে পাঠান",
+              "Confirm",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

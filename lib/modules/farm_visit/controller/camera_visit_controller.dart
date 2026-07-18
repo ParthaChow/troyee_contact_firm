@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:troyee_contact_firm/models/farm_batch_model.dart';
 import '../../../app/services/upload_service.dart';
 
 class CameraVisitController extends GetxController {
