@@ -57,7 +57,7 @@ class FarmSignatureController extends GetxController {
       Get.snackbar(
         "ত্রুটি",
         "দয়া করে তথ্য নিশ্চিত করুন",
-        backgroundColor: Colors.red.withValues(alpha: 0.7),
+        backgroundColor: Colors.red.withOpacity(0.7),
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.all(15),
@@ -98,7 +98,7 @@ class FarmSignatureController extends GetxController {
       Get.snackbar(
         "সফল",
         "তথ্য সফলভাবে সংরক্ষিত হয়েছে",
-        backgroundColor: Colors.green.withValues(alpha: 0.7),
+        backgroundColor: Colors.green.withOpacity(0.7),
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.all(15),
@@ -111,7 +111,7 @@ class FarmSignatureController extends GetxController {
       Get.snackbar(
         "ত্রুটি",
         "সার্ভারে তথ্য পাঠাতে ব্যর্থ: $e",
-        backgroundColor: Colors.red.withValues(alpha: 0.7),
+        backgroundColor: Colors.red.withOpacity(0.7),
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.all(15),

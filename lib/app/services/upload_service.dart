@@ -100,8 +100,9 @@ class UploadService extends GetxService {
             "সফল", 
             "ছবি সফলভাবে আপলোড হয়েছে (Visit ID: ${item['visitId']})",
             snackPosition: SnackPosition.TOP,
-            backgroundColor: AppColors.primary.withOpacity(0.8),
+            backgroundColor: Colors.green.withOpacity(0.7),
             colorText: Colors.white,
+            margin: const EdgeInsets.all(15),
             duration: const Duration(seconds: 2),
           );
         }
