@@ -86,27 +86,12 @@ class InfoController extends GetxController {
 
   Future<void> submitDailyEntry() async {
     try {
-      isLoading.value = true;
-      final baseUrl = _authService.baseUrl;
-      
-      if (baseUrl == null || !(await _authService.ensureValidToken())) {
-        Get.snackbar("Session Expired", "Please login again to continue", 
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-        Get.offAllNamed(Routes.auth);
-        return;
-      }
-
-      final validToken = _authService.accessToken!;
       final visitId = checkInResponse['visitId'];
       if (visitId == null) {
-        // print("CheckIn Response keys: ${checkInResponse.keys}");
-        throw Exception("Visit ID not found (Response: $checkInResponse)");
+        throw Exception("Visit ID not found");
       }
 
-      final data = {
+      final dailyEntryData = {
         "visitId": visitId,
         "batchId": batch.value?.id ?? 0,
         "recordDate": DateTime.now().toUtc().toIso8601String(),
@@ -124,25 +109,19 @@ class InfoController extends GetxController {
         "remarks": remarksController.text
       };
 
-      final response = await _apiFetch.postDailyEntry(
-        baseUrl: baseUrl,
-        token: validToken,
-        data: data,
+      // Update the batch object with new values before passing it forward
+      final updatedBatch = batch.value?.copyWith(
+        mortalityCount: mortalityCount.value,
+        totalFeedKg: double.tryParse(feedController.text) ?? 0,
+        averageWeightKg: double.tryParse(weightController.text) ?? 0,
+        currentCount: birdCount.value,
       );
 
-      Get.snackbar(
-        "Success",
-        "Daily Entry Posted",
-        backgroundColor: Colors.green.withOpacity(0.7),
-        colorText: Colors.white,
-        snackPosition: SnackPosition.TOP,
-        margin: const EdgeInsets.all(15),
-      );
-
+      // Navigate to camera visit WITHOUT posting to server yet
       Get.toNamed(Routes.camera_visit, arguments: {
-        'task': task,
-        'batch': batch.value,
-        'dailyEntryResponse': response,
+        ...Get.arguments as Map<String, dynamic>,
+        'batch': updatedBatch,
+        'dailyEntryData': dailyEntryData,
         'visitId': visitId,
       });
       
@@ -150,13 +129,11 @@ class InfoController extends GetxController {
       Get.snackbar(
         "Error",
         "Failed: $e",
-        backgroundColor: Colors.red.withOpacity(0.7),
+        backgroundColor: Colors.red.withValues(alpha: 0.7),
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.all(15),
       );
-    } finally {
-      isLoading.value = false;
     }
   }
 }

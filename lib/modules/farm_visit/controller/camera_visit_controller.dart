@@ -50,7 +50,6 @@ class CameraVisitController extends GetxController {
     try {
       final image = await cameraController!.takePicture();
       capturedImages.add(image);
-      _autoUpload(image.path);
     } catch (e) {
       print("Error taking picture: $e");
     }
@@ -61,9 +60,6 @@ class CameraVisitController extends GetxController {
       final List<XFile> images = await _picker.pickMultiImage();
       if (images.isNotEmpty) {
         capturedImages.addAll(images);
-        for (var image in images) {
-          _autoUpload(image.path);
-        }
       }
     } catch (e) {
       print("Error picking images: $e");

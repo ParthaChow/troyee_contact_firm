@@ -350,32 +350,38 @@ class _ConfirmationCheckbox extends GetView<FarmSignatureController> {
 class _SubmitButton extends GetView<FarmSignatureController> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 60,
-      child: ElevatedButton(
-        onPressed: () => controller.submit(),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xff41695F),
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          elevation: 0,
-        ),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Confirm",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    return Obx(() => SizedBox(
+          width: double.infinity,
+          height: 60,
+          child: ElevatedButton(
+            onPressed: controller.isLoading.value ? null : () => controller.submit(),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xff41695F),
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              elevation: 0,
             ),
-            SizedBox(width: 8),
-            Icon(Icons.arrow_forward, size: 20),
-          ],
-        ),
-      ),
-    );
+            child: controller.isLoading.value
+                ? const SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                  )
+                : const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Confirm",
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(width: 8),
+                      Icon(Icons.arrow_forward, size: 20),
+                    ],
+                  ),
+          ),
+        ));
   }
 }
 
