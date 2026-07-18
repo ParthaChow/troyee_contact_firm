@@ -291,7 +291,7 @@ class _SubmitButton extends GetView<FarmVisitController> {
                     Icon(Icons.check, size: 24),
                     SizedBox(width: 8),
                     Text(
-                      "চেক-ইন সম্পন্ন করুন",
+                      "Next",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

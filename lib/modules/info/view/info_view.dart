@@ -586,7 +586,7 @@ class InfoView extends GetView<InfoController> {
                     ),
                   )
                 : const Text(
-                    "ক্যামেরা এ যান", // "Go to Camera" in Bengali
+                    "Next",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
           ),
