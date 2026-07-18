@@ -35,6 +35,44 @@ class FarmBatch {
     this.farmName,
   });
 
+  FarmBatch copyWith({
+    int? id,
+    String? batchCode,
+    String? breed,
+    int? farmId,
+    int? initialCount,
+    int? currentCount,
+    int? mortalityCount,
+    DateTime? placementDate,
+    String? healthStatus,
+    double? averageWeightKg,
+    double? totalFeedKg,
+    bool? isActive,
+    DateTime? createdAt,
+    int? ageInDays,
+    double? mortalityRate,
+    String? farmName,
+  }) {
+    return FarmBatch(
+      id: id ?? this.id,
+      batchCode: batchCode ?? this.batchCode,
+      breed: breed ?? this.breed,
+      farmId: farmId ?? this.farmId,
+      initialCount: initialCount ?? this.initialCount,
+      currentCount: currentCount ?? this.currentCount,
+      mortalityCount: mortalityCount ?? this.mortalityCount,
+      placementDate: placementDate ?? this.placementDate,
+      healthStatus: healthStatus ?? this.healthStatus,
+      averageWeightKg: averageWeightKg ?? this.averageWeightKg,
+      totalFeedKg: totalFeedKg ?? this.totalFeedKg,
+      isActive: isActive ?? this.isActive,
+      createdAt: createdAt ?? this.createdAt,
+      ageInDays: ageInDays ?? this.ageInDays,
+      mortalityRate: mortalityRate ?? this.mortalityRate,
+      farmName: farmName ?? this.farmName,
+    );
+  }
+
   factory FarmBatch.fromJson(Map<String, dynamic> json) {
     return FarmBatch(
       id: json['id'] as int,

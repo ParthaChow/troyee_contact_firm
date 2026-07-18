@@ -89,6 +89,12 @@ class UploadService extends GetxService {
             visitId: item['visitId'],
             imagePath: item['imagePath'],
           );
+
+          // Delete the file from local storage after successful upload
+          if (file.existsSync()) {
+            await file.delete();
+            print("Deleted local file after upload: ${item['imagePath']}");
+          }
           
           Get.snackbar(
             "সফল", 

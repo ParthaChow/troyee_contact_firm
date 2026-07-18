@@ -320,7 +320,7 @@ class _AutoUploadBar extends StatelessWidget {
   }
 }
 
-class _NextButton extends StatelessWidget {
+class _NextButton extends GetView<CameraVisitController> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -328,7 +328,9 @@ class _NextButton extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         onPressed: () {
-          Get.toNamed(Routes.signature_visit, arguments: Get.arguments);
+          final args = Map<String, dynamic>.from(Get.arguments ?? {});
+          args['imagePaths'] = controller.capturedImages.map((e) => e.path).toList();
+          Get.toNamed(Routes.signature_visit, arguments: args);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
