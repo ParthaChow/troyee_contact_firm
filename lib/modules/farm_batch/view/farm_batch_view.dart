@@ -52,7 +52,7 @@ class FarmBatchView extends GetView<FarmBatchController> {
                   }
 
                   return ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
                     itemCount: controller.batches.length,
                     itemBuilder: (context, index) {
                       final batch = controller.batches[index];
@@ -135,48 +135,57 @@ class _BatchTile extends GetView<FarmBatchController> {
             });
           },
           child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
               children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.0),
-                  child: Divider(height: 1, color: AppColors.divider),
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFEBEB),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: const Icon(
+                    Icons.add_home_work_rounded,
+                    color: Color(0xFFD32F2F),
+                    size: 24,
+                  ),
                 ),
-                _InfoRow(label: 'ব্যাচ কোড', value: batch.batchCode),
-                const SizedBox(height: 8),
-                _InfoRow(label: 'জাত', value: batch.breed),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        batch.batchCode,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textDark,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "${batch.breed} - স্টক: ${batch.currentCount}",
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: AppColors.textGrey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: AppColors.textGrey,
+                ),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-}
-
-class _InfoRow extends StatelessWidget {
-  final String label;
-  final String value;
-  const _InfoRow({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          '$label: ',
-          style: const TextStyle(color: AppColors.textGrey, fontSize: 14),
-        ),
-        Text(
-          value,
-          style: const TextStyle(
-            color: AppColors.textDark,
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
     );
   }
 }

@@ -41,6 +41,33 @@ class SignInView extends GetView<SignInController> {
                         children: [
                           const SizedBox(height: 20),
 
+                          /// url
+                          TextFormField(
+                            controller: controller.baseUrlController,
+                            validator: controller.validateUsername,
+                            decoration: InputDecoration(
+                              hintText: "Base Url",
+                              prefixIcon: const Icon(Icons.link_rounded, size: 22, color: AppColors.primary),
+                              filled: true,
+                              fillColor: Colors.white,
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: const BorderSide(color: AppColors.primary, width: 1),
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 16),
+
                           /// Username
                           TextFormField(
                             controller: controller.usernameController,
