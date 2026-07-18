@@ -1,9 +1,6 @@
-import 'dart:convert';
-
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:troyee_contact_firm/app/services/services.dart';
-import 'package:troyee_contact_firm/modules/sign_in/controller/sign_in_controller.dart';
 
 import '../../../app/routes/app_routes.dart';
 import '../../../models/farm_batch_model.dart';
@@ -19,14 +16,35 @@ class InfoController extends GetxController {
   late Map<String, dynamic> checkInResponse;
   final RxBool isLoading = true.obs;
 
+  // Input Fields
+  final birdCount = 0.obs;
+  final mortalityCount = 0.obs;
+  final cullingCount = 0.obs;
+  final feedController = TextEditingController(text: "0");
+  final waterController = TextEditingController(text: "0");
+  final tempController = TextEditingController(text: "0");
+  final humidityController = TextEditingController(text: "0");
+  final lightHoursController = TextEditingController(text: "0");
+  final weightController = TextEditingController(text: "0");
+  final medicineController = TextEditingController();
+  final vaccineController = TextEditingController();
+  final remarksController = TextEditingController();
+
   @override
   void onInit() {
     super.onInit();
     final args = Get.arguments as Map<String, dynamic>;
     task = args['task'];
-    // Initial batch data from arguments
     batch.value = args['batch'];
     checkInResponse = args['checkInResponse'];
+    
+    // Initialize bird count from batch if available
+    if (batch.value != null) {
+      birdCount.value = batch.value!.currentCount;
+      mortalityCount.value = batch.value!.mortalityCount;
+      feedController.text = batch.value!.totalFeedKg.toString();
+      weightController.text = batch.value!.averageWeightKg.toString();
+    }
     
     fetchBatchDetails();
   }
@@ -45,6 +63,12 @@ class InfoController extends GetxController {
           batchId: batch.value!.id,
         );
         batch.value = updatedBatch;
+        // Update bird count if it was 0 or just fetched
+        if (birdCount.value == 0) {
+          birdCount.value = updatedBatch.currentCount;
+          feedController.text = updatedBatch.totalFeedKg.toString();
+          weightController.text = updatedBatch.averageWeightKg.toString();
+        }
       }
     } catch (e) {
       Get.snackbar("Error", "Failed to fetch batch details: $e");
@@ -52,6 +76,15 @@ class InfoController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  void incrementBird() => birdCount.value++;
+  void decrementBird() => birdCount.value > 0 ? birdCount.value-- : null;
+  
+  void incrementMortality() => mortalityCount.value++;
+  void decrementMortality() => mortalityCount.value > 0 ? mortalityCount.value-- : null;
+
+  void incrementCulling() => cullingCount.value++;
+  void decrementCulling() => cullingCount.value > 0 ? cullingCount.value-- : null;
 
   Future<void> submitDailyEntry() async {
     try {
@@ -63,28 +96,28 @@ class InfoController extends GetxController {
         throw Exception("Session expired");
       }
 
-      // Assuming visitId is 'id' from checkInResponse
-      final visitId = checkInResponse['id'];
+      final visitId = checkInResponse['visitId'];
       if (visitId == null) {
-        throw Exception("Visit ID not found in check-in response");
+        print("CheckIn Response keys: ${checkInResponse.keys}");
+        throw Exception("Visit ID not found (Response: $checkInResponse)");
       }
 
       final data = {
         "visitId": visitId,
         "batchId": batch.value?.id ?? 0,
         "recordDate": DateTime.now().toUtc().toIso8601String(),
-        "birdCount": 0,
-        "mortalityCount": 0,
-        "cullingCount": 0,
-        "feedConsumptionKg": 0,
-        "waterConsumptionLtr": 0,
-        "temperatureC": 0,
-        "humidityPercent": 0,
-        "averageWeightGm": 0,
-        "lightHours": 0,
-        "medicineUsed": "string",
-        "vaccineUsed": "string",
-        "remarks": "string"
+        "birdCount": birdCount.value,
+        "mortalityCount": mortalityCount.value,
+        "cullingCount": cullingCount.value,
+        "totalFeedKg": double.tryParse(feedController.text) ?? 0,
+        "waterConsumptionLtr": double.tryParse(waterController.text) ?? 0,
+        "temperatureC": double.tryParse(tempController.text) ?? 0,
+        "humidityPercent": double.tryParse(humidityController.text) ?? 0,
+        "averageWeightGm": double.tryParse(weightController.text) ?? 0,
+        "lightHours": double.tryParse(lightHoursController.text) ?? 0,
+        "medicineUsed": medicineController.text,
+        "vaccineUsed": vaccineController.text,
+        "remarks": remarksController.text
       };
 
       final response = await _apiFetch.postDailyEntry(
@@ -93,9 +126,8 @@ class InfoController extends GetxController {
         data: data,
       );
 
-      Get.snackbar("Success", "Daily Entry Posted: ${response['syncStatus']}");
+      Get.snackbar("Success", "Daily Entry Posted");
       
-      // Navigate to camera visit
       Get.toNamed(Routes.camera_visit, arguments: {
         'task': task,
         'batch': batch.value,
@@ -103,7 +135,7 @@ class InfoController extends GetxController {
       });
       
     } catch (e) {
-      Get.snackbar("Error", "Failed to post daily entry: $e");
+      Get.snackbar("Error", "Failed: $e");
     } finally {
       isLoading.value = false;
     }
