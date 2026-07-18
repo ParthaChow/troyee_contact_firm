@@ -1,16 +1,27 @@
 import 'package:camera/camera.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../../app/services/upload_service.dart';
 
 class CameraVisitController extends GetxController {
+  final UploadService _uploadService = Get.find<UploadService>();
+  
   CameraController? cameraController;
   final RxBool isInitialized = false.obs;
   final RxList<XFile> capturedImages = <XFile>[].obs;
   final ImagePicker _picker = ImagePicker();
+  
+  int? visitId;
 
   @override
   void onInit() {
     super.onInit();
+    final args = Get.arguments as Map<String, dynamic>?;
+    if (args != null) {
+      visitId = args['visitId'];
+    }
+    // Set visitId to 35 for now as requested
+    visitId ??= 35;
     _initializeCamera();
   }
 
@@ -38,6 +49,7 @@ class CameraVisitController extends GetxController {
     try {
       final image = await cameraController!.takePicture();
       capturedImages.add(image);
+      _autoUpload(image.path);
     } catch (e) {
       print("Error taking picture: $e");
     }
@@ -48,9 +60,24 @@ class CameraVisitController extends GetxController {
       final List<XFile> images = await _picker.pickMultiImage();
       if (images.isNotEmpty) {
         capturedImages.addAll(images);
+        for (var image in images) {
+          _autoUpload(image.path);
+        }
       }
     } catch (e) {
       print("Error picking images: $e");
+    }
+  }
+
+  void _autoUpload(String path) {
+    if (visitId != null) {
+      _uploadService.addToQueue(visitId: visitId!, imagePath: path);
+      Get.snackbar(
+        "সংরক্ষিত", 
+        "ছবিটি আপলোড সারিতে যুক্ত করা হয়েছে",
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 1),
+      );
     }
   }
 

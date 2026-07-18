@@ -132,6 +132,7 @@ class InfoController extends GetxController {
         'task': task,
         'batch': batch.value,
         'dailyEntryResponse': response,
+        'visitId': visitId,
       });
       
     } catch (e) {

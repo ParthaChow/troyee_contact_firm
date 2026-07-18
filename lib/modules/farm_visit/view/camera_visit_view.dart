@@ -45,6 +45,8 @@ class CameraVisitView extends GetView<CameraVisitController> {
                     const SizedBox(height: 8),
                     _ImageGallery(),
                     const SizedBox(height: 15),
+                    _AutoUploadBar(),
+                    const SizedBox(height: 15),
                     _NextButton(),
                     const SizedBox(height: 5),
                   ],
@@ -279,6 +281,36 @@ class _AddButton extends GetView<CameraVisitController> {
           border: Border.all(color: Colors.grey.shade300, style: BorderStyle.solid),
         ),
         child: const Icon(Icons.add, color: Colors.grey, size: 24),
+      ),
+    );
+  }
+}
+
+class _AutoUploadBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      decoration: BoxDecoration(
+        color: const Color(0xffFDE8E8),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.sync, color: Color(0xffE04F4F), size: 20),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              "নেটওয়ার্ক পেলে স্বয়ংক্রিয়ভাবে আপলোড হবে",
+              style: TextStyle(
+                color: const Color(0xffE04F4F),
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
