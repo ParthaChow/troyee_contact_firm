@@ -7,4 +7,5 @@ abstract class Routes {
   static const camera_visit = "/camera_visit";
   static const info = "/info";
 
+  static const signature_visit = "/signature_visit";
 }
