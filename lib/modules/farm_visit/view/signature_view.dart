@@ -29,10 +29,10 @@ class SignatureView extends GetView<FarmSignatureController> {
                   children: [
                     _SummaryCard(),
                     const SizedBox(height: 24),
-                    _SignatureSection(),
-                    const SizedBox(height: 16),
-                    _ClearButton(),
-                    const SizedBox(height: 20),
+                    // _SignatureSection(),
+                    // const SizedBox(height: 16),
+                    // _ClearButton(),
+                    // const SizedBox(height: 20),
                     _ConfirmationCheckbox(),
                     const SizedBox(height: 40),
                     _SubmitButton(),
@@ -172,160 +172,160 @@ class _SummaryRow extends StatelessWidget {
     );
   }
 }
+//
+// class _SignatureSection extends GetView<FarmSignatureController> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         Row(
+//           children: [
+//             Container(
+//               width: 4,
+//               height: 16,
+//               color: const Color(0xffD79A09),
+//             ),
+//             const SizedBox(width: 8),
+//             const Text(
+//               "এখানে স্বাক্ষর করুন",
+//               style: TextStyle(
+//                 fontSize: 16,
+//                 fontWeight: FontWeight.bold,
+//                 color: Color(0xff0F2D20),
+//               ),
+//             ),
+//           ],
+//         ),
+//         const SizedBox(height: 12),
+//         Container(
+//           height: 250,
+//           width: double.infinity,
+//           decoration: BoxDecoration(
+//             color: const Color(0xffF9F9F9),
+//             borderRadius: BorderRadius.circular(20),
+//             border: Border.all(
+//               color: Colors.grey.shade300,
+//               style: BorderStyle.solid,
+//             ),
+//           ),
+//           child: Stack(
+//             children: [
+//               ClipRRect(
+//                 borderRadius: BorderRadius.circular(20),
+//                 child: Signature(
+//                   controller: controller.signatureController,
+//                   backgroundColor: Colors.transparent,
+//                   width: double.infinity,
+//                   height: 250,
+//                 ),
+//               ),
+//               IgnorePointer(
+//                 child: _DashedBorder(),
+//               ),
+//               IgnorePointer(
+//                 child: Center(
+//                   child: Column(
+//                     mainAxisAlignment: MainAxisAlignment.end,
+//                     children: [
+//                       Container(
+//                         width: 250,
+//                         height: 1,
+//                         color: Colors.grey.shade300,
+//                       ),
+//                       const SizedBox(height: 12),
+//                       Text(
+//                         "আঙুল দিয়ে এখানে স্বাক্ষর করুন",
+//                         style: TextStyle(
+//                           color: Colors.grey.shade400,
+//                           fontSize: 12,
+//                         ),
+//                       ),
+//                       const SizedBox(height: 20),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
 
-class _SignatureSection extends GetView<FarmSignatureController> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Container(
-              width: 4,
-              height: 16,
-              color: const Color(0xffD79A09),
-            ),
-            const SizedBox(width: 8),
-            const Text(
-              "এখানে স্বাক্ষর করুন",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Color(0xff0F2D20),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Container(
-          height: 250,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: const Color(0xffF9F9F9),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: Colors.grey.shade300,
-              style: BorderStyle.solid,
-            ),
-          ),
-          child: Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Signature(
-                  controller: controller.signatureController,
-                  backgroundColor: Colors.transparent,
-                  width: double.infinity,
-                  height: 250,
-                ),
-              ),
-              IgnorePointer(
-                child: _DashedBorder(),
-              ),
-              IgnorePointer(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        width: 250,
-                        height: 1,
-                        color: Colors.grey.shade300,
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        "আঙুল দিয়ে এখানে স্বাক্ষর করুন",
-                        style: TextStyle(
-                          color: Colors.grey.shade400,
-                          fontSize: 12,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
+// class _DashedBorder extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       decoration: BoxDecoration(
+//         borderRadius: BorderRadius.circular(20),
+//       ),
+//       child: CustomPaint(
+//         painter: DashedPainter(),
+//         child: Container(),
+//       ),
+//     );
+//   }
+// }
 
-class _DashedBorder extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: CustomPaint(
-        painter: DashedPainter(),
-        child: Container(),
-      ),
-    );
-  }
-}
+// class DashedPainter extends CustomPainter {
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     final Paint paint = Paint()
+//       ..color = Colors.grey.shade300
+//       ..strokeWidth = 1
+//       ..style = PaintingStyle.stroke;
+//
+//     final double dashWidth = 5;
+//     final double dashSpace = 5;
+//     final Radius radius = const Radius.circular(20);
+//
+//     final RRect rrect = RRect.fromLTRBR(0, 0, size.width, size.height, radius);
+//     final Path path = Path()..addRRect(rrect);
+//
+//     for (final PathMetric metric in path.computeMetrics()) {
+//       double distance = 0;
+//       while (distance < metric.length) {
+//         canvas.drawPath(
+//           metric.extractPath(distance, distance + dashWidth),
+//           paint,
+//         );
+//         distance += dashWidth + dashSpace;
+//       }
+//     }
+//   }
 
-class DashedPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..color = Colors.grey.shade300
-      ..strokeWidth = 1
-      ..style = PaintingStyle.stroke;
-
-    final double dashWidth = 5;
-    final double dashSpace = 5;
-    final Radius radius = const Radius.circular(20);
-
-    final RRect rrect = RRect.fromLTRBR(0, 0, size.width, size.height, radius);
-    final Path path = Path()..addRRect(rrect);
-
-    for (final PathMetric metric in path.computeMetrics()) {
-      double distance = 0;
-      while (distance < metric.length) {
-        canvas.drawPath(
-          metric.extractPath(distance, distance + dashWidth),
-          paint,
-        );
-        distance += dashWidth + dashSpace;
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
-}
-
-class _ClearButton extends GetView<FarmSignatureController> {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 60,
-      child: OutlinedButton(
-        onPressed: () => controller.clearSignature(),
-        style: OutlinedButton.styleFrom(
-          side: const BorderSide(color: Color(0xff0F2D20)),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-        child: const Text(
-          "মুছে ফেলুন",
-          style: TextStyle(
-            color: Color(0xff0F2D20),
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   bool shouldRepaint(CustomPainter oldDelegate) => false;
+// }
+//
+// class _ClearButton extends GetView<FarmSignatureController> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//       width: double.infinity,
+//       height: 60,
+//       child: OutlinedButton(
+//         onPressed: () => controller.clearSignature(),
+//         style: OutlinedButton.styleFrom(
+//           side: const BorderSide(color: Color(0xff0F2D20)),
+//           shape: RoundedRectangleBorder(
+//             borderRadius: BorderRadius.circular(16),
+//           ),
+//         ),
+//         child: const Text(
+//           "মুছে ফেলুন",
+//           style: TextStyle(
+//             color: Color(0xff0F2D20),
+//             fontSize: 18,
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class _ConfirmationCheckbox extends GetView<FarmSignatureController> {
   @override
