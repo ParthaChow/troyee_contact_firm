@@ -14,16 +14,27 @@ class UploadService extends GetxService {
   final Connectivity _connectivity = Connectivity();
 
   final RxList<Map<String, dynamic>> _queue = <Map<String, dynamic>>[].obs;
+  final RxBool isConnected = true.obs;
   bool _isUploading = false;
 
   Future<UploadService> init() async {
     _loadQueue();
+    
+    // Check initial connectivity
+    checkInitialConnectivity();
+
     _connectivity.onConnectivityChanged.listen((List<ConnectivityResult> results) {
-      if (results.isNotEmpty && !results.contains(ConnectivityResult.none)) {
+      isConnected.value = results.isNotEmpty && !results.contains(ConnectivityResult.none);
+      if (isConnected.value) {
         _processQueue();
       }
     });
     return this;
+  }
+
+  Future<void> checkInitialConnectivity() async {
+    var results = await _connectivity.checkConnectivity();
+    isConnected.value = results.isNotEmpty && !results.contains(ConnectivityResult.none);
   }
 
   void _loadQueue() {

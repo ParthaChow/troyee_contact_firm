@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import '../../../app/services/upload_service.dart';
 import '../../../app/routes/app_routes.dart';
 import '../../../app/core/theme/app_colors.dart';
 import '../controller/camera_visit_controller.dart';
@@ -45,7 +46,10 @@ class CameraVisitView extends GetView<CameraVisitController> {
                     const SizedBox(height: 8),
                     _ImageGallery(),
                     const SizedBox(height: 15),
-                    _AutoUploadBar(),
+                    Obx(() {
+                      final isConnected = Get.find<UploadService>().isConnected.value;
+                      return isConnected ? const SizedBox.shrink() : _AutoUploadBar();
+                    }),
                     const SizedBox(height: 15),
                     _NextButton(),
                     const SizedBox(height: 5),
@@ -335,7 +339,7 @@ class _NextButton extends StatelessWidget {
           elevation: 0,
         ),
         child: const Text(
-          "পরবর্তী: স্বাক্ষর →",
+          "Next",
           style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
         ),
       ),
