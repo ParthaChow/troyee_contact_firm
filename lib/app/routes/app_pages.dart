@@ -53,6 +53,8 @@ class AppPages {
       name: Routes.info,
       page: () => const InfoView(),
       binding: InfoBinidng(),
+    ),
+    GetPage(
       name: Routes.signature_visit,
       page: () => const SignatureView(),
       binding: SignatureBinding(),

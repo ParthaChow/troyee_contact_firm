@@ -736,14 +736,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
-  pigeon:
-    dependency: transitive
-    description:
-      name: pigeon
-      sha256: "04cfefc8add8b47ddf9ccac8b92bb4edeb67c87f185c623ba0db118ac99334ad"
-      url: "https://pub.dev"
-    source: hosted
-    version: "26.3.4"
   petitparser:
     dependency: transitive
     description:
@@ -752,6 +744,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.2"
+  pigeon:
+    dependency: transitive
+    description:
+      name: pigeon
+      sha256: "04cfefc8add8b47ddf9ccac8b92bb4edeb67c87f185c623ba0db118ac99334ad"
+      url: "https://pub.dev"
+    source: hosted
+    version: "26.3.4"
   platform:
     dependency: transitive
     description:

@@ -481,6 +481,7 @@ class InfoView extends GetView<InfoController> {
                 child: TextField(
                   controller: textController,
                   textAlign: TextAlign.end,
+                  keyboardType: TextInputType.number,
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
