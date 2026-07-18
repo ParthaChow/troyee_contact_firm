@@ -125,15 +125,29 @@ class FarmVisitController extends GetxController {
         deviceId: deviceLocationId,
       );
 
-      Get.snackbar("Success", "Check-in successful");
+      Get.snackbar(
+        "Success",
+        "Check-in successful",
+        backgroundColor: Colors.green.withOpacity(0.7),
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+        margin: const EdgeInsets.all(15),
+      );
       
-      // Pass the response data forward
-      Get.toNamed(Routes.info, arguments: {
+      // Pass the response data forward and replace current route so user can't go back
+      Get.offNamed(Routes.info, arguments: {
         ...Get.arguments as Map<String, dynamic>,
         'checkInResponse': response,
       });
     } catch (e) {
-      Get.snackbar("Check-in Failed", e.toString());
+      Get.snackbar(
+        "Check-in Failed", 
+        e.toString(),
+        backgroundColor: Colors.red.withOpacity(0.7),
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+        margin: const EdgeInsets.all(15),
+      );
       final baseUrl = _authService.baseUrl;
       final token = _authService.accessToken;
       print("url $baseUrl");

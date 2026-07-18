@@ -45,21 +45,41 @@ class FarmSignatureController extends GetxController {
   }
 
   Future<void> submit() async {
-    if (signatureController.isEmpty) {
-      Get.snackbar("Success", "Info is saved successfully", snackPosition: SnackPosition.BOTTOM);
-      Get.toNamed(Routes.home);
-      return;
-    }
+    // if (signatureController.isEmpty) {
+    //   Get.snackbar(
+    //     "ত্রুটি",
+    //     "দয়া করে স্বাক্ষর করুন",
+    //     backgroundColor: Colors.red.withOpacity(0.7),
+    //     colorText: Colors.white,
+    //     snackPosition: SnackPosition.TOP,
+    //     margin: const EdgeInsets.all(15),
+    //   );
+    //   return;
+    // }
     if (!isConfirmed.value) {
-      Get.snackbar("ত্রুটি", "দয়া করে তথ্য নিশ্চিত করুন", snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        "ত্রুটি",
+        "দয়া করে তথ্য নিশ্চিত করুন",
+        backgroundColor: Colors.red.withOpacity(0.7),
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+        margin: const EdgeInsets.all(15),
+      );
       return;
     }
+
+    Get.snackbar(
+      "সফল",
+      "তথ্য সফলভাবে সংরক্ষিত হয়েছে",
+      backgroundColor: Colors.green.withOpacity(0.7),
+      colorText: Colors.white,
+      snackPosition: SnackPosition.TOP,
+      margin: const EdgeInsets.all(15),
+
+    );
     
-    /// TODO: Logic to save signature and sync
-    Get.snackbar("সফল", "তথ্য সফলভাবে সংরক্ষিত হয়েছে", snackPosition: SnackPosition.BOTTOM);
-    
-    // Navigate to home or success screen
-    // Get.offAllNamed(Routes.home);
+    // Clear all navigation stack and go to home screen
+    Get.offAllNamed(Routes.home);
   }
 
   @override

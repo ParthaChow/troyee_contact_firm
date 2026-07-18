@@ -130,7 +130,14 @@ class InfoController extends GetxController {
         data: data,
       );
 
-      Get.snackbar("Success", "Daily Entry Posted");
+      Get.snackbar(
+        "Success",
+        "Daily Entry Posted",
+        backgroundColor: Colors.green.withOpacity(0.7),
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+        margin: const EdgeInsets.all(15),
+      );
 
       Get.toNamed(Routes.camera_visit, arguments: {
         'task': task,
@@ -140,7 +147,14 @@ class InfoController extends GetxController {
       });
       
     } catch (e) {
-      Get.snackbar("Error", "Failed: $e");
+      Get.snackbar(
+        "Error",
+        "Failed: $e",
+        backgroundColor: Colors.red.withOpacity(0.7),
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+        margin: const EdgeInsets.all(15),
+      );
     } finally {
       isLoading.value = false;
     }

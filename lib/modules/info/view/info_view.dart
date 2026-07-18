@@ -8,51 +8,54 @@ class InfoView extends GetView<InfoController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF7F9F7),
-      body: Column(
-        children: [
-          _buildHeader(context),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // const SizedBox(height: 16),
-                  // _buildOfflineBanner(),
-                  const SizedBox(height: 24),
-                  _buildSectionHeader("পাখির তথ্য"),
-                  const SizedBox(height: 12),
-                  _buildBirdInfoCard(),
-                  const SizedBox(height: 24),
-                  _buildSectionHeader("খাদ্য ও পানি"),
-                  const SizedBox(height: 12),
-                  _buildFoodWaterCard(),
-                  const SizedBox(height: 24),
-                  _buildSectionHeader("পরিবেশ"),
-                  const SizedBox(height: 12),
-                  _buildEnvironmentCard(),
-                  const SizedBox(height: 24),
-                  _buildSectionHeader("বৃদ্ধি"),
-                  const SizedBox(height: 12),
-                  _buildGrowthCard(),
-                  const SizedBox(height: 24),
-                  _buildSectionHeader("স্বাস্থ্য"),
-                  const SizedBox(height: 12),
-                  _buildHealthCard(),
-                  const SizedBox(height: 24),
-                  _buildSectionHeader("মন্তব্য"),
-                  const SizedBox(height: 12),
-                  _buildRemarksCard(),
-                  const SizedBox(height: 32),
-                  _buildSubmitButton(),
-                  const SizedBox(height: 32),
-                ],
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF7F9F7),
+        body: Column(
+          children: [
+            _buildHeader(context),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // const SizedBox(height: 16),
+                    // _buildOfflineBanner(),
+                    const SizedBox(height: 24),
+                    _buildSectionHeader("পাখির তথ্য"),
+                    const SizedBox(height: 12),
+                    _buildBirdInfoCard(),
+                    const SizedBox(height: 24),
+                    _buildSectionHeader("খাদ্য ও পানি"),
+                    const SizedBox(height: 12),
+                    _buildFoodWaterCard(),
+                    const SizedBox(height: 24),
+                    _buildSectionHeader("পরিবেশ"),
+                    const SizedBox(height: 12),
+                    _buildEnvironmentCard(),
+                    const SizedBox(height: 24),
+                    _buildSectionHeader("বৃদ্ধি"),
+                    const SizedBox(height: 12),
+                    _buildGrowthCard(),
+                    const SizedBox(height: 24),
+                    _buildSectionHeader("স্বাস্থ্য"),
+                    const SizedBox(height: 12),
+                    _buildHealthCard(),
+                    const SizedBox(height: 24),
+                    _buildSectionHeader("মন্তব্য"),
+                    const SizedBox(height: 12),
+                    _buildRemarksCard(),
+                    const SizedBox(height: 32),
+                    _buildSubmitButton(),
+                    const SizedBox(height: 32),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -77,15 +80,9 @@ class InfoView extends GetView<InfoController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: [
-              IconButton(
-                onPressed: () => Get.back(),
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-              ),
-              const SizedBox(width: 12),
-              const Text(
+            children: const [
+              SizedBox(width: 12),
+              Text(
                 "দৈনিক তথ্য এন্ট্রি",
                 style: TextStyle(
                   color: Colors.white,
