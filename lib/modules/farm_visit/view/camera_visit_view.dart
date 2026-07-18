@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import '../../../app/routes/app_routes.dart';
 import '../../../app/core/theme/app_colors.dart';
 import '../controller/camera_visit_controller.dart';
 
@@ -291,7 +292,7 @@ class _NextButton extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         onPressed: () {
-          Get.snackbar("Info", "Next step: Signature");
+          Get.toNamed(Routes.signature_visit, arguments: Get.arguments);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
