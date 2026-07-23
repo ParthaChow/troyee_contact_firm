@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../app/core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../controller/info_controller.dart';
 
 class InfoView extends GetView<InfoController> {
@@ -8,47 +9,53 @@ class InfoView extends GetView<InfoController> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context).languageCode;
+
+    // Localize numbers in controllers when locale changes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _localizeAllControllers(locale);
+    });
+
     return PopScope(
       canPop: false,
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: Column(
           children: [
-            _buildHeader(context),
+            _buildHeader(context, locale),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // const SizedBox(height: 16),
-                    // _buildOfflineBanner(),
                     const SizedBox(height: 24),
-                    _buildSectionHeader(context, "পাখির তথ্য"),
+                    _buildSectionHeader(context, l10n.bird_info),
                     const SizedBox(height: 12),
-                    _buildBirdInfoCard(context),
+                    _buildBirdInfoCard(context, locale),
                     const SizedBox(height: 24),
-                    _buildSectionHeader(context, "খাদ্য ও পানি"),
+                    _buildSectionHeader(context, l10n.food_and_water),
                     const SizedBox(height: 12),
-                    _buildFoodWaterCard(context),
+                    _buildFoodWaterCard(context, locale),
                     const SizedBox(height: 24),
-                    _buildSectionHeader(context, "পরিবেশ"),
+                    _buildSectionHeader(context, l10n.environment),
                     const SizedBox(height: 12),
-                    _buildEnvironmentCard(context),
+                    _buildEnvironmentCard(context, locale),
                     const SizedBox(height: 24),
-                    _buildSectionHeader(context, "বৃদ্ধি"),
+                    _buildSectionHeader(context, l10n.growth),
                     const SizedBox(height: 12),
-                    _buildGrowthCard(context),
+                    _buildGrowthCard(context, locale),
                     const SizedBox(height: 24),
-                    _buildSectionHeader(context, "স্বাস্থ্য"),
+                    _buildSectionHeader(context, l10n.health),
                     const SizedBox(height: 12),
-                    _buildHealthCard(context),
+                    _buildHealthCard(context, locale),
                     const SizedBox(height: 24),
-                    _buildSectionHeader(context, "মন্তব্য"),
+                    _buildSectionHeader(context, l10n.remarks),
                     const SizedBox(height: 12),
                     _buildRemarksCard(context),
                     const SizedBox(height: 32),
-                    _buildSubmitButton(),
+                    _buildSubmitButton(context),
                     const SizedBox(height: 32),
                   ],
                 ),
@@ -60,7 +67,8 @@ class InfoView extends GetView<InfoController> {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, String locale) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.only(
@@ -82,11 +90,11 @@ class InfoView extends GetView<InfoController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: const [
-              SizedBox(width: 12),
+            children: [
+              const SizedBox(width: 12),
               Text(
-                "দৈনিক তথ্য এন্ট্রি",
-                style: TextStyle(
+                l10n.daily_info_entry,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
@@ -100,8 +108,9 @@ class InfoView extends GetView<InfoController> {
             child: Obx(() {
               final farmName = controller.task.name;
               final age = controller.batch.value?.ageInDays ?? 0;
+              final localizedAge = _localizeNumber(age.toString(), locale);
               return Text(
-                "$farmName • দিন $age",
+                "$farmName • ${l10n.day} $localizedAge",
                 style: const TextStyle(color: Colors.white70, fontSize: 16),
               );
             }),
@@ -111,31 +120,6 @@ class InfoView extends GetView<InfoController> {
     );
   }
 
-  // Widget _buildOfflineBanner() {
-  //   return Container(
-  //     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-  //     decoration: BoxDecoration(
-  //       color: const Color(0xFFFDE8E8),
-  //       borderRadius: BorderRadius.circular(12),
-  //     ),
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       children: const [
-  //         Icon(Icons.wifi_off, size: 18, color: Color(0xFFC53030)),
-  //         SizedBox(width: 8),
-  //         Text(
-  //           "অফলাইনে ডিভাইসে সংরক্ষিত হচ্ছে",
-  //           style: TextStyle(
-  //             color: Color(0xFFC53030),
-  //             fontSize: 14,
-  //             fontWeight: FontWeight.w500,
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-  //
   Widget _buildSectionHeader(BuildContext context, String title) {
     return Row(
       children: [
@@ -162,7 +146,8 @@ class InfoView extends GetView<InfoController> {
     );
   }
 
-  Widget _buildBirdInfoCard(BuildContext context) {
+  Widget _buildBirdInfoCard(BuildContext context, String locale) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -180,29 +165,29 @@ class InfoView extends GetView<InfoController> {
         children: [
           _buildCounterRow(
             context,
-            "মুরগির সংখ্যা",
-            "Bird count",
+            l10n.bird_count_label,
             controller.birdCount,
             controller.incrementBird,
             controller.decrementBird,
+            locale,
           ),
           Divider(height: 32, color: Theme.of(context).dividerColor.withOpacity(0.1)),
           _buildCounterRow(
             context,
-            "মৃত্যু",
-            "Mortality",
+            l10n.mortality_label,
             controller.mortalityCount,
             controller.incrementMortality,
             controller.decrementMortality,
+            locale,
           ),
           Divider(height: 32, color: Theme.of(context).dividerColor.withOpacity(0.1)),
           _buildCounterRow(
             context,
-            "কালিং",
-            "Culling",
+            l10n.culling_label,
             controller.cullingCount,
             controller.incrementCulling,
             controller.decrementCulling,
+            locale,
           ),
         ],
       ),
@@ -212,30 +197,21 @@ class InfoView extends GetView<InfoController> {
   Widget _buildCounterRow(
     BuildContext context,
     String title,
-    String subtitle,
     RxInt count,
     VoidCallback onAdd,
     VoidCallback onRemove,
+    String locale,
   ) {
     return Row(
       children: [
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).textTheme.bodyLarge?.color,
-                ),
-              ),
-              Text(
-                subtitle,
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
-              ),
-            ],
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
+            ),
           ),
         ),
         Row(
@@ -244,7 +220,7 @@ class InfoView extends GetView<InfoController> {
             const SizedBox(width: 16),
             Obx(
               () => Text(
-                _toBengaliNumber(count.value.toString()),
+                _localizeNumber(count.value.toString(), locale),
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -277,7 +253,8 @@ class InfoView extends GetView<InfoController> {
     );
   }
 
-  Widget _buildFoodWaterCard(BuildContext context) {
+  Widget _buildFoodWaterCard(BuildContext context, String locale) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -295,23 +272,24 @@ class InfoView extends GetView<InfoController> {
         children: [
           _buildInputRow(
             context,
-            "খাদ্য খরচ (কেজি)",
-            "Feed consumption",
+            l10n.feed_consumption_label,
             controller.feedController,
+            locale,
           ),
           Divider(height: 32, color: Theme.of(context).dividerColor.withOpacity(0.1)),
           _buildInputRow(
             context,
-            "পানি খরচ (লিটার)",
-            "Water consumption",
+            l10n.water_consumption_label,
             controller.waterController,
+            locale,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildEnvironmentCard(BuildContext context) {
+  Widget _buildEnvironmentCard(BuildContext context, String locale) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -329,30 +307,31 @@ class InfoView extends GetView<InfoController> {
         children: [
           _buildInputRow(
             context,
-            "তাপমাত্রা (°সে)",
-            "Temperature",
+            l10n.temperature_label,
             controller.tempController,
+            locale,
           ),
           Divider(height: 32, color: Theme.of(context).dividerColor.withOpacity(0.1)),
           _buildInputRow(
             context,
-            "আর্দ্রতা (%)",
-            "Humidity",
+            l10n.humidity_label,
             controller.humidityController,
+            locale,
           ),
           Divider(height: 32, color: Theme.of(context).dividerColor.withOpacity(0.1)),
           _buildInputRow(
             context,
-            "আলোর সময় (ঘণ্টা)",
-            "Light hours",
+            l10n.light_hours_label,
             controller.lightHoursController,
+            locale,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildGrowthCard(BuildContext context) {
+  Widget _buildGrowthCard(BuildContext context, String locale) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -368,14 +347,15 @@ class InfoView extends GetView<InfoController> {
       ),
       child: _buildInputRow(
         context,
-        "গড় ওজন (গ্রাম)",
-        "Average weight",
+        l10n.avg_weight_label,
         controller.weightController,
+        locale,
       ),
     );
   }
 
-  Widget _buildHealthCard(BuildContext context) {
+  Widget _buildHealthCard(BuildContext context, String locale) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -393,19 +373,20 @@ class InfoView extends GetView<InfoController> {
         children: [
           _buildSelectRow(
             context,
-            "ব্যবহৃত ওষুধ",
-            "Medicine used",
+            l10n.medicine_used_label,
             controller.medicineController,
+            locale,
             hasDropdown: true,
           ),
           Divider(height: 32, color: Theme.of(context).dividerColor.withOpacity(0.1)),
-          _buildSelectRow(context, "ভ্যাকসিন", "Vaccine", controller.vaccineController),
+          _buildSelectRow(context, l10n.vaccine_label, controller.vaccineController, locale),
         ],
       ),
     );
   }
 
   Widget _buildRemarksCard(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -432,8 +413,8 @@ class InfoView extends GetView<InfoController> {
           controller: controller.remarksController,
           maxLines: 3,
           style: TextStyle(fontSize: 15, color: Theme.of(context).textTheme.bodyLarge?.color),
-          decoration: const InputDecoration(
-            hintText: "মন্তব্য লিখুন...",
+          decoration: InputDecoration(
+            hintText: l10n.enter_remarks_hint,
             border: InputBorder.none,
             isDense: true,
           ),
@@ -445,29 +426,20 @@ class InfoView extends GetView<InfoController> {
   Widget _buildSelectRow(
     BuildContext context,
     String title,
-    String subtitle,
-    TextEditingController textController, {
+    TextEditingController textController,
+    String locale, {
     bool hasDropdown = false,
   }) {
     return Row(
       children: [
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).textTheme.bodyLarge?.color,
-                ),
-              ),
-              Text(
-                subtitle,
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
-              ),
-            ],
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
+            ),
           ),
         ),
         Container(
@@ -497,6 +469,17 @@ class InfoView extends GetView<InfoController> {
                     border: InputBorder.none,
                     isDense: true,
                   ),
+                  onChanged: (value) {
+                    if (locale == 'bn') {
+                      final localized = _localizeNumber(value, 'bn');
+                      if (localized != value) {
+                        textController.text = localized;
+                        textController.selection = TextSelection.fromPosition(
+                          TextPosition(offset: textController.text.length),
+                        );
+                      }
+                    }
+                  },
                 ),
               ),
               if (hasDropdown)
@@ -518,28 +501,19 @@ class InfoView extends GetView<InfoController> {
   Widget _buildInputRow(
     BuildContext context,
     String title,
-    String subtitle,
     TextEditingController textController,
+    String locale,
   ) {
     return Row(
       children: [
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).textTheme.bodyLarge?.color,
-                ),
-              ),
-              Text(
-                subtitle,
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
-              ),
-            ],
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
+            ),
           ),
         ),
         Container(
@@ -565,13 +539,25 @@ class InfoView extends GetView<InfoController> {
               contentPadding: EdgeInsets.symmetric(horizontal: 12),
               border: InputBorder.none,
             ),
+            onChanged: (value) {
+              if (locale == 'bn') {
+                final localized = _localizeNumber(value, 'bn');
+                if (localized != value) {
+                  textController.text = localized;
+                  textController.selection = TextSelection.fromPosition(
+                    TextPosition(offset: textController.text.length),
+                  );
+                }
+              }
+            },
           ),
         ),
       ],
     );
   }
 
-  Widget _buildSubmitButton() {
+  Widget _buildSubmitButton(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Obx(
       () => SizedBox(
         width: double.infinity,
@@ -597,31 +583,31 @@ class InfoView extends GetView<InfoController> {
                     strokeWidth: 2,
                   ),
                 )
-              : const Text(
-                  "Next",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              : Text(
+                  l10n.next,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
         ),
       ),
     );
   }
 
-  String _toBengaliNumber(String number) {
-    const bengaliNumbers = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-    String result = '';
-    for (int i = 0; i < number.length; i++) {
-      if (number[i] == '.') {
-        result += '.';
-      } else if (number[i] == ',') {
-        result += ',';
-      } else {
-        int index = int.tryParse(number[i]) ?? -1;
-        if (index != -1) {
-          result += bengaliNumbers[index];
-        } else {
-          result += number[i];
-        }
-      }
+  void _localizeAllControllers(String locale) {
+    controller.feedController.text = _localizeNumber(controller.feedController.text, locale);
+    controller.waterController.text = _localizeNumber(controller.waterController.text, locale);
+    controller.tempController.text = _localizeNumber(controller.tempController.text, locale);
+    controller.humidityController.text = _localizeNumber(controller.humidityController.text, locale);
+    controller.lightHoursController.text = _localizeNumber(controller.lightHoursController.text, locale);
+    controller.weightController.text = _localizeNumber(controller.weightController.text, locale);
+  }
+
+  String _localizeNumber(String input, String locale) {
+    if (locale == 'en') return controller.unlocalizeNumber(input);
+    final english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const bengali = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    String result = controller.unlocalizeNumber(input);
+    for (int i = 0; i < 10; i++) {
+      result = result.replaceAll(english[i], bengali[i]);
     }
     return result;
   }

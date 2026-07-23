@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:signature/signature.dart';
 import 'package:flutter/material.dart';
+import 'package:troyee_contact_firm/l10n/app_localizations.dart';
 
 import '../../../app/routes/app_routes.dart';
 import '../../../app/services/api_fetch.dart';
@@ -53,10 +54,11 @@ class FarmSignatureController extends GetxController {
   }
 
   Future<void> submit() async {
+    final l10n = AppLocalizations.of(Get.context!)!;
     if (!isConfirmed.value) {
       Get.snackbar(
-        "ত্রুটি",
-        "দয়া করে তথ্য নিশ্চিত করুন",
+        l10n.error,
+        l10n.please_confirm_info,
         backgroundColor: Colors.red.withOpacity(0.7),
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,
@@ -66,7 +68,7 @@ class FarmSignatureController extends GetxController {
     }
 
     if (dailyEntryData == null) {
-      Get.snackbar("Error", "Daily entry data missing");
+      Get.snackbar(l10n.error, l10n.daily_entry_missing);
       return;
     }
 
@@ -75,7 +77,7 @@ class FarmSignatureController extends GetxController {
       final baseUrl = _authService.baseUrl;
 
       if (baseUrl == null || !(await _authService.ensureValidToken())) {
-        Get.snackbar("Session Expired", "Please login again to continue");
+        Get.snackbar(l10n.session_expired, l10n.please_login_again);
         Get.offAllNamed(Routes.auth);
         return;
       }
@@ -96,8 +98,8 @@ class FarmSignatureController extends GetxController {
       }
 
       Get.snackbar(
-        "সফল",
-        "তথ্য সফলভাবে সংরক্ষিত হয়েছে",
+        l10n.success,
+        l10n.data_saved_success,
         backgroundColor: Colors.green.withOpacity(0.7),
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,
@@ -109,8 +111,8 @@ class FarmSignatureController extends GetxController {
       
     } catch (e) {
       Get.snackbar(
-        "ত্রুটি",
-        "সার্ভারে তথ্য পাঠাতে ব্যর্থ: $e",
+        l10n.error,
+        "${l10n.failed_to_send_data}: $e",
         backgroundColor: Colors.red.withOpacity(0.7),
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,

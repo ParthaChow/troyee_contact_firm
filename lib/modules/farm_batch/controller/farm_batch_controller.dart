@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:troyee_contact_firm/l10n/app_localizations.dart';
 import 'package:troyee_contact_firm/modules/sign_in/controller/sign_in_controller.dart';
 
 import '../../../models/farm_batch_model.dart';
@@ -41,10 +42,12 @@ class FarmBatchController extends GetxController {
         List<dynamic> jsonList = jsonDecode(response.body);
         batches.value = jsonList.map((json) => FarmBatch.fromJson(json)).toList();
       } else {
-        Get.snackbar('Error', 'Failed to load batches: ${response.statusCode}');
+        final l10n = AppLocalizations.of(Get.context!)!;
+        Get.snackbar(l10n.error, '${l10n.failed_load_batches}: ${response.statusCode}');
       }
     } catch (e) {
-      Get.snackbar('Error', 'An error occurred: $e');
+      final l10n = AppLocalizations.of(Get.context!)!;
+      Get.snackbar(l10n.error, '${l10n.error}: $e');
       print('Error An error occurred: $e');
     } finally {
       isLoading(false);

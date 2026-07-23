@@ -6,15 +6,15 @@ import 'package:get/get.dart';
 import '../../../app/services/upload_service.dart';
 import '../../../app/routes/app_routes.dart';
 import '../../../app/core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../controller/camera_visit_controller.dart';
 
 class CameraVisitView extends GetView<CameraVisitController> {
   const CameraVisitView({super.key});
 
-
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light.copyWith(
         statusBarColor: Colors.transparent,
@@ -36,7 +36,7 @@ class CameraVisitView extends GetView<CameraVisitController> {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      "| তোলা ছবি",
+                      "| ${l10n.captured_images}",
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -69,6 +69,7 @@ class CameraVisitView extends GetView<CameraVisitController> {
 class _HeaderSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -93,9 +94,9 @@ class _HeaderSection extends StatelessWidget {
                 child: const Icon(Icons.arrow_back, color: Colors.white, size: 24),
               ),
               const SizedBox(width: 12),
-              const Text(
-                "ছবি তুলুন",
-                style: TextStyle(
+              Text(
+                l10n.take_photo,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
@@ -107,7 +108,7 @@ class _HeaderSection extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 36),
             child: Text(
-              "শেড, খাদ্য, পানি ও পরিবেশের ছবি",
+              l10n.camera_instruction,
               style: TextStyle(
                 color: Colors.white.withOpacity(0.8),
                 fontSize: 13,
@@ -297,6 +298,7 @@ class _AddButton extends GetView<CameraVisitController> {
 class _AutoUploadBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -310,9 +312,9 @@ class _AutoUploadBar extends StatelessWidget {
           const SizedBox(width: 10),
           Expanded(
             child: Text(
-              "নেটওয়ার্ক পেলে স্বয়ংক্রিয়ভাবে আপলোড হবে",
-              style: TextStyle(
-                color: const Color(0xffE04F4F),
+              l10n.auto_upload_msg,
+              style: const TextStyle(
+                color: Color(0xffE04F4F),
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),
@@ -327,6 +329,7 @@ class _AutoUploadBar extends StatelessWidget {
 class _NextButton extends GetView<CameraVisitController> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SizedBox(
       width: double.infinity,
       height: 50,
@@ -344,9 +347,9 @@ class _NextButton extends GetView<CameraVisitController> {
           ),
           elevation: 0,
         ),
-        child: const Text(
-          "Next",
-          style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+        child: Text(
+          l10n.next,
+          style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
         ),
       ),
     );

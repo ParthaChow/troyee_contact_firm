@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:troyee_contact_firm/app/services/services.dart';
+import 'package:troyee_contact_firm/l10n/app_localizations.dart';
 
 import '../../../app/routes/app_routes.dart';
 import '../../../models/farm_batch_model.dart';
@@ -69,7 +70,8 @@ class InfoController extends GetxController {
         }
       }
     } catch (e) {
-      Get.snackbar("Error", "Failed to fetch batch details: $e");
+      final l10n = AppLocalizations.of(Get.context!)!;
+      Get.snackbar(l10n.error, "${l10n.fetch_batch_error}: $e");
     } finally {
       isLoading.value = false;
     }
@@ -83,6 +85,16 @@ class InfoController extends GetxController {
 
   void incrementCulling() => cullingCount.value++;
   void decrementCulling() => cullingCount.value > 0 ? cullingCount.value-- : null;
+
+  String unlocalizeNumber(String input) {
+    const bengali = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    String result = input;
+    for (int i = 0; i < 10; i++) {
+      result = result.replaceAll(bengali[i], english[i]);
+    }
+    return result;
+  }
 
   Future<void> submitDailyEntry() async {
     try {
@@ -98,12 +110,12 @@ class InfoController extends GetxController {
         "birdCount": birdCount.value,
         "mortalityCount": mortalityCount.value,
         "cullingCount": cullingCount.value,
-        "totalFeedKg": double.tryParse(feedController.text) ?? 0,
-        "waterConsumptionLtr": double.tryParse(waterController.text) ?? 0,
-        "temperatureC": double.tryParse(tempController.text) ?? 0,
-        "humidityPercent": double.tryParse(humidityController.text) ?? 0,
-        "averageWeightGm": double.tryParse(weightController.text) ?? 0,
-        "lightHours": double.tryParse(lightHoursController.text) ?? 0,
+        "totalFeedKg": double.tryParse(unlocalizeNumber(feedController.text)) ?? 0,
+        "waterConsumptionLtr": double.tryParse(unlocalizeNumber(waterController.text)) ?? 0,
+        "temperatureC": double.tryParse(unlocalizeNumber(tempController.text)) ?? 0,
+        "humidityPercent": double.tryParse(unlocalizeNumber(humidityController.text)) ?? 0,
+        "averageWeightGm": double.tryParse(unlocalizeNumber(weightController.text)) ?? 0,
+        "lightHours": double.tryParse(unlocalizeNumber(lightHoursController.text)) ?? 0,
         "medicineUsed": medicineController.text,
         "vaccineUsed": vaccineController.text,
         "remarks": remarksController.text
@@ -112,8 +124,8 @@ class InfoController extends GetxController {
       // Update the batch object with new values before passing it forward
       final updatedBatch = batch.value?.copyWith(
         mortalityCount: mortalityCount.value,
-        totalFeedKg: double.tryParse(feedController.text) ?? 0,
-        averageWeightKg: double.tryParse(weightController.text) ?? 0,
+        totalFeedKg: double.tryParse(unlocalizeNumber(feedController.text)) ?? 0,
+        averageWeightKg: double.tryParse(unlocalizeNumber(weightController.text)) ?? 0,
         currentCount: birdCount.value,
       );
 
@@ -126,9 +138,10 @@ class InfoController extends GetxController {
       });
       
     } catch (e) {
+      final l10n = AppLocalizations.of(Get.context!)!;
       Get.snackbar(
-        "Error",
-        "Failed: $e",
+        l10n.error,
+        "${l10n.failed}: $e",
         backgroundColor: Colors.red.withOpacity(0.7),
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,

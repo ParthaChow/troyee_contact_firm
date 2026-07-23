@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:troyee_contact_firm/l10n/app_localizations.dart';
 
 import '../../../app/routes/app_routes.dart';
 import '../../../app/services/api_fetch.dart';
@@ -99,8 +100,9 @@ class SignInController extends GetxController {
         baseUrl: baseUrlController.text.trim(),
       );
 
-      Get.snackbar("Success",
-          "Welcome ${result.fullName}",
+      final l10n = AppLocalizations.of(Get.context!)!;
+      Get.snackbar(l10n.success,
+          "${l10n.welcome ?? 'Welcome'} ${result.fullName}",
       snackPosition: SnackPosition.BOTTOM,);
 
 
@@ -109,8 +111,8 @@ class SignInController extends GetxController {
         arguments: result,
       );
     } catch (e) {
-
-      Get.snackbar("Login Failed",
+      final l10n = AppLocalizations.of(Get.context!)!;
+      Get.snackbar(l10n.login_failed,
         e.toString(),
         snackPosition: SnackPosition.BOTTOM,);
     } finally {
