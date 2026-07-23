@@ -174,27 +174,27 @@ class _BatchTile extends GetView<FarmBatchController> {
                     children: [
                       Text(
                         batch.batchCode,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.textDark,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         "${batch.breed} - স্টক: ${batch.currentCount}",
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 13,
-                          color: AppColors.textGrey,
+                          color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
                         ),
                       ),
                     ],
                   ),
                 ),
-                const Icon(
+                Icon(
                   Icons.arrow_forward_ios,
                   size: 16,
-                  color: AppColors.textGrey,
+                  color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.5),
                 ),
               ],
             ),

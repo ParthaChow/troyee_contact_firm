@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -13,11 +14,13 @@ class FarmVisitController extends GetxController {
   final ApiFetch _apiFetch = ApiFetch();
 
   final Rxn<Position> currentPosition = Rxn<Position>();
+  final Rxn<Position> initialPosition = Rxn<Position>();
   final RxBool isLoading = true.obs;
   final RxBool isCheckingIn = false.obs;
 
   GoogleMapController? mapController;
   final RxSet<Marker> markers = <Marker>{}.obs;
+  StreamSubscription<Position>? _positionStreamSubscription;
 
   late FarmTask task;
   late FarmBatch batch;
@@ -30,10 +33,16 @@ class FarmVisitController extends GetxController {
     final args = Get.arguments as Map<String, dynamic>;
     task = args['task'];
     batch = args['batch'];
-    _getCurrentLocation();
+    _startLocationUpdates();
   }
 
-  Future<void> _getCurrentLocation() async {
+  @override
+  void onClose() {
+    _positionStreamSubscription?.cancel();
+    super.onClose();
+  }
+
+  Future<void> _startLocationUpdates() async {
     try {
       bool serviceEnabled;
       LocationPermission permission;
@@ -82,23 +91,35 @@ class FarmVisitController extends GetxController {
         return;
       }
 
+      // Get initial position
       final position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
       currentPosition.value = position;
-
+      initialPosition.value = position;
       _addMarker(position);
-
-      if (mapController != null) {
-        mapController!.animateCamera(
-          CameraUpdate.newLatLngZoom(
-            LatLng(position.latitude, position.longitude),
-            16,
-          ),
-        );
-      }
-
       isLoading.value = false;
+
+      // Start listening for updates
+      _positionStreamSubscription = Geolocator.getPositionStream(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+          distanceFilter: 5, // Update every 5 meters
+        ),
+      ).listen((Position position) {
+        currentPosition.value = position;
+        _addMarker(position);
+        
+        // Follow user on map
+        if (mapController != null) {
+          mapController!.animateCamera(
+            CameraUpdate.newLatLng(
+              LatLng(position.latitude, position.longitude),
+            ),
+          );
+        }
+      });
+
     } catch (e) {
       Get.snackbar(
         "Error",
@@ -209,16 +230,5 @@ class FarmVisitController extends GetxController {
 
   void onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    if (currentPosition.value != null) {
-      mapController?.animateCamera(
-        CameraUpdate.newLatLngZoom(
-          LatLng(
-            currentPosition.value!.latitude,
-            currentPosition.value!.longitude,
-          ),
-          16,
-        ),
-      );
-    }
   }
 }

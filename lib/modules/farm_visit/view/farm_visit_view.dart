@@ -116,24 +116,34 @@ class _MapContainer extends GetView<FarmVisitController> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(23),
         child: Obx(() {
+          // Only rebuild the whole widget when loading state or initial position changes
           if (controller.isLoading.value) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (controller.currentPosition.value == null) {
-            return const Center(child: Text("Location not available"));
+          
+          final initialPos = controller.initialPosition.value;
+          if (initialPos == null) {
+            return const Center(
+              child: Text(
+                "নির্ভুল অবস্থান খোঁজা হচ্ছে...",
+                style: TextStyle(fontSize: 12),
+              ),
+            );
           }
-          final pos = controller.currentPosition.value!;
+
+          // Use markers from controller
           return GoogleMap(
             initialCameraPosition: CameraPosition(
-              target: LatLng(pos.latitude, pos.longitude),
+              target: LatLng(initialPos.latitude, initialPos.longitude),
               zoom: 16,
             ),
             onMapCreated: controller.onMapCreated,
-            markers: controller.markers,
+            markers: controller.markers.toSet(),
             myLocationEnabled: true,
-            myLocationButtonEnabled: false,
+            myLocationButtonEnabled: true,
             zoomControlsEnabled: false,
             mapToolbarEnabled: false,
+            compassEnabled: true,
           );
         }),
       ),
