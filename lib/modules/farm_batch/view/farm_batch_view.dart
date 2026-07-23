@@ -18,16 +18,16 @@ class FarmBatchView extends GetView<FarmBatchController> {
         statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: Column(
           children: [
             _HeaderSection(),
             Expanded(
               child: Container(
                 width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: AppColors.background,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
                 ),
                 transform: Matrix4.translationValues(0, -30, 0),
                 child: Obx(() {
@@ -74,7 +74,9 @@ class _HeaderSection extends GetView<FarmBatchController> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: AppColors.primary,
+      color: Theme.of(context).brightness == Brightness.light 
+          ? AppColors.primary 
+          : const Color(0xff0a1b15),
       padding: EdgeInsets.fromLTRB(
         10,
         MediaQuery.of(context).padding.top + 10,
@@ -126,11 +128,11 @@ class _BatchTile extends GetView<FarmBatchController> {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: .03),
+            color: Colors.black.withOpacity(.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),

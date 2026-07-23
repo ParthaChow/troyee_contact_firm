@@ -27,11 +27,11 @@ class FarmTaskTile extends StatelessWidget {
           child: Ink(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: .03),
+                  color: Colors.black.withOpacity(.03),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -43,8 +43,10 @@ class FarmTaskTile extends StatelessWidget {
                 Container(
                   width: 48,
                   height: 48,
-                  decoration: const BoxDecoration(
-                    color: Color(0xffFEEBEB),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).brightness == Brightness.light 
+                      ? const Color(0xffFEEBEB)
+                      : Colors.red.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -63,17 +65,17 @@ class FarmTaskTile extends StatelessWidget {
                     children: [
                       Text(
                         task.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.textDark,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         "${task.location} - স্টক: ${task.currentStock}",
-                        style: const TextStyle(
-                          color: AppColors.textGrey,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.7),
                           fontSize: 13,
                         ),
                       ),
@@ -81,10 +83,10 @@ class FarmTaskTile extends StatelessWidget {
                   ),
                 ),
 
-                const Icon(
+                Icon(
                   Icons.arrow_forward_ios,
                   size: 16,
-                  color: AppColors.textGrey,
+                  color: Theme.of(context).hintColor,
                 ),
               ],
             ),

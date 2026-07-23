@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../app/core/theme/app_colors.dart';
 import '../../../app/routes/app_routes.dart';
+import '../../../app/services/theme_service.dart';
 import '../controllers/home_controller.dart';
 import '../widgets/farm_task_tile.dart';
 
@@ -18,7 +19,7 @@ class HomeView extends GetView<HomeController> {
         statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: Obx(() {
           switch (controller.navIndex.value) {
             case 0:
@@ -38,8 +39,9 @@ class HomeView extends GetView<HomeController> {
             currentIndex: controller.navIndex.value,
             onTap: controller.changeNavIndex,
             type: BottomNavigationBarType.fixed,
-            selectedItemColor: AppColors.primary,
+            selectedItemColor: Theme.of(context).primaryColor,
             unselectedItemColor: Colors.grey,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             showSelectedLabels: true,
             showUnselectedLabels: true,
             selectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
@@ -85,9 +87,9 @@ class _HomeSection extends StatelessWidget {
         Expanded(
           child: Container(
             width: double.infinity,
-            decoration: const BoxDecoration(
-              color: AppColors.background,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
             ),
             transform: Matrix4.translationValues(0, -30, 0),
             child: Obx(
@@ -139,9 +141,9 @@ class _FarmListSection extends StatelessWidget {
         Expanded(
           child: Container(
             width: double.infinity,
-            decoration: const BoxDecoration(
-              color: AppColors.background,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
             ),
             transform: Matrix4.translationValues(0, -30, 0),
             child: Obx(
@@ -191,9 +193,9 @@ class _SyncSection extends StatelessWidget {
         Expanded(
           child: Container(
             width: double.infinity,
-            decoration: const BoxDecoration(
-              color: AppColors.background,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
             ),
             transform: Matrix4.translationValues(0, -30, 0),
             child: Center(
@@ -279,6 +281,16 @@ class _ProfileSection extends StatelessWidget {
                 title: 'ব্যক্তিগত তথ্য',
                 onTap: () {},
               ),
+              GetBuilder<ThemeService>(
+                init: ThemeService(),
+                builder: (themeService) => _ProfileMenuItem(
+                  icon: themeService.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                  title: themeService.isDarkMode ? 'ডার্ক মোড (অন)' : 'লাইট মোড (অন)',
+                  onTap: () {
+                    themeService.switchTheme();
+                  },
+                ),
+              ),
               _ProfileMenuItem(
                 icon: Icons.settings_outlined,
                 title: 'সেটিংস',
@@ -355,7 +367,7 @@ class _ProfileMenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: AppColors.primary),
+      leading: Icon(icon, color: Theme.of(context).primaryColor),
       title: Text(title, style: const TextStyle(fontSize: 16)),
       trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
       onTap: onTap,
@@ -371,7 +383,9 @@ class _HeaderSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: const Color(0xff0F2D20), // Dark Green
+      color: Theme.of(context).brightness == Brightness.light 
+          ? const Color(0xff0F2D20) 
+          : const Color(0xff0a1b15), // Dark Green or darker
       padding: EdgeInsets.fromLTRB(
         20,
         MediaQuery.of(context).padding.top + 10,
