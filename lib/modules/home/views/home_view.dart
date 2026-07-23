@@ -129,62 +129,10 @@ class _HomeSection extends StatelessWidget {
     );
   }
 }
-//
-// class _FarmListSection extends StatelessWidget {
-//   final HomeController controller;
-//   const _FarmListSection({required this.controller});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         _HeaderSection(controller: controller),
-//         Expanded(
-//           child: Container(
-//             width: double.infinity,
-//             decoration: const BoxDecoration(
-//               color: AppColors.background,
-//               borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-//             ),
-//             transform: Matrix4.translationValues(0, -30, 0),
-//             child: Obx(
-//               () => controller.isLoading.value
-//                   ? const Center(child: CircularProgressIndicator())
-//                   : ListView(
-//                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-//                       children: [
-//                         const SizedBox(height: 10),
-//                         const Text(
-//                           "সম্পূর্ণ তালিকা",
-//                           style: TextStyle(
-//                             fontSize: 18,
-//                             fontWeight: FontWeight.bold,
-//                             color: AppColors.textDark,
-//                           ),
-//                         ),
-//                         const SizedBox(height: 16),
-//                         ...controller.farmTasks.map(
-//                           (task) => FarmTaskTile(
-//                             task: task,
-//                             onTap: () {
-//                               controller.startVisit(task.id);
-//                               Get.toNamed(Routes.farm_batch, arguments: task);
-//                             },
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
 
-class _WeatherSection extends StatelessWidget {
+class _FarmListSection extends StatelessWidget {
   final HomeController controller;
-  const _WeatherSection({required this.controller});
+  const _FarmListSection({required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -194,9 +142,9 @@ class _WeatherSection extends StatelessWidget {
         Expanded(
           child: Container(
             width: double.infinity,
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            decoration: const BoxDecoration(
+              color: AppColors.background,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
             ),
             transform: Matrix4.translationValues(0, -30, 0),
             child: Obx(
@@ -231,6 +179,16 @@ class _WeatherSection extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class _WeatherSection extends StatelessWidget {
+  final HomeController controller;
+  const _WeatherSection({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return const WeatherView();
   }
 }
 
