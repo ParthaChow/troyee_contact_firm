@@ -6,6 +6,7 @@ import '../../../app/core/theme/app_colors.dart';
 import '../../../app/routes/app_routes.dart';
 import '../controllers/home_controller.dart';
 import '../widgets/farm_task_tile.dart';
+import '../../weather/view/weather_view.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -24,7 +25,7 @@ class HomeView extends GetView<HomeController> {
             case 0:
               return _HomeSection(controller: controller);
             case 1:
-              return _FarmListSection(controller: controller);
+              return _WeatherSection(controller: controller);
             case 2:
               return _SyncSection(controller: controller);
             case 3:
@@ -126,56 +127,66 @@ class _HomeSection extends StatelessWidget {
     );
   }
 }
+//
+// class _FarmListSection extends StatelessWidget {
+//   final HomeController controller;
+//   const _FarmListSection({required this.controller});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         _HeaderSection(controller: controller),
+//         Expanded(
+//           child: Container(
+//             width: double.infinity,
+//             decoration: const BoxDecoration(
+//               color: AppColors.background,
+//               borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+//             ),
+//             transform: Matrix4.translationValues(0, -30, 0),
+//             child: Obx(
+//               () => controller.isLoading.value
+//                   ? const Center(child: CircularProgressIndicator())
+//                   : ListView(
+//                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+//                       children: [
+//                         const SizedBox(height: 10),
+//                         const Text(
+//                           "সম্পূর্ণ তালিকা",
+//                           style: TextStyle(
+//                             fontSize: 18,
+//                             fontWeight: FontWeight.bold,
+//                             color: AppColors.textDark,
+//                           ),
+//                         ),
+//                         const SizedBox(height: 16),
+//                         ...controller.farmTasks.map(
+//                           (task) => FarmTaskTile(
+//                             task: task,
+//                             onTap: () {
+//                               controller.startVisit(task.id);
+//                               Get.toNamed(Routes.farm_batch, arguments: task);
+//                             },
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
 
-class _FarmListSection extends StatelessWidget {
+class _WeatherSection extends StatelessWidget {
   final HomeController controller;
-  const _FarmListSection({required this.controller});
+  const _WeatherSection({required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _HeaderSection(controller: controller),
-        Expanded(
-          child: Container(
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              color: AppColors.background,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-            ),
-            transform: Matrix4.translationValues(0, -30, 0),
-            child: Obx(
-              () => controller.isLoading.value
-                  ? const Center(child: CircularProgressIndicator())
-                  : ListView(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                      children: [
-                        const SizedBox(height: 10),
-                        const Text(
-                          "সম্পূর্ণ তালিকা",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textDark,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        ...controller.farmTasks.map(
-                          (task) => FarmTaskTile(
-                            task: task,
-                            onTap: () {
-                              controller.startVisit(task.id);
-                              Get.toNamed(Routes.farm_batch, arguments: task);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-            ),
-          ),
-        ),
-      ],
-    );
+    return const WeatherView();
   }
 }
 

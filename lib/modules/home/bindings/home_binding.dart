@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 import '../controllers/home_controller.dart';
 import '../repositories/home_repository.dart';
+import '../../weather/controller/weather_controller.dart';
 
 class HomeBinding extends Bindings {
   @override
@@ -13,6 +14,11 @@ class HomeBinding extends Bindings {
 
     Get.lazyPut<HomeController>(
           () => HomeController(),
+    );
+
+    Get.lazyPut<WeatherController>(
+          () => WeatherController(),
+      fenix: true,
     );
   }
 }
