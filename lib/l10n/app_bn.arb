@@ -100,5 +100,8 @@
   "welcome": "স্বাগতম",
   "saved": "সংরক্ষিত",
   "added_to_queue": "ছবিটি আপলোড সারিতে যুক্ত করা হয়েছে",
-  "your_location": "আপনার অবস্থান"
+  "your_location": "আপনার অবস্থান",
+  "preferences": "পছন্দসমূহ",
+  "appearance": "অ্যাপিয়ারেন্স",
+  "device_settings": "ডিভাইস সেটিংস"
 }

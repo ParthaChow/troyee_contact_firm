@@ -316,4 +316,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get your_location => 'Your Location';
+
+  @override
+  String get preferences => 'Preferences';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get device_settings => 'Device settings';
 }

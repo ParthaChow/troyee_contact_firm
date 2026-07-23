@@ -315,4 +315,13 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get your_location => 'আপনার অবস্থান';
+
+  @override
+  String get preferences => 'পছন্দসমূহ';
+
+  @override
+  String get appearance => 'অ্যাপিয়ারেন্স';
+
+  @override
+  String get device_settings => 'ডিভাইস সেটিংস';
 }

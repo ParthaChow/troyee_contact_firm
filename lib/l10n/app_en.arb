@@ -100,5 +100,8 @@
   "welcome": "Welcome",
   "saved": "Saved",
   "added_to_queue": "Image added to upload queue",
-  "your_location": "Your Location"
+  "your_location": "Your Location",
+  "preferences": "Preferences",
+  "appearance": "Appearance",
+  "device_settings": "Device settings"
 }
