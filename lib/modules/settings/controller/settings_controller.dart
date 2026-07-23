@@ -6,6 +6,7 @@ class SettingsController extends GetxController {
   final ThemeService _themeService = Get.find<ThemeService>();
   final LocaleService _localeService = Get.find<LocaleService>();
 
+  // Use getters that access the .value of Rx variables to make them reactive in Obx
   bool get isDarkMode => _themeService.isDarkMode;
   String get currentLanguage => _localeService.locale.languageCode;
 

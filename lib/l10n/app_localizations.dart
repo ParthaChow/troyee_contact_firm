@@ -709,6 +709,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your Location'**
   String get your_location;
+
+  /// No description provided for @preferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferences'**
+  String get preferences;
+
+  /// No description provided for @appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// No description provided for @device_settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Device settings'**
+  String get device_settings;
 }
 
 class _AppLocalizationsDelegate
