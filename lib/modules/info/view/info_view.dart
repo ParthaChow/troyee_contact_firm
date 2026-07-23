@@ -11,7 +11,7 @@ class InfoView extends GetView<InfoController> {
     return PopScope(
       canPop: false,
       child: Scaffold(
-        backgroundColor: const Color(0xFFF7F9F7),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: Column(
           children: [
             _buildHeader(context),
@@ -24,29 +24,29 @@ class InfoView extends GetView<InfoController> {
                     // const SizedBox(height: 16),
                     // _buildOfflineBanner(),
                     const SizedBox(height: 24),
-                    _buildSectionHeader("পাখির তথ্য"),
+                    _buildSectionHeader(context, "পাখির তথ্য"),
                     const SizedBox(height: 12),
-                    _buildBirdInfoCard(),
+                    _buildBirdInfoCard(context),
                     const SizedBox(height: 24),
-                    _buildSectionHeader("খাদ্য ও পানি"),
+                    _buildSectionHeader(context, "খাদ্য ও পানি"),
                     const SizedBox(height: 12),
-                    _buildFoodWaterCard(),
+                    _buildFoodWaterCard(context),
                     const SizedBox(height: 24),
-                    _buildSectionHeader("পরিবেশ"),
+                    _buildSectionHeader(context, "পরিবেশ"),
                     const SizedBox(height: 12),
-                    _buildEnvironmentCard(),
+                    _buildEnvironmentCard(context),
                     const SizedBox(height: 24),
-                    _buildSectionHeader("বৃদ্ধি"),
+                    _buildSectionHeader(context, "বৃদ্ধি"),
                     const SizedBox(height: 12),
-                    _buildGrowthCard(),
+                    _buildGrowthCard(context),
                     const SizedBox(height: 24),
-                    _buildSectionHeader("স্বাস্থ্য"),
+                    _buildSectionHeader(context, "স্বাস্থ্য"),
                     const SizedBox(height: 12),
-                    _buildHealthCard(),
+                    _buildHealthCard(context),
                     const SizedBox(height: 24),
-                    _buildSectionHeader("মন্তব্য"),
+                    _buildSectionHeader(context, "মন্তব্য"),
                     const SizedBox(height: 12),
-                    _buildRemarksCard(),
+                    _buildRemarksCard(context),
                     const SizedBox(height: 32),
                     _buildSubmitButton(),
                     const SizedBox(height: 32),
@@ -69,9 +69,11 @@ class InfoView extends GetView<InfoController> {
         left: 20,
         right: 20,
       ),
-      decoration: const BoxDecoration(
-        color: Color(0xFF0F2D20),
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: Theme.of(context).brightness == Brightness.light 
+            ? const Color(0xFF0F2D20) 
+            : const Color(0xff0a1b15),
+        borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(30),
           bottomRight: Radius.circular(30),
         ),
@@ -134,7 +136,7 @@ class InfoView extends GetView<InfoController> {
   //   );
   // }
   //
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(BuildContext context, String title) {
     return Row(
       children: [
         Container(
@@ -148,21 +150,23 @@ class InfoView extends GetView<InfoController> {
         const SizedBox(width: 8),
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF0F2D20),
+            color: Theme.of(context).brightness == Brightness.light 
+                ? const Color(0xFF0F2D20) 
+                : Colors.white,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildBirdInfoCard() {
+  Widget _buildBirdInfoCard(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -175,22 +179,25 @@ class InfoView extends GetView<InfoController> {
       child: Column(
         children: [
           _buildCounterRow(
+            context,
             "মুরগির সংখ্যা",
             "Bird count",
             controller.birdCount,
             controller.incrementBird,
             controller.decrementBird,
           ),
-          const Divider(height: 32, color: Color(0xFFEEEEEE)),
+          Divider(height: 32, color: Theme.of(context).dividerColor.withOpacity(0.1)),
           _buildCounterRow(
+            context,
             "মৃত্যু",
             "Mortality",
             controller.mortalityCount,
             controller.incrementMortality,
             controller.decrementMortality,
           ),
-          const Divider(height: 32, color: Color(0xFFEEEEEE)),
+          Divider(height: 32, color: Theme.of(context).dividerColor.withOpacity(0.1)),
           _buildCounterRow(
+            context,
             "কালিং",
             "Culling",
             controller.cullingCount,
@@ -203,6 +210,7 @@ class InfoView extends GetView<InfoController> {
   }
 
   Widget _buildCounterRow(
+    BuildContext context,
     String title,
     String subtitle,
     RxInt count,
@@ -217,10 +225,10 @@ class InfoView extends GetView<InfoController> {
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF0F2D20),
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
               Text(
@@ -232,46 +240,48 @@ class InfoView extends GetView<InfoController> {
         ),
         Row(
           children: [
-            _buildCounterButton(Icons.remove, onRemove),
+            _buildCounterButton(context, Icons.remove, onRemove),
             const SizedBox(width: 16),
             Obx(
               () => Text(
                 _toBengaliNumber(count.value.toString()),
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF0F2D20),
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
             ),
             const SizedBox(width: 16),
-            _buildCounterButton(Icons.add, onAdd),
+            _buildCounterButton(context, Icons.add, onAdd),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildCounterButton(IconData icon, VoidCallback onTap) {
+  Widget _buildCounterButton(BuildContext context, IconData icon, VoidCallback onTap) {
     return InkWell(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: const Color(0xFFF5F7F5),
+          color: Theme.of(context).brightness == Brightness.light 
+              ? const Color(0xFFF5F7F5) 
+              : Colors.white10,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: const Color(0xFFE0E0E0)),
+          border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.2)),
         ),
-        child: Icon(icon, size: 18, color: const Color(0xFF0F2D20)),
+        child: Icon(icon, size: 18, color: Theme.of(context).iconTheme.color),
       ),
     );
   }
 
-  Widget _buildFoodWaterCard() {
+  Widget _buildFoodWaterCard(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -284,12 +294,14 @@ class InfoView extends GetView<InfoController> {
       child: Column(
         children: [
           _buildInputRow(
+            context,
             "খাদ্য খরচ (কেজি)",
             "Feed consumption",
             controller.feedController,
           ),
-          const Divider(height: 32, color: Color(0xFFEEEEEE)),
+          Divider(height: 32, color: Theme.of(context).dividerColor.withOpacity(0.1)),
           _buildInputRow(
+            context,
             "পানি খরচ (লিটার)",
             "Water consumption",
             controller.waterController,
@@ -299,11 +311,11 @@ class InfoView extends GetView<InfoController> {
     );
   }
 
-  Widget _buildEnvironmentCard() {
+  Widget _buildEnvironmentCard(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -316,18 +328,21 @@ class InfoView extends GetView<InfoController> {
       child: Column(
         children: [
           _buildInputRow(
+            context,
             "তাপমাত্রা (°সে)",
             "Temperature",
             controller.tempController,
           ),
-          const Divider(height: 32, color: Color(0xFFEEEEEE)),
+          Divider(height: 32, color: Theme.of(context).dividerColor.withOpacity(0.1)),
           _buildInputRow(
+            context,
             "আর্দ্রতা (%)",
             "Humidity",
             controller.humidityController,
           ),
-          const Divider(height: 32, color: Color(0xFFEEEEEE)),
+          Divider(height: 32, color: Theme.of(context).dividerColor.withOpacity(0.1)),
           _buildInputRow(
+            context,
             "আলোর সময় (ঘণ্টা)",
             "Light hours",
             controller.lightHoursController,
@@ -337,11 +352,11 @@ class InfoView extends GetView<InfoController> {
     );
   }
 
-  Widget _buildGrowthCard() {
+  Widget _buildGrowthCard(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -352,6 +367,7 @@ class InfoView extends GetView<InfoController> {
         ],
       ),
       child: _buildInputRow(
+        context,
         "গড় ওজন (গ্রাম)",
         "Average weight",
         controller.weightController,
@@ -359,11 +375,11 @@ class InfoView extends GetView<InfoController> {
     );
   }
 
-  Widget _buildHealthCard() {
+  Widget _buildHealthCard(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -376,23 +392,24 @@ class InfoView extends GetView<InfoController> {
       child: Column(
         children: [
           _buildSelectRow(
+            context,
             "ব্যবহৃত ওষুধ",
             "Medicine used",
             controller.medicineController,
             hasDropdown: true,
           ),
-          const Divider(height: 32, color: Color(0xFFEEEEEE)),
-          _buildSelectRow("ভ্যাকসিন", "Vaccine", controller.vaccineController),
+          Divider(height: 32, color: Theme.of(context).dividerColor.withOpacity(0.1)),
+          _buildSelectRow(context, "ভ্যাকসিন", "Vaccine", controller.vaccineController),
         ],
       ),
     );
   }
 
-  Widget _buildRemarksCard() {
+  Widget _buildRemarksCard(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -405,14 +422,16 @@ class InfoView extends GetView<InfoController> {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: const Color(0xFFF5F7F5),
+          color: Theme.of(context).brightness == Brightness.light 
+              ? const Color(0xFFF5F7F5) 
+              : Colors.white10,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFE0E0E0)),
+          border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.2)),
         ),
         child: TextField(
           controller: controller.remarksController,
           maxLines: 3,
-          style: const TextStyle(fontSize: 15, color: Color(0xFF0F2D20)),
+          style: TextStyle(fontSize: 15, color: Theme.of(context).textTheme.bodyLarge?.color),
           decoration: const InputDecoration(
             hintText: "মন্তব্য লিখুন...",
             border: InputBorder.none,
@@ -424,6 +443,7 @@ class InfoView extends GetView<InfoController> {
   }
 
   Widget _buildSelectRow(
+    BuildContext context,
     String title,
     String subtitle,
     TextEditingController textController, {
@@ -437,10 +457,10 @@ class InfoView extends GetView<InfoController> {
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF0F2D20),
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
               Text(
@@ -454,9 +474,11 @@ class InfoView extends GetView<InfoController> {
           width: 150,
           height: 45,
           decoration: BoxDecoration(
-            color: const Color(0xFFF5F7F5),
+            color: Theme.of(context).brightness == Brightness.light 
+                ? const Color(0xFFF5F7F5) 
+                : Colors.white10,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFFE0E0E0)),
+            border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.2)),
           ),
           child: Row(
             children: [
@@ -465,10 +487,10 @@ class InfoView extends GetView<InfoController> {
                   controller: textController,
                   textAlign: TextAlign.end,
                   keyboardType: TextInputType.number,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF0F2D20),
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
                   decoration: const InputDecoration(
                     contentPadding: EdgeInsets.symmetric(horizontal: 12),
@@ -494,6 +516,7 @@ class InfoView extends GetView<InfoController> {
   }
 
   Widget _buildInputRow(
+    BuildContext context,
     String title,
     String subtitle,
     TextEditingController textController,
@@ -506,10 +529,10 @@ class InfoView extends GetView<InfoController> {
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF0F2D20),
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
               Text(
@@ -523,18 +546,20 @@ class InfoView extends GetView<InfoController> {
           width: 120,
           height: 45,
           decoration: BoxDecoration(
-            color: const Color(0xFFF5F7F5),
+            color: Theme.of(context).brightness == Brightness.light 
+                ? const Color(0xFFF5F7F5) 
+                : Colors.white10,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFFE0E0E0)),
+            border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.2)),
           ),
           child: TextField(
             controller: textController,
             textAlign: TextAlign.end,
             keyboardType: TextInputType.number,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF0F2D20),
+              color: Theme.of(context).textTheme.bodyLarge?.color,
             ),
             decoration: const InputDecoration(
               contentPadding: EdgeInsets.symmetric(horizontal: 12),

@@ -17,7 +17,7 @@ class FarmVisitView extends GetView<FarmVisitController> {
         statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: Column(
           children: [
             _HeaderSection(),
@@ -51,9 +51,11 @@ class _HeaderSection extends GetView<FarmVisitController> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(
-        color: AppColors.primary,
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
+      decoration: BoxDecoration(
+        color: Theme.of(context).brightness == Brightness.light 
+            ? AppColors.primary 
+            : const Color(0xff0a1b15),
+        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(30)),
       ),
       padding: EdgeInsets.fromLTRB(
         20,
@@ -107,31 +109,41 @@ class _MapContainer extends GetView<FarmVisitController> {
       height: 220,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey.shade300, width: 1),
+        border: Border.all(color: Colors.grey.shade300.withOpacity(0.5), width: 1),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(23),
         child: Obx(() {
+          // Only rebuild the whole widget when loading state or initial position changes
           if (controller.isLoading.value) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (controller.currentPosition.value == null) {
-            return const Center(child: Text("Location not available"));
+          
+          final initialPos = controller.initialPosition.value;
+          if (initialPos == null) {
+            return const Center(
+              child: Text(
+                "নির্ভুল অবস্থান খোঁজা হচ্ছে...",
+                style: TextStyle(fontSize: 12),
+              ),
+            );
           }
-          final pos = controller.currentPosition.value!;
+
+          // Use markers from controller
           return GoogleMap(
             initialCameraPosition: CameraPosition(
-              target: LatLng(pos.latitude, pos.longitude),
+              target: LatLng(initialPos.latitude, initialPos.longitude),
               zoom: 16,
             ),
             onMapCreated: controller.onMapCreated,
-            markers: controller.markers,
+            markers: controller.markers.toSet(),
             myLocationEnabled: true,
-            myLocationButtonEnabled: false,
+            myLocationButtonEnabled: true,
             zoomControlsEnabled: false,
             mapToolbarEnabled: false,
+            compassEnabled: true,
           );
         }),
       ),
@@ -198,7 +210,7 @@ class _DetailsCard extends GetView<FarmVisitController> {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(24),
       ),
       child: Column(
@@ -236,18 +248,18 @@ class _DetailRow extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
-                  color: AppColors.textDark,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
               const SizedBox(height: 2),
               Text(
                 subtitle,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 12,
-                  color: AppColors.textGrey,
+                  color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.7),
                 ),
               ),
             ],
@@ -255,10 +267,10 @@ class _DetailRow extends StatelessWidget {
         ),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
-            color: AppColors.textDark,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
       ],

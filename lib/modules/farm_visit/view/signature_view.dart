@@ -17,7 +17,7 @@ class SignatureView extends GetView<FarmSignatureController> {
         statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: Column(
           children: [
             _HeaderSection(),
@@ -27,13 +27,13 @@ class SignatureView extends GetView<FarmSignatureController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _SummaryCard(),
+                    _SummaryCard(context),
                     const SizedBox(height: 24),
                     // _SignatureSection(),
                     // const SizedBox(height: 16),
                     // _ClearButton(),
                     // const SizedBox(height: 20),
-                    _ConfirmationCheckbox(),
+                    _ConfirmationCheckbox(context),
                     const SizedBox(height: 40),
                     _SubmitButton(),
                     const SizedBox(height: 20),
@@ -53,9 +53,11 @@ class _HeaderSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(
-        color: Color(0xff1A261F),
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
+      decoration: BoxDecoration(
+        color: Theme.of(context).brightness == Brightness.light 
+            ? const Color(0xff1A261F) 
+            : const Color(0xff0a1b15),
+        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(30)),
       ),
       padding: EdgeInsets.fromLTRB(
         20,
@@ -102,28 +104,34 @@ class _HeaderSection extends StatelessWidget {
 }
 
 class _SummaryCard extends GetView<FarmSignatureController> {
+  final BuildContext context;
+  const _SummaryCard(this.context);
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.1)),
       ),
       child: Column(
         children: [
           _SummaryRow(
+            context,
             label: "মোট মৃত্যু",
             value: controller.mortalityCount.toString(),
           ),
-          const Divider(height: 32),
+          Divider(height: 32, color: Theme.of(context).dividerColor.withOpacity(0.1)),
           _SummaryRow(
+            context,
             label: "গড় ওজন",
             value: "${controller.averageWeightKg.toString()} গ্রাম",
           ),
-          const Divider(height: 32),
+          Divider(height: 32, color: Theme.of(context).dividerColor.withOpacity(0.1)),
           _SummaryRow(
+            context,
             label: "খাদ্য খরচ",
             value: "${controller.totalFeedKg.toString()} কেজি",
           ),
@@ -136,10 +144,11 @@ class _SummaryCard extends GetView<FarmSignatureController> {
 }
 
 class _SummaryRow extends StatelessWidget {
+  final BuildContext context;
   final String label;
   final String value;
 
-  const _SummaryRow({required this.label, required this.value});
+  const _SummaryRow(this.context, {required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -148,18 +157,18 @@ class _SummaryRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Color(0xff212121),
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: Color(0xff212121),
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
       ],
@@ -322,6 +331,9 @@ class _SummaryRow extends StatelessWidget {
 // }
 
 class _ConfirmationCheckbox extends GetView<FarmSignatureController> {
+  final BuildContext context;
+  const _ConfirmationCheckbox(this.context);
+
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -335,10 +347,13 @@ class _ConfirmationCheckbox extends GetView<FarmSignatureController> {
               borderRadius: BorderRadius.circular(4),
             ),
           ),
-          const Expanded(
+          Expanded(
             child: Text(
               "আমি নিশ্চিত করছি যে উপরের তথ্য সঠিক",
-              style: TextStyle(fontSize: 14, color: Color(0xff424242)),
+              style: TextStyle(
+                fontSize: 14, 
+                color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8),
+              ),
             ),
           ),
         ],

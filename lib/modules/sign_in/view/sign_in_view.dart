@@ -16,7 +16,7 @@ class SignInView extends GetView<SignInController> {
         statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -24,9 +24,9 @@ class SignInView extends GetView<SignInController> {
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                decoration: const BoxDecoration(
-                  color: AppColors.background,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
                 ),
                 transform: Matrix4.translationValues(0, -30, 0),
                 child: Form(
@@ -47,9 +47,9 @@ class SignInView extends GetView<SignInController> {
                             validator: controller.validateUsername,
                             decoration: InputDecoration(
                               hintText: "Base Url",
-                              prefixIcon: const Icon(Icons.link_rounded, size: 22, color: AppColors.primary),
+                              prefixIcon: Icon(Icons.link_rounded, size: 22, color: Theme.of(context).primaryColor),
                               filled: true,
-                              fillColor: Colors.white,
+                              fillColor: Theme.of(context).colorScheme.surface,
                               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -61,7 +61,7 @@ class SignInView extends GetView<SignInController> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: AppColors.primary, width: 1),
+                                borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 1),
                               ),
                             ),
                           ),
@@ -74,9 +74,9 @@ class SignInView extends GetView<SignInController> {
                             validator: controller.validateUsername,
                             decoration: InputDecoration(
                               hintText: "Username",
-                              prefixIcon: const Icon(Icons.person_outline, size: 22, color: AppColors.primary),
+                              prefixIcon: Icon(Icons.person_outline, size: 22, color: Theme.of(context).primaryColor),
                               filled: true,
-                              fillColor: Colors.white,
+                              fillColor: Theme.of(context).colorScheme.surface,
                               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -88,7 +88,7 @@ class SignInView extends GetView<SignInController> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: AppColors.primary, width: 1),
+                                borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 1),
                               ),
                             ),
                           ),
@@ -102,19 +102,19 @@ class SignInView extends GetView<SignInController> {
                             obscureText: controller.obcsurePassword.value,
                             decoration: InputDecoration(
                               hintText: "Password",
-                              prefixIcon: const Icon(Icons.lock_outline, size: 22, color: AppColors.primary),
+                              prefixIcon: Icon(Icons.lock_outline, size: 22, color: Theme.of(context).primaryColor),
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   controller.obcsurePassword.value
                                       ? Icons.visibility_off_outlined
                                       : Icons.visibility_outlined,
-                                  color: AppColors.textGrey,
+                                  color: Theme.of(context).hintColor,
                                   size: 20,
                                 ),
                                 onPressed: controller.togglePassword,
                               ),
                               filled: true,
-                              fillColor: Colors.white,
+                              fillColor: Theme.of(context).colorScheme.surface,
                               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -126,7 +126,7 @@ class SignInView extends GetView<SignInController> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: AppColors.primary, width: 1),
+                                borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 1),
                               ),
                             ),
                           ),
@@ -140,7 +140,7 @@ class SignInView extends GetView<SignInController> {
                             child: ElevatedButton(
                               onPressed: controller.isLoading.value ? null : controller.login,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.primary,
+                                backgroundColor: Theme.of(context).primaryColor,
                                 foregroundColor: Colors.white,
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
@@ -273,7 +273,9 @@ class _HeaderSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: AppColors.primary,
+      color: Theme.of(context).brightness == Brightness.light 
+          ? AppColors.primary 
+          : const Color(0xff0a1b15),
       padding: EdgeInsets.fromLTRB(
         24,
         MediaQuery.of(context).padding.top + 22,
@@ -326,11 +328,11 @@ class _QuickProfileCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 20), // Increased margin
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20), // Significantly increased padding for size
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(20), // More rounded corners
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: .06), // Slightly deeper shadow
+              color: Colors.black.withOpacity(.06), // Slightly deeper shadow
               blurRadius: 15,
               offset: const Offset(0, 6),
             ),
@@ -340,8 +342,8 @@ class _QuickProfileCard extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 30, // Bigger avatar
-              backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-              child: const Icon(Icons.person, color: AppColors.primary, size: 36), // Bigger icon
+              backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+              child: Icon(Icons.person, color: Theme.of(context).primaryColor, size: 36), // Bigger icon
             ),
             const SizedBox(width: 20),
             Expanded(
@@ -351,10 +353,10 @@ class _QuickProfileCard extends StatelessWidget {
                 children: [
                   Text(
                     profile['fullName'],
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18, // Bigger font
-                      color: AppColors.textDark,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -362,8 +364,8 @@ class _QuickProfileCard extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     profile['zone'],
-                    style: const TextStyle(
-                      color: AppColors.textGrey,
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.7),
                       fontSize: 14, // Bigger font
                     ),
                     maxLines: 1,
@@ -372,7 +374,7 @@ class _QuickProfileCard extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(Icons.arrow_forward_ios, size: 18, color: AppColors.textGrey),
+            Icon(Icons.arrow_forward_ios, size: 18, color: Theme.of(context).hintColor),
           ],
         ),
       ),
