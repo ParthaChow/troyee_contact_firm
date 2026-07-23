@@ -1,9 +1,13 @@
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../../../models/weather_model.dart';
+
+
+
 
 class WeatherController extends GetxController {
   final RxList<WeatherForecast> forecastList = <WeatherForecast>[].obs;
@@ -26,13 +30,25 @@ class WeatherController extends GetxController {
       // Fetch from OpenWeatherMap (API Key from .env)
       final apiKey = dotenv.env['OPENWEATHER_API_KEY'] ?? "";
       final url = "https://api.openweathermap.org/data/2.5/forecast?lat=${position.latitude}&lon=${position.longitude}&appid=$apiKey&units=metric";
-      
+      // final url = "https://api.openweathermap.org/data/2.5/forecast?lat=23.7533055556&lon=90.3917222222&appid=$apiKey&units=metric";
+
       final response = await http.get(Uri.parse(url));
-      
+
+
       if (response.statusCode == 200) {
+        final Geocoding geocoding = Geocoding();
+
+        List<Placemark> placemarks = await geocoding.placemarkFromCoordinates(position.latitude,position.longitude);
+          Placemark place = placemarks[0];
+          String location = place.street ?? "";
+        if (location.contains(',')) {
+          int lastCommaIndex = location.lastIndexOf(',');
+          location = location.substring(0, lastCommaIndex).trim();
+        }
         final data = jsonDecode(response.body);
-        cityName.value = data['city']['name'];
-        
+        cityName.value = location;
+
+        print(cityName.value);
         final List list = data['list'];
         final Map<String, WeatherForecast> dailyForecasts = {};
         
