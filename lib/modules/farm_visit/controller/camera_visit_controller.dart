@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:troyee_contact_firm/l10n/app_localizations.dart';
 import 'package:troyee_contact_firm/models/farm_batch_model.dart';
 import '../../../app/services/upload_service.dart';
 
@@ -69,9 +70,10 @@ class CameraVisitController extends GetxController {
   void _autoUpload(String path) {
     if (visitId != null) {
       _uploadService.addToQueue(visitId: visitId!, imagePath: path);
+      final l10n = AppLocalizations.of(Get.context!)!;
       Get.snackbar(
-        "সংরক্ষিত", 
-        "ছবিটি আপলোড সারিতে যুক্ত করা হয়েছে",
+        l10n.saved, 
+        l10n.added_to_queue,
         snackPosition: SnackPosition.BOTTOM,
         duration: const Duration(seconds: 1),
       );

@@ -16,6 +16,8 @@ import '../../modules/home/views/home_view.dart';
 import '../../modules/splash/binding/splash_binding.dart';
 import '../../modules/weather/binding/weather_binidng.dart';
 import '../../modules/weather/view/weather_view.dart';
+import '../../modules/settings/binding/settings_binding.dart';
+import '../../modules/settings/view/settings_view.dart';
 import 'app_routes.dart';
 import '../../modules/splash/view/splash_view.dart';
 
@@ -65,6 +67,11 @@ class AppPages {
       name: Routes.weather,
       page: () => const WeatherView(),
       binding: WeatherBinding(),
+    ),
+    GetPage(
+      name: Routes.settings,
+      page: () => const SettingsView(),
+      binding: SettingsBinding(),
     ),
   ];
 }

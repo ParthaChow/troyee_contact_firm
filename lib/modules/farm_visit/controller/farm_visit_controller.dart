@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:troyee_contact_firm/l10n/app_localizations.dart';
 import '../../../app/routes/app_routes.dart';
 import '../../../app/services/api_fetch.dart';
 import '../../../app/services/services.dart';
@@ -49,9 +50,10 @@ class FarmVisitController extends GetxController {
 
       serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
+        final l10n = AppLocalizations.of(Get.context!)!;
         Get.snackbar(
-          "Error",
-          "Location services are disabled.",
+          l10n.error,
+          l10n.location_services_disabled,
           backgroundColor: Colors.red.withOpacity(0.7),
           colorText: Colors.white,
           snackPosition: SnackPosition.TOP,
@@ -65,9 +67,10 @@ class FarmVisitController extends GetxController {
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
+          final l10n = AppLocalizations.of(Get.context!)!;
           Get.snackbar(
-            "Error",
-            "Location permissions are denied.",
+            l10n.error,
+            l10n.location_permissions_denied,
             backgroundColor: Colors.red.withOpacity(0.7),
             colorText: Colors.white,
             snackPosition: SnackPosition.TOP,
@@ -79,9 +82,10 @@ class FarmVisitController extends GetxController {
       }
 
       if (permission == LocationPermission.deniedForever) {
+        final l10n = AppLocalizations.of(Get.context!)!;
         Get.snackbar(
-          "Error",
-          "Location permissions are permanently denied.",
+          l10n.error,
+          l10n.location_permissions_permanently_denied,
           backgroundColor: Colors.red.withOpacity(0.7),
           colorText: Colors.white,
           snackPosition: SnackPosition.TOP,
@@ -121,9 +125,10 @@ class FarmVisitController extends GetxController {
       });
 
     } catch (e) {
+      final l10n = AppLocalizations.of(Get.context!)!;
       Get.snackbar(
-        "Error",
-        "Failed to get location: $e",
+        l10n.error,
+        "${l10n.failed_to_get_location}: $e",
         backgroundColor: Colors.red.withOpacity(0.7),
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,
@@ -134,8 +139,9 @@ class FarmVisitController extends GetxController {
   }
 
   Future<void> checkIn() async {
+    final l10n = AppLocalizations.of(Get.context!)!;
     if (currentPosition.value == null) {
-      Get.snackbar("Error", "Location not available. Please wait.",
+      Get.snackbar(l10n.error, l10n.location_not_available,
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.red,
         colorText: Colors.white,);
@@ -158,8 +164,8 @@ class FarmVisitController extends GetxController {
           token == null ||
           !(await _authService.ensureValidToken())) {
         Get.snackbar(
-          "Session Expired",
-          "Please login again to continue",
+          l10n.session_expired,
+          l10n.please_login_again,
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           colorText: Colors.white,
@@ -183,8 +189,8 @@ class FarmVisitController extends GetxController {
       );
 
       Get.snackbar(
-        "Success",
-        "Check-in successful",
+        l10n.success,
+        l10n.checkin_success,
         backgroundColor: Colors.green.withOpacity(0.7),
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,
@@ -200,8 +206,9 @@ class FarmVisitController extends GetxController {
         },
       );
     } catch (e) {
+      final l10n = AppLocalizations.of(Get.context!)!;
       Get.snackbar(
-        "Check-in Failed",
+        l10n.checkin_failed,
         e.toString(),
         backgroundColor: Colors.red.withOpacity(0.7),
         colorText: Colors.white,
@@ -218,12 +225,13 @@ class FarmVisitController extends GetxController {
   }
 
   void _addMarker(Position position) {
+    final l10n = AppLocalizations.of(Get.context!)!;
     markers.clear();
     markers.add(
       Marker(
         markerId: const MarkerId('currentLocation'),
         position: LatLng(position.latitude, position.longitude),
-        infoWindow: const InfoWindow(title: 'Your Location'),
+        infoWindow: InfoWindow(title: l10n.your_location),
       ),
     );
   }

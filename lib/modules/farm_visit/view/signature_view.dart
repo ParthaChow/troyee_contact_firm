@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:signature/signature.dart';
 import '../../../app/core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../controller/signature_controller.dart';
 
 class SignatureView extends GetView<FarmSignatureController> {
@@ -28,11 +29,7 @@ class SignatureView extends GetView<FarmSignatureController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _SummaryCard(context),
-                    const SizedBox(height: 24),
-                    // _SignatureSection(),
-                    // const SizedBox(height: 16),
-                    // _ClearButton(),
-                    // const SizedBox(height: 20),
+                    const SizedBox(height: 40),
                     _ConfirmationCheckbox(context),
                     const SizedBox(height: 40),
                     _SubmitButton(),
@@ -51,6 +48,7 @@ class SignatureView extends GetView<FarmSignatureController> {
 class _HeaderSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -79,9 +77,9 @@ class _HeaderSection extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              const Text(
-                "Confirmation Page",
-                style: TextStyle(
+              Text(
+                l10n.confirmation_page,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
@@ -90,11 +88,11 @@ class _HeaderSection extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          const Padding(
-            padding: EdgeInsets.only(left: 36),
+          Padding(
+            padding: const EdgeInsets.only(left: 36),
             child: Text(
-              "তথ্য নিশ্চিতকরণ",
-              style: TextStyle(color: Colors.white70, fontSize: 14),
+              l10n.info_confirmation,
+              style: const TextStyle(color: Colors.white70, fontSize: 14),
             ),
           ),
         ],
@@ -109,6 +107,9 @@ class _SummaryCard extends GetView<FarmSignatureController> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final langCode = Get.locale?.languageCode ?? 'bn';
+    
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -120,27 +121,46 @@ class _SummaryCard extends GetView<FarmSignatureController> {
         children: [
           _SummaryRow(
             context,
-            label: "মোট মৃত্যু",
-            value: controller.mortalityCount.toString(),
+            label: l10n.total_mortality,
+            value: _localizeNumber(controller.mortalityCount.toString(), langCode),
           ),
           Divider(height: 32, color: Theme.of(context).dividerColor.withOpacity(0.1)),
           _SummaryRow(
             context,
-            label: "গড় ওজন",
-            value: "${controller.averageWeightKg.toString()} গ্রাম",
+            label: l10n.average_weight,
+            value: "${_localizeNumber(controller.averageWeightKg.toString(), langCode)} ${l10n.grams}",
           ),
           Divider(height: 32, color: Theme.of(context).dividerColor.withOpacity(0.1)),
           _SummaryRow(
             context,
-            label: "খাদ্য খরচ",
-            value: "${controller.totalFeedKg.toString()} কেজি",
+            label: l10n.total_feed,
+            value: "${_localizeNumber(controller.totalFeedKg.toString(), langCode)} ${l10n.kg}",
           ),
         ],
       ),
     );
   }
 
-
+  String _localizeNumber(String number, String locale) {
+    if (locale == 'en') return number;
+    const bengaliNumbers = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    String result = '';
+    for (int i = 0; i < number.length; i++) {
+      if (number[i] == '.') {
+        result += '.';
+      } else if (number[i] == ',') {
+        result += ',';
+      } else {
+        int index = int.tryParse(number[i]) ?? -1;
+        if (index != -1) {
+          result += bengaliNumbers[index];
+        } else {
+          result += number[i];
+        }
+      }
+    }
+    return result;
+  }
 }
 
 class _SummaryRow extends StatelessWidget {
@@ -336,6 +356,7 @@ class _ConfirmationCheckbox extends GetView<FarmSignatureController> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Obx(
       () => Row(
         children: [
@@ -349,7 +370,7 @@ class _ConfirmationCheckbox extends GetView<FarmSignatureController> {
           ),
           Expanded(
             child: Text(
-              "আমি নিশ্চিত করছি যে উপরের তথ্য সঠিক",
+              l10n.confirmation_agreement,
               style: TextStyle(
                 fontSize: 14, 
                 color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8),
@@ -365,6 +386,7 @@ class _ConfirmationCheckbox extends GetView<FarmSignatureController> {
 class _SubmitButton extends GetView<FarmSignatureController> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Obx(() => SizedBox(
           width: double.infinity,
           height: 60,
@@ -384,15 +406,15 @@ class _SubmitButton extends GetView<FarmSignatureController> {
                     width: 24,
                     child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                   )
-                : const Row(
+                : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Confirm",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        l10n.confirm_button,
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(width: 8),
-                      Icon(Icons.arrow_forward, size: 20),
+                      const SizedBox(width: 8),
+                      const Icon(Icons.arrow_forward, size: 20),
                     ],
                   ),
           ),

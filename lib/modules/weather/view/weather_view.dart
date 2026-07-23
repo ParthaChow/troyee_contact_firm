@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../app/core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../models/weather_model.dart';
 import '../controller/weather_controller.dart';
 
@@ -10,10 +11,11 @@ class WeatherView extends GetView<WeatherController> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('আবহাওয়ার পূর্বাভাস', style: TextStyle(color: Colors.white)),
+        title: Text(l10n.weather_forecast, style: const TextStyle(color: Colors.white)),
         backgroundColor: AppColors.primary,
         elevation: 0,
         centerTitle: true,
@@ -24,7 +26,7 @@ class WeatherView extends GetView<WeatherController> {
         }
 
         if (controller.forecastList.isEmpty) {
-          return const Center(child: Text("তথ্য পাওয়া যায়নি"));
+          return Center(child: Text(l10n.data_not_found));
         }
 
         final current = controller.forecastList.first;
@@ -34,11 +36,11 @@ class WeatherView extends GetView<WeatherController> {
           child: ListView(
             padding: const EdgeInsets.all(20),
             children: [
-              _buildCurrentWeather(current),
+              _buildCurrentWeather(context, current),
               const SizedBox(height: 24),
-              const Text(
-                "Forcast for next 5 days",
-                style: TextStyle(
+              Text(
+                l10n.forecast_5_days,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textDark,
@@ -53,7 +55,8 @@ class WeatherView extends GetView<WeatherController> {
     );
   }
 
-  Widget _buildCurrentWeather(WeatherForecast current) {
+  Widget _buildCurrentWeather(BuildContext context, WeatherForecast current) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -78,7 +81,7 @@ class WeatherView extends GetView<WeatherController> {
             ),
           ),
           Text(
-            DateFormat('EEEE, d MMMM').format(current.date),
+            DateFormat('EEEE, d MMMM', Get.locale?.languageCode).format(current.date),
             style: const TextStyle(color: Colors.white70, fontSize: 13),
           ),
           const SizedBox(height: 12),
@@ -114,8 +117,8 @@ class WeatherView extends GetView<WeatherController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildWeatherDetail(Icons.water_drop_outlined, "${current.humidity.toInt()}%", "আর্দ্রতা"),
-              _buildWeatherDetail(Icons.air, "${current.windSpeed} km/h", "বাতাস"),
+              _buildWeatherDetail(Icons.water_drop_outlined, "${current.humidity.toInt()}%", l10n.humidity),
+              _buildWeatherDetail(Icons.air, "${current.windSpeed} km/h", l10n.wind),
             ],
           ),
         ],

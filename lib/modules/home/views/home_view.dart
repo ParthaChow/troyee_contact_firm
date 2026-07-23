@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../app/core/theme/app_colors.dart';
 import '../../../app/routes/app_routes.dart';
 import '../../../app/services/theme_service.dart';
+import '../../../l10n/app_localizations.dart';
 import '../controllers/home_controller.dart';
 import '../widgets/farm_task_tile.dart';
 import '../../weather/view/weather_view.dart';
@@ -14,6 +15,7 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light.copyWith(
         statusBarColor: Colors.transparent,
@@ -47,26 +49,26 @@ class HomeView extends GetView<HomeController> {
             showUnselectedLabels: true,
             selectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
             unselectedLabelStyle: const TextStyle(fontSize: 12),
-            items: const [
+            items: [
               BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                activeIcon: Icon(Icons.home),
-                label: 'হোম',
+                icon: const Icon(Icons.home_outlined),
+                activeIcon: const Icon(Icons.home),
+                label: l10n.home,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.assignment_outlined),
-                activeIcon: Icon(Icons.assignment),
-                label: 'তালিকা',
+                icon: const Icon(Icons.assignment_outlined),
+                activeIcon: const Icon(Icons.assignment),
+                label: l10n.list,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.sync_outlined),
-                activeIcon: Icon(Icons.sync),
-                label: 'সিঙ্ক',
+                icon: const Icon(Icons.sync_outlined),
+                activeIcon: const Icon(Icons.sync),
+                label: l10n.sync,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline),
-                activeIcon: Icon(Icons.person),
-                label: 'প্রোফাইল',
+                icon: const Icon(Icons.person_outline),
+                activeIcon: const Icon(Icons.person),
+                label: l10n.profile,
               ),
             ],
           ),
@@ -198,6 +200,7 @@ class _SyncSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         _HeaderSection(controller: controller),
@@ -216,14 +219,14 @@ class _SyncSection extends StatelessWidget {
                   const Icon(Icons.sync, size: 80, color: AppColors.primary),
                   const SizedBox(height: 20),
                   Obx(() => Text(
-                        "পেন্ডিং রেকর্ড: ${controller.pendingSyncRecords.value}",
+                        "${l10n.pending_records}: ${controller.pendingSyncRecords.value}",
                         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       )),
                   const SizedBox(height: 30),
                   ElevatedButton.icon(
                     onPressed: () => controller.syncAll(),
                     icon: const Icon(Icons.sync),
-                    label: const Text("সব সিঙ্ক করুন"),
+                    label: Text(l10n.sync_all),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
@@ -246,6 +249,7 @@ class _ProfileSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         Container(
@@ -289,27 +293,17 @@ class _ProfileSection extends StatelessWidget {
             children: [
               _ProfileMenuItem(
                 icon: Icons.person_outline,
-                title: 'ব্যক্তিগত তথ্য',
+                title: l10n.personal_info,
                 onTap: () {},
-              ),
-              GetBuilder<ThemeService>(
-                init: ThemeService(),
-                builder: (themeService) => _ProfileMenuItem(
-                  icon: themeService.isDarkMode ? Icons.dark_mode : Icons.light_mode,
-                  title: themeService.isDarkMode ? 'ডার্ক মোড (অন)' : 'লাইট মোড (অন)',
-                  onTap: () {
-                    themeService.switchTheme();
-                  },
-                ),
               ),
               _ProfileMenuItem(
                 icon: Icons.settings_outlined,
-                title: 'সেটিংস',
-                onTap: () {},
+                title: l10n.settings,
+                onTap: () => Get.toNamed(Routes.settings),
               ),
               _ProfileMenuItem(
                 icon: Icons.help_outline,
-                title: 'সহায়তা',
+                title: l10n.help,
                 onTap: () {},
               ),
               const SizedBox(height: 20),
@@ -324,9 +318,9 @@ class _ProfileSection extends StatelessWidget {
                   ),
                   child: const Icon(Icons.logout, color: Colors.red),
                 ),
-                title: const Text(
-                  'লগআউট',
-                  style: TextStyle(
+                title: Text(
+                  l10n.logout,
+                  style: const TextStyle(
                     color: Colors.red,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -342,21 +336,22 @@ class _ProfileSection extends StatelessWidget {
   }
 
   void _showLogoutDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     Get.dialog(
       AlertDialog(
-        title: const Text('লগআউট'),
-        content: const Text('আপনি কি নিশ্চিত যে আপনি লগআউট করতে চান?'),
+        title: Text(l10n.logout),
+        content: Text(l10n.confirm_logout),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('না', style: TextStyle(color: Colors.grey)),
+            child: Text(l10n.no, style: const TextStyle(color: Colors.grey)),
           ),
           TextButton(
             onPressed: () {
               Get.back();
               controller.logout();
             },
-            child: const Text('হ্যাঁ', style: TextStyle(color: Colors.red)),
+            child: Text(l10n.yes, style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -392,6 +387,7 @@ class _HeaderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       color: Theme.of(context).brightness == Brightness.light 
@@ -424,7 +420,7 @@ class _HeaderSection extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      "ফিল্ড অফিসার - ${controller.zone}",
+                      "${l10n.field_officer} - ${controller.zone}",
                       style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 14,
@@ -455,7 +451,7 @@ class _HeaderSection extends StatelessWidget {
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        controller.statusLabel,
+                        controller.isOnline.value ? l10n.online : l10n.offline,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 12,
@@ -479,18 +475,19 @@ class _EmptyTaskWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 60),
+    final l10n = AppLocalizations.of(context)!;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 60),
       child: Column(
         children: [
-          Icon(Icons.agriculture_outlined, size: 70, color: Colors.grey),
-          SizedBox(height: 16),
+          const Icon(Icons.agriculture_outlined, size: 70, color: Colors.grey),
+          const SizedBox(height: 16),
           Text(
-            "কোনো ফার্ম পাওয়া যায়নি",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            l10n.no_farm_found,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
-          SizedBox(height: 8),
-          Text("আজকের জন্য কোনো কাজ নির্ধারিত নেই"),
+          const SizedBox(height: 8),
+          Text(l10n.no_tasks_today),
         ],
       ),
     );

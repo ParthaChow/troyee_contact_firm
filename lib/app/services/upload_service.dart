@@ -3,6 +3,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import '../../l10n/app_localizations.dart';
 import '../core/theme/app_colors.dart';
 import 'api_fetch.dart';
 import 'services.dart';
@@ -96,9 +97,10 @@ class UploadService extends GetxService {
             print("Deleted local file after upload: ${item['imagePath']}");
           }
           
+          final l10n = AppLocalizations.of(Get.context!)!;
           Get.snackbar(
-            "সফল", 
-            "ছবি সফলভাবে আপলোড হয়েছে (Visit ID: ${item['visitId']})",
+            l10n.success, 
+            "${l10n.upload_success} (Visit ID: ${item['visitId']})",
             snackPosition: SnackPosition.TOP,
             backgroundColor: Colors.green.withOpacity(0.7),
             colorText: Colors.white,
@@ -112,9 +114,10 @@ class UploadService extends GetxService {
       } catch (e) {
         print("Upload failed: $e");
         
+        final l10n = AppLocalizations.of(Get.context!)!;
         Get.snackbar(
-          "ত্রুটি", 
-          "ছবি আপলোড করতে ব্যর্থ হয়েছে। পুনরায় চেষ্টা করা হচ্ছে...",
+          l10n.error, 
+          l10n.upload_failed,
           snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.red.withOpacity(0.8),
           colorText: Colors.white,
