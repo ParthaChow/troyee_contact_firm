@@ -29,11 +29,12 @@ class SettingsView extends GetView<SettingsController> {
                     children: [
                       _buildSectionLabel(l10n.preferences),
                       const SizedBox(height: 8),
-                      _buildSettingsTile(
+                      _buildToggleTile(
                         icon: Icons.contrast_rounded,
                         title: l10n.appearance,
-                        value: isDark ? l10n.dark_mode : l10n.light_mode,
-                        onTap: () => _showAppearanceBottomSheet(context, isDark, l10n),
+                        subtitle: isDark ? l10n.dark_mode : l10n.light_mode,
+                        value: isDark,
+                        onChanged: (val) => controller.toggleTheme(),
                         isDark: isDark,
                       ),
                       _buildDivider(isDark),
@@ -93,6 +94,60 @@ class SettingsView extends GetView<SettingsController> {
     );
   }
 
+  Widget _buildToggleTile({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required bool value,
+    required ValueChanged<bool> onChanged,
+    required bool isDark,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: isDark ? Colors.white70 : Colors.black54,
+            size: 22,
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: isDark ? Colors.white.withOpacity(0.9) : Colors.black87,
+                  ),
+                ),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: isDark ? Colors.white38 : Colors.black38,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(2),
+            child: Switch.adaptive(
+              value: value,
+              onChanged: onChanged,
+              activeThumbColor: AppColors.accent,
+              activeTrackColor: AppColors.accent.withValues(alpha: 0.3),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildSettingsTile({
     required IconData icon,
     required String title,
@@ -119,7 +174,7 @@ class SettingsView extends GetView<SettingsController> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
-                  color: isDark ? Colors.white.withOpacity(0.9) : Colors.black87,
+                  color: isDark ? Colors.white.withValues(alpha: 0.9) : Colors.black87,
                 ),
               ),
             ),
@@ -147,61 +202,7 @@ class SettingsView extends GetView<SettingsController> {
       height: 1,
       thickness: 0.5,
       indent: 42,
-      color: isDark ? Colors.white.withOpacity(0.05) : Colors.black.withOpacity(0.05),
-    );
-  }
-
-  void _showAppearanceBottomSheet(BuildContext context, bool isDark, AppLocalizations l10n) {
-    Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: isDark ? const Color(0xff1a2b25) : Colors.white,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: isDark ? Colors.white12 : Colors.black12,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              l10n.appearance,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: isDark ? Colors.white : Colors.black,
-              ),
-            ),
-            const SizedBox(height: 16),
-            _buildSelectionTile(
-              title: l10n.light_mode,
-              isSelected: !isDark,
-              onTap: () {
-                if (isDark) controller.toggleTheme();
-                Get.back();
-              },
-              isDark: isDark,
-            ),
-            _buildSelectionTile(
-              title: l10n.dark_mode,
-              isSelected: isDark,
-              onTap: () {
-                if (!isDark) controller.toggleTheme();
-                Get.back();
-              },
-              isDark: isDark,
-            ),
-            const SizedBox(height: 16),
-          ],
-        ),
-      ),
+      color: isDark ? Colors.white.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.05),
     );
   }
 
