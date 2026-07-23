@@ -18,6 +18,10 @@ import '../../modules/weather/binding/weather_binidng.dart';
 import '../../modules/weather/view/weather_view.dart';
 import '../../modules/settings/binding/settings_binding.dart';
 import '../../modules/settings/view/settings_view.dart';
+import '../../modules/profile/binding/profile_binding.dart';
+import '../../modules/profile/view/profile_view.dart';
+import '../../modules/chat/binding/chat_binding.dart';
+import '../../modules/chat/view/chat_view.dart';
 import 'app_routes.dart';
 import '../../modules/splash/view/splash_view.dart';
 
@@ -72,6 +76,16 @@ class AppPages {
       name: Routes.settings,
       page: () => const SettingsView(),
       binding: SettingsBinding(),
+    ),
+    GetPage(
+      name: Routes.profile,
+      page: () => const ProfileView(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: Routes.chat,
+      page: () => const ChatView(),
+      binding: ChatBinding(),
     ),
   ];
 }

@@ -9,4 +9,6 @@ abstract class Routes {
   static const signature_visit = "/signature_visit";
   static const weather = "/weather";
   static const settings = "/settings";
+  static const profile = "/profile";
+  static const chat = "/chat";
 }

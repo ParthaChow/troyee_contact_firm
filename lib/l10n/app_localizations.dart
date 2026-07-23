@@ -224,6 +224,12 @@ abstract class AppLocalizations {
   /// **'Next'**
   String get next;
 
+  /// No description provided for @office_chat.
+  ///
+  /// In en, this message translates to:
+  /// **'Office Chat'**
+  String get office_chat;
+
   /// No description provided for @support_chat.
   ///
   /// In en, this message translates to:

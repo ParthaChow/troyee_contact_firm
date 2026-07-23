@@ -72,6 +72,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get next => 'Next';
 
   @override
+  String get office_chat => 'Office Chat';
+
+  @override
   String get support_chat => 'Support Chat';
 
   @override

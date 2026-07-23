@@ -20,6 +20,7 @@
   "accuracy": "Accuracy",
   "owner_name": "Owner Name",
   "next": "Next",
+  "office_chat": "Office Chat",
   "support_chat": "Support Chat",
   "type_message": "Type a message...",
   "confirm_logout": "Are you sure you want to logout?",

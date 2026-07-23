@@ -72,6 +72,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get next => 'পরবর্তী';
 
   @override
+  String get office_chat => 'অফিস চ্যাট';
+
+  @override
   String get support_chat => 'সহায়তা চ্যাট';
 
   @override
