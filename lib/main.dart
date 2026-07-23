@@ -6,11 +6,14 @@ import 'app/routes/app_pages.dart';
 import 'app/routes/app_routes.dart';
 import 'app/services/services.dart';
 import 'app/services/upload_service.dart';
+import 'app/services/theme_service.dart';
+import 'app/core/theme/app_theme.dart';
 
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
 
+  await GetStorage.init();
   await GetStorage.init('auth_storage');
   await GetStorage.init('upload_queue');
 
@@ -22,6 +25,8 @@ Future<void> main() async{
     return await UploadService().init();
   });
 
+  Get.put(ThemeService());
+
   runApp(TroyeeApp());
 }
 
@@ -30,12 +35,13 @@ class TroyeeApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeService = Get.find<ThemeService>();
+    
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: Colors.blue,
-        scaffoldBackgroundColor: Colors.white,
-      ),
+      theme: AppThemes.light,
+      darkTheme: AppThemes.dark,
+      themeMode: themeService.theme,
       initialRoute: Routes.splash,
       getPages: AppPages.routes,
     );

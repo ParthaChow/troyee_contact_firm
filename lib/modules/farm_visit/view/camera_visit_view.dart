@@ -21,7 +21,7 @@ class CameraVisitView extends GetView<CameraVisitController> {
         statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: Column(
           children: [
             _HeaderSection(),
@@ -35,12 +35,14 @@ class CameraVisitView extends GetView<CameraVisitController> {
                       child: _CameraContainer(),
                     ),
                     const SizedBox(height: 12),
-                    const Text(
+                    Text(
                       "| তোলা ছবি",
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xffD79A09),
+                        color: Theme.of(context).brightness == Brightness.light 
+                            ? const Color(0xffD79A09) 
+                            : AppColors.accent,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -69,9 +71,11 @@ class _HeaderSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(
-        color: AppColors.primary,
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
+      decoration: BoxDecoration(
+        color: Theme.of(context).brightness == Brightness.light 
+            ? AppColors.primary 
+            : const Color(0xff0a1b15),
+        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(30)),
       ),
       padding: EdgeInsets.fromLTRB(
         20,
@@ -280,9 +284,9 @@ class _AddButton extends GetView<CameraVisitController> {
       child: Container(
         width: 70,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey.shade300, style: BorderStyle.solid),
+          border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.2), style: BorderStyle.solid),
         ),
         child: const Icon(Icons.add, color: Colors.grey, size: 24),
       ),
@@ -333,7 +337,7 @@ class _NextButton extends GetView<CameraVisitController> {
           Get.toNamed(Routes.signature_visit, arguments: args);
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: Theme.of(context).primaryColor,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
